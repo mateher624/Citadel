@@ -5,15 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.Window;
+using SFML.System;
 
 namespace citadelGame
 {
-    abstract class _test_game
+    abstract class _test_Game
     {
         protected RenderWindow window;
         protected Color clearColor;
 
-        public _test_game(uint width, uint height, string name, Color clearColor)
+        public _test_Game(uint width, uint height, string name, Color clearColor)
         {
             this.window = new RenderWindow(new VideoMode(width, height), name, Styles.Close);
             this.clearColor = clearColor;
@@ -25,6 +26,9 @@ namespace citadelGame
 
         public void Run()
         {
+            LoadContent();
+            Initialize();
+
             while (window.IsOpen)
             {
                 window.DispatchEvents();

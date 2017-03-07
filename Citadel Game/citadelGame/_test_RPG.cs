@@ -5,12 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.Window;
+using SFML.System;
 
 
 namespace citadelGame
 {
-    class _test_RPG : _test_game
+    class _test_RPG : _test_Game
     {
+        _test_Tilemap map;
+        Texture tileset;
+
         public _test_RPG() : base(800, 600, "Game Name", Color.Cyan)
         {
 
@@ -18,19 +22,22 @@ namespace citadelGame
 
         protected override void LoadContent()
         {
-            //throw new NotImplementedException();
+            tileset = new Texture("Resources/DungeonTileset.png");
         }
+
         protected override void Initialize()
         {
-            //throw new NotImplementedException();
+            map = new _test_Tilemap(tileset, 4, 4, 32.0f, 32.0f);
         }
+
         protected override void Tick()
         {
             //throw new NotImplementedException();
         }
+
         protected override void Render()
         {
-            //throw new NotImplementedException();
+            window.Draw(map);
         }
     }
 }
