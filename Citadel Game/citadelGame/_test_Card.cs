@@ -24,8 +24,8 @@ namespace citadelGame
 
         public _test_Card(int x, int y, int width, int height, Color color)
         {
-            this.x = x;
-            this.y = y;
+            this.posx = x;
+            this.posy = y;
             this.color = color;
         }
     }
