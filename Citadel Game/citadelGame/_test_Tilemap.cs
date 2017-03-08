@@ -14,29 +14,32 @@ namespace citadelGame
         private Texture tileset;
         private VertexArray vertexArray;
 
-        private int tileWidth;
-        private int tileHeight;
+        private int mapWidth;
+        private int mapHeight;
+
         private float tileTextureDimension;
         private float tileWorldDimension;
 
-        public _test_Tilemap(Texture tileset, int tileWidth, int tileHeight, float tileTextureDimension, float tileWorldDimension)
+        public _test_Tilemap(Texture tileset, int mapWidth, int mapHeight, float tileTextureDimension, float tileWorldDimension)
         {
             this.tileset = tileset;
-            this.tileWidth = tileWidth;
-            this.tileHeight = tileHeight;
+            this.mapWidth = mapWidth;
+            this.mapHeight = mapHeight;
             this.tileTextureDimension = tileTextureDimension;
             this.tileWorldDimension = tileWorldDimension;
 
-            vertexArray = new VertexArray(PrimitiveType.Quads, (uint)(tileWidth * tileHeight * 4));
+            vertexArray = new VertexArray(PrimitiveType.Quads, (uint)(mapWidth * mapHeight * 4));
 
-            _test_Tile tile = new _test_Tile(10, 16, Color.White);
-            for (int i = 0; i < tileWidth; i++)
+            _test_Tile tile = new _test_Tile(0, 3, Color.White); // 10 16
+            for (int i = 0; i < mapWidth; i++)
             {
-                for (int j = 0; j < tileHeight; j++)
+                for (int j = 0; j < mapHeight; j++)
                 {
                     AddTileVerticies(tile, new Vector2f((float)i, (float)j));
                 }
             }
+            //_test_Tile card = new _test_Tile(0, 3, Color.White);
+            //AddTileVerticies(card, new Vector2f(100.0f, 100.0f));
         }
 
         public void Draw(RenderTarget target, RenderStates states)

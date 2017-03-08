@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_test_Card.cs" />
     <Compile Include="_test_Game.cs" />
     <Compile Include="_test_RPG.cs" />
     <Compile Include="_test_Tile.cs" />
