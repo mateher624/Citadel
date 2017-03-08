@@ -22,7 +22,8 @@ namespace citadelGame
         RectangleShape body;
         Sprite body_textured;
 
-        int state;
+        public int state;
+        
 
         public _test_button(int start_x, int start_y, int width, int height)
         {
@@ -64,7 +65,12 @@ namespace citadelGame
         {
             if (texture_type == 0)
             {
-                if (state == 0)
+                if (state == -1)
+                {
+                    this.body.FillColor = Color.White;
+                    this.body.OutlineColor = Color.Black;
+                }
+                else if (state == 0)
                 {
                     this.body.FillColor = Color.Green;
                     this.body.OutlineColor = Color.Magenta;
@@ -82,6 +88,10 @@ namespace citadelGame
             }
             else
             {
+                if (state == -1)
+                {
+                    this.body_textured.TextureRect = new IntRect(this.width, this.height, this.width, this.height);
+                }
                 if (state == 0)
                 {
                     this.body_textured.TextureRect = new IntRect(0, 0, this.width, this.height);
@@ -99,7 +109,7 @@ namespace citadelGame
 
         public void Collide(int x, int y)
         {
-            if (state != 2)
+            if (state != 2 && state != -1)
             {
                 if (x >= this.start_x && x <= (this.start_x+width) && y >= this.start_y && y <= (this.start_y+height)) state = 1;
                 else state = 0;
@@ -108,7 +118,7 @@ namespace citadelGame
 
         public void Clicked(int x, int y, Mouse.Button button)
         {
-            if (state != 2)
+            if (state != 2 && state != -1)
             {
                 if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height) && button.ToString() == "Left") state = 2;
                 else Collide(x, y);
@@ -127,7 +137,7 @@ namespace citadelGame
         public void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (texture_type == 0 ) target.Draw(body, states);
+            if (texture_type == 0) target.Draw(body, states);
             else if (texture_type == 1) target.Draw(body_textured, states);
 
         }

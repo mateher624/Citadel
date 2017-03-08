@@ -15,35 +15,26 @@ namespace citadelGame
         _test_Tilemap map;
         Texture tileset;
         Texture btn_face;
-        List<_test_button> button_list;
+        List<UIButton> button_list;
 
         public _test_RPG() : base(800, 600, "Game Name", Color.Cyan)
         {
-            button_list = new List<_test_button>();
+            button_list = new List<UIButton>();
         }
 
         protected override void CheckCollide(MouseMoveEventArgs e)
         {
-            foreach (_test_button button in button_list)
-            {
-                button.Collide(e.X, e.Y);
-            }
+            foreach (UIButton button in button_list) button.Collide(e.X, e.Y);
         }
 
         protected override void CheckClick(MouseButtonEventArgs e)
         {
-            foreach (_test_button button in button_list)
-            {
-                button.Clicked(e.X, e.Y, e.Button);
-            }
+            foreach (UIButton button in button_list) button.Clicked(e.X, e.Y, e.Button);
         }
 
         protected override void CheckUnClick(MouseButtonEventArgs e)
         {
-            foreach (_test_button button in button_list)
-            {
-                button.UnClicked(e.X, e.Y, e.Button);
-            }
+            foreach (UIButton button in button_list) button.UnClicked(e.X, e.Y, e.Button);
         }
 
         protected override void LoadContent()
@@ -55,9 +46,14 @@ namespace citadelGame
         protected override void Initialize()
         {
             map = new _test_Tilemap(tileset, 4, 4, 32.0f, 64.0f);
-            button_list.Add(new _test_button(320, 20, 180, 40));
-            button_list.Add(new _test_button(320, 80, 180, 40));
-            button_list.Add(new _test_button(320, 140, 95, 53, btn_face));
+            button_list.Add(new UIPrimitiveButton(320, 20, 180, 40));
+            button_list.Add(new UIPrimitiveButton(320, 80, 180, 40));
+            button_list.Add(new UIGlyphButton(320, 140, 95, 53, btn_face));
+            button_list.Add(new UIGlyphButton(500, 140, 95, 53, btn_face));
+
+            UIGlyphButton button_off = new UIGlyphButton(320, 240, 95, 53, btn_face);
+            button_off.state = -1;
+            button_list.Add(button_off);
         }
 
         protected override void Tick()
@@ -68,7 +64,7 @@ namespace citadelGame
         protected override void Render()
         {
             window.Draw(map);
-            foreach (_test_button button in button_list)
+            foreach (UIButton button in button_list)
             {
                 window.Draw(button);
             }

@@ -85,8 +85,5 @@ namespace citadelGame
 
         protected abstract void Tick();
         protected abstract void Render();
-
-
-
     }
 }
