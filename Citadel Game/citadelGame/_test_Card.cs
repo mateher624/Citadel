@@ -23,7 +23,13 @@ namespace citadelGame
         Texture face;
         Sprite body;
 
-        float expose_size = 1.2f;
+        public bool mouseOver = false;
+
+        float exposeSize = 1.2f;
+
+        private bool animationLock = false;
+        private int animationDuration = 200;
+        private int animationStep = 0;
 
         public int state;
 
@@ -52,6 +58,29 @@ namespace citadelGame
         {
             if (state == 0) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
             else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
+
+            if (mouseOver == true)
+            {
+                if (animationStep > 0 && animationLock == true)
+                {
+                    float newExposeSize = 1 + (exposeSize - 1) * (animationDuration - animationStep) / animationDuration;
+                    this.body.Scale = new Vector2f(newExposeSize, newExposeSize);
+                    this.body.Position = new Vector2f(this.start_x - this.width * (newExposeSize - 1) / 2, this.start_y - this.height * (newExposeSize - 1) / 2);
+                    animationStep--;
+                }
+                else if (animationStep == 0)
+                {
+                    //float newExposeSize = 1 + (exposeSize - 1) * (animationDuration - animationStep) / animationDuration;
+                    this.body.Scale = new Vector2f(exposeSize, exposeSize);
+                    this.body.Position = new Vector2f(this.start_x - this.width * (exposeSize - 1) / 2, this.start_y - this.height * (exposeSize - 1) / 2);       
+                }
+            }
+            else
+            {
+                this.body.Scale = new Vector2f(1.0f, 1.0f);
+                this.body.Position = new Vector2f(this.start_x, this.start_y);
+                animationLock = false;
+            }
         }
 
         public bool IsOnTop(int x, int y)
@@ -61,8 +90,13 @@ namespace citadelGame
 
         public void Expose()
         {
-            this.body.Scale = new Vector2f(expose_size, expose_size);
-            this.body.Position = new Vector2f(this.start_x - this.width * (expose_size - 1) / 2, this.start_y - this.height * (expose_size - 1) / 2);
+            if (animationLock == false)
+            {
+                animationLock = true;
+                animationStep = animationDuration;
+            }
+            //this.body.Scale = new Vector2f(exposeSize, exposeSize);
+            //this.body.Position = new Vector2f(this.start_x - this.width * (exposeSize - 1) / 2, this.start_y - this.height * (exposeSize - 1) / 2);
         }
 
         public void DisExpose()
@@ -83,9 +117,23 @@ namespace citadelGame
 
         public bool Collide(int x, int y)
         {
-            if (dock == true) return true;
-            if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height)) return true;
-            else return false;
+
+            if (dock == true)
+            {
+                //mouseOver = true;
+                return true;
+            }
+            if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height))
+            {
+                //mouseOver = true;
+                return true;
+            }
+            else
+            {
+                //mouseOver = false;
+                return false;
+            }
+
         }
 
         public bool Clicked(int x, int y, Mouse.Button button)

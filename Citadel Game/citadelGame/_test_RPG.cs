@@ -15,73 +15,99 @@ namespace citadelGame
 
         _test_Tilemap map;
         Texture tileset;
-        Texture btn_face;
+        Texture buttonFace;
         Texture deck;
-        List<UIButton> button_list;
-        List<_test_Card> card_sprite_list;
+        List<UIButton> buttonList;
+        List<_test_Card> cardSpriteList;
+        List<_test_Card> hand;
 
-        public _test_RPG() : base(800, 600, "Game Name", Color.Cyan)
+        public _test_RPG() : base(1200, 800, "Game Name", Color.Cyan)
         {
-            button_list = new List<UIButton>();
-            card_sprite_list = new List<_test_Card>();
+            buttonList = new List<UIButton>();
+            cardSpriteList = new List<_test_Card>();
+            hand = new List<_test_Card>();
         }
 
         protected override void CheckCollide(MouseMoveEventArgs e)
         {
-            int dummy_position = 0;
-            _test_Card dummy_card = new _test_Card(0, 0, 0, 0, deck, 0, 0);
-            bool happened = false;
+            int cardIndex = 0;
+            _test_Card chosenCard = new _test_Card(0, 0, 0, 0, deck, 0, 0);
+            bool eventHappened = false;
 
-            Vector2i mouse_coords = new Vector2i(e.X, e.Y);
-            Vector2f world_coords = window.MapPixelToCoords(mouse_coords);
-            foreach (UIButton button in button_list) button.Collide((int)world_coords.X, (int)world_coords.Y);
-            foreach (_test_Card card in card_sprite_list)
+            Vector2i mouseCoords = new Vector2i(e.X, e.Y);
+            Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
+            foreach (UIButton button in buttonList) button.Collide((int)worldCoords.X, (int)worldCoords.Y);
+
+            // TYLKO DLA cardSpriteList
+            foreach (_test_Card card in cardSpriteList)
             {
+                card.mouseOver = false;
                 card.DisExpose();
-                bool active = card.Collide((int)world_coords.X, (int)world_coords.Y);
+                bool active = card.Collide((int)worldCoords.X, (int)worldCoords.Y);
                 if (active == true)
                 {
-                    dummy_position = card_sprite_list.IndexOf(card);
-                    dummy_card = card;
-                    happened = true;
+                    cardIndex = cardSpriteList.IndexOf(card);
+                    chosenCard = card;
+                    eventHappened = true;
                 }
             }
-            if (happened == true)
+            if (eventHappened == true)
             {
                 //card_sprite_list.RemoveAt(dummy_position);
                 //card_sprite_list.Add(dummy_card);
+                chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
+                chosenCard.mouseOver = true;
+                chosenCard.Expose();
+            }  
 
-                dummy_card.Drag((int)world_coords.X, (int)world_coords.Y);
-                dummy_card.Expose();
+            // TYLKO DLA hand
+            foreach (_test_Card card in hand)
+            {
+                card.mouseOver = false;
+                card.DisExpose();  
+                bool active = card.Collide((int)worldCoords.X, (int)worldCoords.Y);
+                if (active == true)
+                {
+                    cardIndex = cardSpriteList.IndexOf(card);
+                    chosenCard = card;
+                    eventHappened = true;
+                }
             }
-            //else dummy_card.DisExpose();
+            if (eventHappened == true)
+            {
+                //card_sprite_list.RemoveAt(dummy_position);
+                //card_sprite_list.Add(dummy_card);
+                chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
+                chosenCard.mouseOver = true;
+                chosenCard.Expose();
+            }
         }
         
         protected override void CheckClick(MouseButtonEventArgs e)
         {
-            Vector2i mouse_coords = new Vector2i(e.X, e.Y);
-            Vector2f world_coords = window.MapPixelToCoords(mouse_coords);
+            Vector2i mouseCoords = new Vector2i(e.X, e.Y);
+            Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
             
-            foreach (UIButton button in button_list) button.Clicked((int)world_coords.X, (int)world_coords.Y, e.Button);
+            foreach (UIButton button in buttonList) button.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
 
             // POTĘŻNIE UPOŚLEDZONA FUNKCJA ELEMENTU AKTYWNEGO
-            int dummy_position = 0;
-            _test_Card dummy_card = new _test_Card(0, 0, 0, 0, deck, 0, 0); 
-            bool happened = false;
-            foreach (_test_Card card in card_sprite_list)
+            int cardIndex = 0;
+            _test_Card chosenCard = new _test_Card(0, 0, 0, 0, deck, 0, 0); 
+            bool eventHappened = false;
+            foreach (_test_Card card in cardSpriteList)
             {
-                bool active = card.Clicked((int)world_coords.X, (int)world_coords.Y, e.Button);
+                bool active = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                 if (active == true)
                 {
-                    dummy_position = card_sprite_list.IndexOf(card);
-                    dummy_card = card;
-                    happened = true;
+                    cardIndex = cardSpriteList.IndexOf(card);
+                    chosenCard = card;
+                    eventHappened = true;
                 }
             }
-            if (happened == true)
+            if (eventHappened == true)
             {
-                card_sprite_list.RemoveAt(dummy_position);
-                card_sprite_list.Add(dummy_card);
+                cardSpriteList.RemoveAt(cardIndex);
+                cardSpriteList.Add(chosenCard);
             }
 
             // Trzeba dopisać funkcje IfOnTop dla klasy card (dopiero potem wywoływać Clicked)
@@ -90,43 +116,44 @@ namespace citadelGame
 
         protected override void CheckUnClick(MouseButtonEventArgs e)
         {
-            Vector2i mouse_coords = new Vector2i(e.X, e.Y);
-            Vector2f world_coords = window.MapPixelToCoords(mouse_coords);
-            foreach (UIButton button in button_list) button.UnClicked((int)world_coords.X, (int)world_coords.Y, e.Button);
-            foreach (_test_Card card in card_sprite_list) card.UnClicked((int)world_coords.X, (int)world_coords.Y, e.Button);
+            Vector2i mouseCoords = new Vector2i(e.X, e.Y);
+            Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
+            foreach (UIButton button in buttonList) button.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            foreach (_test_Card card in cardSpriteList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
         }
 
         protected override void LoadContent()
         {
             tileset = new Texture("Resources/DungeonTileset.png");
-            btn_face = new Texture("Resources/btn_play.bmp");
+            buttonFace = new Texture("Resources/btn_play.bmp");
             deck = new Texture("Resources/deck.gif");
         }
 
         protected override void Initialize()
         {
             map = new _test_Tilemap(tileset, 4, 4, 32.0f, 64.0f);
-            button_list.Add(new UIPrimitiveButton(320, 20, 180, 40));
-            button_list.Add(new UIPrimitiveButton(320, 80, 180, 40));
-            button_list.Add(new UIGlyphButton(320, 140, 95, 53, btn_face));
-            button_list.Add(new UIGlyphButton(500, 140, 95, 53, btn_face));
+            buttonList.Add(new UIPrimitiveButton(320, 20, 180, 40));
+            buttonList.Add(new UIPrimitiveButton(320, 80, 180, 40));
+            buttonList.Add(new UIGlyphButton(320, 140, 95, 53, buttonFace));
+            buttonList.Add(new UIGlyphButton(500, 140, 95, 53, buttonFace));
 
-            UIGlyphButton button_off = new UIGlyphButton(320, 240, 95, 53, btn_face);
-            button_off.state = -1;
-            button_list.Add(button_off);
+            UIGlyphButton buttonOff = new UIGlyphButton(320, 240, 95, 53, buttonFace);
+            buttonOff.state = -1;
+            buttonList.Add(buttonOff);
 
             for (int i = 0; i < 13; i++)
             {
-                card_sprite_list.Add(new _test_Card(20+15 * i, 20, 72, 100, deck, i, 3));
-                card_sprite_list.Add(new _test_Card(20 + 15 * i, 130, 72, 100, deck, i, 2));
-                card_sprite_list.Add(new _test_Card(20 + 15 * i, 240, 72, 100, deck, i, 1));
-                card_sprite_list.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deck, i, 0));
+                cardSpriteList.Add(new _test_Card(20+15 * i, 20, 72, 100, deck, i, 3));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 130, 72, 100, deck, i, 2));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 240, 72, 100, deck, i, 1));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deck, i, 0));
             }
-            //card_sprite_list.Add(new _test_Card(1, 1, 72, 100, deck, 0, 2));
-            //card_sprite_list.Add(new _test_Card(37, 51, 72, 100, deck, 1, 2));
-            //card_sprite_list.Add(new _test_Card(37 * 2, 51 * 2, 72, 100, deck, 2, 2));
-            //card_sprite_list.Add(new _test_Card(37 * 3, 51 * 3, 72, 100, deck, 3, 2));
-            //card_sprite_list.Add(new _test_Card(37 * 4, 51 * 4, 72, 100, deck, 4, 2));
+
+            hand.Add(new _test_Card(100, 600, 72, 100, deck, 0, 2));
+            hand.Add(new _test_Card(200, 600, 72, 100, deck, 4, 3));
+            hand.Add(new _test_Card(300, 600, 72, 100, deck, 2, 2));
+            hand.Add(new _test_Card(400, 600, 72, 100, deck, 11, 1));
+            hand.Add(new _test_Card(500, 600, 72, 100, deck, 7, 0));
         }
 
         protected override void Tick()
@@ -137,14 +164,19 @@ namespace citadelGame
         protected override void Render()
         {
             window.Draw(map);
-            foreach (UIButton button in button_list)
+            foreach (UIButton button in buttonList)
             {
                 window.Draw(button);
             }
-            foreach (_test_Card card in card_sprite_list)
+            foreach (_test_Card card in cardSpriteList)
             {
                 window.Draw(card);
             }
+            foreach (_test_Card card in hand)
+            {
+                window.Draw(card);
+            }
+
         }
     }
 }
