@@ -23,9 +23,11 @@ namespace citadelGame
         Texture face;
         Sprite body;
 
+        float expose_size = 1.2f;
+
         public int state;
 
-        public Color color;
+        //public Color color;
 
         public bool dock;
 
@@ -40,7 +42,6 @@ namespace citadelGame
             this.texture_y = texture_y;
             this.face = face;
 
-
             this.body = new Sprite();
             this.body.Texture = this.face;
             this.body.TextureRect = new IntRect(0, 0, this.width, this.height);
@@ -53,7 +54,24 @@ namespace citadelGame
             else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
         }
 
-        public void Collide(int x, int y)
+        public bool IsOnTop(int x, int y)
+        {
+            return false;
+        }
+
+        public void Expose()
+        {
+            this.body.Scale = new Vector2f(expose_size, expose_size);
+            this.body.Position = new Vector2f(this.start_x - this.width * (expose_size - 1) / 2, this.start_y - this.height * (expose_size - 1) / 2);
+        }
+
+        public void DisExpose()
+        {
+            this.body.Scale = new Vector2f(1.0f, 1.0f);
+            this.body.Position = new Vector2f(this.start_x, this.start_y);
+        }
+
+        public void Drag(int x, int y)
         {
             if (dock == true)
             {
@@ -63,18 +81,31 @@ namespace citadelGame
             }
         }
 
-        public void Clicked(int x, int y, Mouse.Button button)
+        public bool Collide(int x, int y)
         {
-            if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height) && button.ToString() == "Left")
-            {
-                dock = true;
-                dock_pos_x = x - this.start_x;
-                dock_pos_y = y - this.start_y;
+            if (dock == true) return true;
+            if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height)) return true;
+            else return false;
+        }
 
-                //if (state == 0) state = 1;
-                //else state = 0;
+        public bool Clicked(int x, int y, Mouse.Button button)
+        {
+            if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height))
+            {
+                if (button.ToString() == "Left")
+                {
+                    dock = true;
+                    dock_pos_x = x - this.start_x;
+                    dock_pos_y = y - this.start_y;
+                }
+                else if (button.ToString() == "Right")
+                {
+                    if (state == 0) state = 1;
+                    else state = 0;
+                }
+                return true;
             }
-            
+            return false;
         }
 
         public void UnClicked(int x, int y, Mouse.Button button)
