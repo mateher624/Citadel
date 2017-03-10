@@ -11,6 +11,8 @@ namespace citadelGame
 {
     class _test_Card : Drawable
     {
+        public int dockX;
+        public int dockY;
         public int start_x;
         public int start_y;
         public int width;
@@ -19,6 +21,10 @@ namespace citadelGame
         public int texture_y;
         private int dock_pos_x;
         private int dock_pos_y;
+        public int oldStartX;
+        public int oldStartY;
+
+        public int handStartX;
 
         Texture face;
         Sprite body;
@@ -27,9 +33,13 @@ namespace citadelGame
 
         float exposeSize = 1.2f;
 
-        private bool animationLock = false;
-        private int animationDuration = 200;
-        private int animationStep = 0;
+        private bool exposeAnimationLock = false;
+        private int exposeAnimationDuration = 200;
+        private int exposeAnimationStep = 0;
+
+        private bool magnetAnimationLock = false;
+        private int magnetAnimationDuration = 200;
+        private int magnetAnimationStep = 0;
 
         public int state;
 
@@ -40,6 +50,8 @@ namespace citadelGame
         public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y)
         {
             state = 1;
+            this.dockX = start_x;
+            this.dockY = start_y;
             this.start_x = start_x;
             this.start_y = start_y;
             this.width = width;
@@ -47,6 +59,7 @@ namespace citadelGame
             this.texture_x = texture_x;
             this.texture_y = texture_y;
             this.face = face;
+            this.handStartX = start_x;
 
             this.body = new Sprite();
             this.body.Texture = this.face;
@@ -59,16 +72,27 @@ namespace citadelGame
             if (state == 0) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
             else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
 
+            if (magnetAnimationLock == true)
+            {
+                if (magnetAnimationStep == -1) magnetAnimationLock = false;
+                else
+                {
+                    start_x = oldStartX - (int)((oldStartX - dockX) * (magnetAnimationDuration - magnetAnimationStep) / (float)magnetAnimationDuration);
+                    start_y = oldStartY - (int)((oldStartY - dockY) * (magnetAnimationDuration - magnetAnimationStep) / (float)magnetAnimationDuration);
+                    magnetAnimationStep--;
+                }
+            }
+
             if (mouseOver == true)
             {
-                if (animationStep > 0 && animationLock == true)
+                if (exposeAnimationStep > 0 && exposeAnimationLock == true)
                 {
-                    float newExposeSize = 1 + (exposeSize - 1) * (animationDuration - animationStep) / animationDuration;
+                    float newExposeSize = 1 + (exposeSize - 1) * (exposeAnimationDuration - exposeAnimationStep) / exposeAnimationDuration;
                     this.body.Scale = new Vector2f(newExposeSize, newExposeSize);
                     this.body.Position = new Vector2f(this.start_x - this.width * (newExposeSize - 1) / 2, this.start_y - this.height * (newExposeSize - 1) / 2);
-                    animationStep--;
+                    exposeAnimationStep--;
                 }
-                else if (animationStep == 0)
+                else if (exposeAnimationStep == 0)
                 {
                     //float newExposeSize = 1 + (exposeSize - 1) * (animationDuration - animationStep) / animationDuration;
                     this.body.Scale = new Vector2f(exposeSize, exposeSize);
@@ -79,7 +103,7 @@ namespace citadelGame
             {
                 this.body.Scale = new Vector2f(1.0f, 1.0f);
                 this.body.Position = new Vector2f(this.start_x, this.start_y);
-                animationLock = false;
+                exposeAnimationLock = false;
             }
         }
 
@@ -90,10 +114,10 @@ namespace citadelGame
 
         public void Expose()
         {
-            if (animationLock == false)
+            if (exposeAnimationLock == false)
             {
-                animationLock = true;
-                animationStep = animationDuration;
+                exposeAnimationLock = true;
+                exposeAnimationStep = exposeAnimationDuration;
             }
             //this.body.Scale = new Vector2f(exposeSize, exposeSize);
             //this.body.Position = new Vector2f(this.start_x - this.width * (exposeSize - 1) / 2, this.start_y - this.height * (exposeSize - 1) / 2);
@@ -111,7 +135,16 @@ namespace citadelGame
             {
                 this.start_x = x - dock_pos_x;
                 this.start_y = y - dock_pos_y;
+
+                // WYŁĄCZENIE PRZYCIĄGANIA PRZY PRZESUNIĘCIU
+                //this.dockX = this.start_x;
+                //this.dockY = this.start_y;
+
                 this.body.Position = new Vector2f(this.start_x, this.start_y);
+            }
+            else
+            {
+                
             }
         }
 
@@ -159,6 +192,14 @@ namespace citadelGame
         public void UnClicked(int x, int y, Mouse.Button button)
         {
             dock = false;
+
+            if ((dockX != start_x || dockY != start_y) && magnetAnimationLock == false)
+            {
+                magnetAnimationLock = true;
+                oldStartX = start_x;
+                oldStartY = start_y;
+                magnetAnimationStep = magnetAnimationDuration;
+            }
         }
 
         public void Draw(RenderTarget target, RenderStates states)

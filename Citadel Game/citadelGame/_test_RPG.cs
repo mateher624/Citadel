@@ -12,20 +12,19 @@ namespace citadelGame
 {
     class _test_RPG : _test_Game
     {
-
         _test_Tilemap map;
         Texture tileset;
         Texture buttonFace;
         Texture deck;
         List<UIButton> buttonList;
         List<_test_Card> cardSpriteList;
-        List<_test_Card> hand;
+
+        _test_Hand hand;
 
         public _test_RPG() : base(1200, 800, "Game Name", Color.Cyan)
         {
             buttonList = new List<UIButton>();
             cardSpriteList = new List<_test_Card>();
-            hand = new List<_test_Card>();
         }
 
         protected override void CheckCollide(MouseMoveEventArgs e)
@@ -58,17 +57,19 @@ namespace citadelGame
                 chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
                 chosenCard.mouseOver = true;
                 chosenCard.Expose();
-            }  
+            }
 
             // TYLKO DLA hand
-            foreach (_test_Card card in hand)
+            eventHappened = false;
+            foreach (_test_Card card in hand.cardList)
             {
                 card.mouseOver = false;
+                card.start_x = card.handStartX;
                 card.DisExpose();  
                 bool active = card.Collide((int)worldCoords.X, (int)worldCoords.Y);
                 if (active == true)
                 {
-                    cardIndex = cardSpriteList.IndexOf(card);
+                    cardIndex = hand.cardList.IndexOf(card);
                     chosenCard = card;
                     eventHappened = true;
                 }
@@ -80,6 +81,7 @@ namespace citadelGame
                 chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
                 chosenCard.mouseOver = true;
                 chosenCard.Expose();
+                hand.Update(cardIndex);
             }
         }
         
@@ -108,10 +110,28 @@ namespace citadelGame
             {
                 cardSpriteList.RemoveAt(cardIndex);
                 cardSpriteList.Add(chosenCard);
+                //chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
             }
 
-            // Trzeba dopisać funkcje IfOnTop dla klasy card (dopiero potem wywoływać Clicked)
-
+            eventHappened = false;
+            foreach (_test_Card card in hand.cardList)
+            {
+                bool active = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (active == true)
+                {
+                    cardIndex = hand.cardList.IndexOf(card);
+                    chosenCard = card;
+                    eventHappened = true;
+                }
+            }
+            if (eventHappened == true)
+            {
+                hand.activeCard = chosenCard;
+                hand.activeCardActive = true;
+                //hand.cardList.RemoveAt(cardIndex);
+                //hand.cardList.Add(chosenCard);
+                //chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
+            }
         }
 
         protected override void CheckUnClick(MouseButtonEventArgs e)
@@ -120,6 +140,12 @@ namespace citadelGame
             Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
             foreach (UIButton button in buttonList) button.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             foreach (_test_Card card in cardSpriteList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            //foreach (_test_Card card in hand.cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            if (hand.activeCardActive == true)
+            {
+                hand.activeCard.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                hand.activeCardActive = false;
+            }
         }
 
         protected override void LoadContent()
@@ -131,6 +157,8 @@ namespace citadelGame
 
         protected override void Initialize()
         {
+            hand = new _test_Hand(100, 600, 600, deck);
+
             map = new _test_Tilemap(tileset, 4, 4, 32.0f, 64.0f);
             buttonList.Add(new UIPrimitiveButton(320, 20, 180, 40));
             buttonList.Add(new UIPrimitiveButton(320, 80, 180, 40));
@@ -149,11 +177,23 @@ namespace citadelGame
                 cardSpriteList.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deck, i, 0));
             }
 
-            hand.Add(new _test_Card(100, 600, 72, 100, deck, 0, 2));
-            hand.Add(new _test_Card(200, 600, 72, 100, deck, 4, 3));
-            hand.Add(new _test_Card(300, 600, 72, 100, deck, 2, 2));
-            hand.Add(new _test_Card(400, 600, 72, 100, deck, 11, 1));
-            hand.Add(new _test_Card(500, 600, 72, 100, deck, 7, 0));
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            hand.AddCard();
+            //hand.Add(new _test_Card(200, 600, 72, 100, deck, 4, 3));
+            //hand.Add(new _test_Card(300, 600, 72, 100, deck, 2, 2));
+            //hand.Add(new _test_Card(400, 600, 72, 100, deck, 11, 1));
+            //hand.Add(new _test_Card(500, 600, 72, 100, deck, 7, 0));
         }
 
         protected override void Tick()
@@ -172,7 +212,7 @@ namespace citadelGame
             {
                 window.Draw(card);
             }
-            foreach (_test_Card card in hand)
+            foreach (_test_Card card in hand.cardList)
             {
                 window.Draw(card);
             }
