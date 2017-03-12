@@ -82,6 +82,7 @@
     <Compile Include="_test_Card.cs" />
     <Compile Include="_test_Game.cs" />
     <Compile Include="_test_Hand.cs" />
+    <Compile Include="_test_Playground.cs" />
     <Compile Include="_test_RPG.cs" />
     <Compile Include="_test_Tile.cs" />
     <Compile Include="_test_Tilemap.cs" />

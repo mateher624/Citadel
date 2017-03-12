@@ -205,7 +205,6 @@ namespace citadelGame
                     this.dockY = this.currentY;
                 }
 
-
                 this.body.Position = new Vector2f(this.currentX, this.currentY);
             }
         }
