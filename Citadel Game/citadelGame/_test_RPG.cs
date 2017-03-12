@@ -164,7 +164,12 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
             
-            foreach (UIButton button in buttonList) button.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            //foreach (UIButton button in buttonList) button.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            for (int i = buttonList.Count - 1; i >= 0; i--)
+            {
+                bool done = buttonList[i].UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (done == true) hand.AddCard(0, 3);
+            }
             foreach (_test_Card card in cardSpriteList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
             //foreach (_test_Card card in hand.cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             if (hand.activeCardActive == true)
@@ -196,9 +201,9 @@ namespace citadelGame
 
         protected override void LoadContent()
         {
-            tileset = new Texture("Resources/DungeonTileset.png");
-            buttonFace = new Texture("Resources/btn_play.bmp");
-            deck = new Texture("Resources/deck.gif");
+            tileset = new Texture("../../Resources/DungeonTileset.png");
+            buttonFace = new Texture("../../Resources/btn_play.bmp");
+            deck = new Texture("../../Resources/deck.gif");
         }
 
         protected override void Initialize()
@@ -237,6 +242,11 @@ namespace citadelGame
             hand.AddCard(3, 2);
             hand.AddCard(4, 1);
             hand.AddCard(11, 0);
+
+            hand.AddCard(0, 1);
+            hand.AddCard(12, 1);
+            hand.AddCard(11, 1);
+            
             //hand.Add(new _test_Card(200, 600, 72, 100, deck, 4, 3));
             //hand.Add(new _test_Card(300, 600, 72, 100, deck, 2, 2));
             //hand.Add(new _test_Card(400, 600, 72, 100, deck, 11, 1));

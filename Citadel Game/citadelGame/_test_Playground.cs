@@ -17,6 +17,10 @@ namespace citadelGame
         private int height;
         int offset = 50;
 
+        int cardAreaWidth;
+        int cardAreaStartX;
+        int cardAreaStartY;
+
         private bool mouseOver = false;
 
         RectangleShape body;
@@ -53,16 +57,21 @@ namespace citadelGame
 
         public void AddCard(_test_Card addedCard)
         {
-            int i = 1;
+            int i = 0;
             cardCount++;
-            //width = Math.Min((int)(72 * 1.2 * (cardCount + 1)), maxTableWidth);
-            height = 100;
+
             cardList.Add(addedCard);
+            //width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
+            height = cardList[0].height;
+
             foreach (_test_Card card in cardList)
             {
-                card.dockX = startX + (i * (width) / (cardCount+1)) - card.width/2;
+                //card.dockX = startX + (i * (cardAreaWidth) / (cardCount+1)) - card.width/2;
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
                 card.dockY = startY;
-                card.handStartX = card.currentX;
+                card.handStartX = card.dockX;
                 card.dockY = startY;
                 card.Free();
                 //card.dockX = card.currentX;

@@ -38,13 +38,22 @@ namespace citadelGame
             }
         }
 
-        public void UnClicked(int x, int y, Mouse.Button button)
+        public bool UnClicked(int x, int y, Mouse.Button button)
         {
             if (state == 2)
             {
-                if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height)) state = 1;
-                else state = 0;
+                if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height))
+                {
+                    state = 1;
+                    return true;
+                }
+                else
+                {
+                    state = 0;
+                    return false;
+                }
             }
+            else return false;
         }
 
         public abstract void Draw(RenderTarget target, RenderStates states);

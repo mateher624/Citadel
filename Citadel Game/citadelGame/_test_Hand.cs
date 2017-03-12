@@ -12,6 +12,9 @@ namespace citadelGame
     class _test_Hand : Drawable
     {
         int width;
+        int cardAreaWidth;
+        int cardAreaStartX;
+        int cardAreaStartY;
         int maxHandWidth;
         int cardCount;
         int height;
@@ -48,58 +51,33 @@ namespace citadelGame
 
         public void SlipCards(int cardIndex)
         {
-            //int i = 0;
-
-            //if (activeCardActive == false)
+            for (int i = cardList.Count - 1; i >= 0; i--)
             {
-                //foreach (_test_Card card in cardList)
-                for (int i = cardList.Count - 1; i >= 0; i--)
+                int distance = Math.Abs(cardIndex - i);
+                //double deltaX = Math.Abs(1 / (float)distance * card.width * 0.6f);
+                int deltaX = 0;
+                if (cardCount * (cardList[i].width * cardList[i].exposeSize + 1) > width)
                 {
-                    //cardList[i].ResPos();
-                    int distance = Math.Abs(cardIndex - i);
-                    //double deltaX = Math.Abs(1 / (float)distance * card.width * 0.6f);
-                    int deltaX = 0;
-                    if (cardCount * (cardList[i].width * cardList[i].exposeSize + 1) > width)
-                    {
-                        deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(cardCount / 3.0f, distance) / (cardCount / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
-                    }
+                    deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(cardCount / 3.0f, distance) / (cardCount / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
+                }
                    
-                    if (i < cardIndex && deltaX != 0)
-                    {
-                        //cardList[i].magnetAnimationLock = false;
-                        cardList[i].destinationX = (int)(cardList[i].handStartX - deltaX);
-                        cardList[i].dockX = cardList[i].destinationX;
-                        cardList[i].ForceFree();
-                        //if (cardList[i].currentX == cardList[i].destinationX)
-                        //{
-                        //    cardList[i].dockX = cardList[i].handStartX;
-                        //    cardList[i].freezePosition = true;
-                        //}
-                        //if (freeze == true) card.currentX = (int)(card.currentX - deltaX);
-                        //else card.Flow((int)(card.currentX - deltaX));
-
-                    }
-                    else if (i > cardIndex && deltaX != 0)
-                    {
-                        cardList[i].destinationX = (int)(cardList[i].handStartX + deltaX);
-                        cardList[i].dockX = cardList[i].destinationX;
-                        cardList[i].ForceFree();
-                        //if (cardList[i].currentX == cardList[i].destinationX)
-                        //{
-                        //    cardList[i].dockX = cardList[i].handStartX;
-                        //    cardList[i].freezePosition = true;
-                        //}
-                        //if (freeze == true) card.currentX = (int)(card.currentX + deltaX);
-                        //else card.Flow((int)(card.currentX + deltaX));
-                    }
-                    else
-                    {
-                        cardList[i].destinationX = (int)(cardList[i].handStartX);
-                        cardList[i].dockX = cardList[i].destinationX;
-                        cardList[i].ForceFree();
-                    }
-                    //if (freeze == false) card.Free();
-                    //i++;
+                if (i < cardIndex && deltaX != 0)
+                {
+                    cardList[i].destinationX = (int)(cardList[i].handStartX - deltaX);
+                    cardList[i].dockX = cardList[i].destinationX;
+                    cardList[i].ForceFree();
+                }
+                else if (i > cardIndex && deltaX != 0)
+                {
+                    cardList[i].destinationX = (int)(cardList[i].handStartX + deltaX);
+                    cardList[i].dockX = cardList[i].destinationX;
+                    cardList[i].ForceFree();
+                }
+                else
+                {
+                    cardList[i].destinationX = (int)(cardList[i].handStartX);
+                    cardList[i].dockX = cardList[i].destinationX;
+                    cardList[i].ForceFree();
                 }
             }
         }
@@ -108,16 +86,20 @@ namespace citadelGame
         {
             int i = 0;
             cardCount++;
-            width = Math.Min((int)(72 * 1.2 * (cardCount+1)), maxHandWidth);
-            height = 100;
             cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
+            //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
+            width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
+            height = cardList[0].height;
             foreach (_test_Card card in cardList)
             {
-                card.currentX = startX + (i * (width+1) / (cardCount));
-                card.handStartX = card.currentX;
-                card.currentY = startY;
-                card.dockX = card.currentX;
-                card.dockY = card.currentY;
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.handStartX = card.dockX;
+                card.dockY = startY;
+                //card.dockX = card.currentX;
+                //card.dockY = card.currentY;
+                card.Free();
                 i++;
             }
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
@@ -127,16 +109,21 @@ namespace citadelGame
         {
             int i = 0;
             cardCount--;
+            //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount + 1)), maxHandWidth);
+            width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
+            height = cardList[0].height;
             cardList.Remove(removedCard);
-            width = Math.Min((int)(72 * 1.2 * (cardCount + 1)), maxHandWidth);
-            height = 100;
+            
             foreach (_test_Card card in cardList)
             {
-                card.currentX = startX + (i * (width + 1) / (cardCount));
-                card.handStartX = card.currentX;
-                card.currentY = startY;
-                card.dockX = card.currentX;
-                card.dockY = card.currentY;
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.handStartX = card.dockX;
+                card.dockY = startY;
+                //card.dockX = card.currentX;
+                //card.dockY = card.currentY;
+                card.Free();
                 i++;
             }
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
