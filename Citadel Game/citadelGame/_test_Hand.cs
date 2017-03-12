@@ -13,7 +13,7 @@ namespace citadelGame
     {
         int width;
         int maxHandWidth;
-        int handSize;
+        int cardCount;
         int height;
         int startX;
         int startY;
@@ -58,7 +58,12 @@ namespace citadelGame
                     //cardList[i].ResPos();
                     int distance = Math.Abs(cardIndex - i);
                     //double deltaX = Math.Abs(1 / (float)distance * card.width * 0.6f);
-                    int deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(handSize / 3.0f, distance) / (handSize / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
+                    int deltaX = 0;
+                    if (cardCount * (cardList[i].width * cardList[i].exposeSize + 1) > width)
+                    {
+                        deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(cardCount / 3.0f, distance) / (cardCount / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
+                    }
+                   
                     if (i < cardIndex && deltaX != 0)
                     {
                         //cardList[i].magnetAnimationLock = false;
@@ -102,13 +107,13 @@ namespace citadelGame
         public void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
-            handSize++;
-            width = Math.Min((int)(72 * 1.2 * (handSize+1)), maxHandWidth);
+            cardCount++;
+            width = Math.Min((int)(72 * 1.2 * (cardCount+1)), maxHandWidth);
             height = 100;
             cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
             foreach (_test_Card card in cardList)
             {
-                card.currentX = startX + (i * (width+1) / (handSize));
+                card.currentX = startX + (i * (width+1) / (cardCount));
                 card.handStartX = card.currentX;
                 card.currentY = startY;
                 card.dockX = card.currentX;
@@ -118,17 +123,16 @@ namespace citadelGame
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public void RemoveCard(int texture_x, int texture_y, _test_Card removedCard)
+        public void RemoveCard(_test_Card removedCard)
         {
             int i = 0;
-            handSize--;
+            cardCount--;
             cardList.Remove(removedCard);
-            width = Math.Min((int)(72 * 1.2 * (handSize + 1)), maxHandWidth);
+            width = Math.Min((int)(72 * 1.2 * (cardCount + 1)), maxHandWidth);
             height = 100;
-            cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
             foreach (_test_Card card in cardList)
             {
-                card.currentX = startX + (i * (width + 1) / (handSize));
+                card.currentX = startX + (i * (width + 1) / (cardCount));
                 card.handStartX = card.currentX;
                 card.currentY = startY;
                 card.dockX = card.currentX;

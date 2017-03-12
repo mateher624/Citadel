@@ -30,7 +30,7 @@ namespace citadelGame
 
         public bool mouseOver = false;
 
-        float exposeSize = 1.2f;
+        public float exposeSize = 1.2f;
 
         private bool exposeAnimationLock = false;
         private int exposeAnimationDuration = 61;

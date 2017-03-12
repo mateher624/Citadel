@@ -51,20 +51,22 @@ namespace citadelGame
             return mouseOver;
         }
 
-        public void AddCard(int texture_x, int texture_y, _test_Card addedCard)
+        public void AddCard(_test_Card addedCard)
         {
-            int i = 0;
+            int i = 1;
             cardCount++;
             //width = Math.Min((int)(72 * 1.2 * (cardCount + 1)), maxTableWidth);
             height = 100;
-            cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
+            cardList.Add(addedCard);
             foreach (_test_Card card in cardList)
             {
-                card.currentX = startX + (i * (width + 1) / (cardCount));
+                card.dockX = startX + (i * (width) / (cardCount+1)) - card.width/2;
+                card.dockY = startY;
                 card.handStartX = card.currentX;
-                card.currentY = startY;
-                card.dockX = card.currentX;
-                card.dockY = card.currentY;
+                card.dockY = startY;
+                card.Free();
+                //card.dockX = card.currentX;
+                //card.dockY = card.currentY;
                 i++;
             }
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
@@ -81,7 +83,7 @@ namespace citadelGame
             {
                 this.body.FillColor = Color.Green;
                 this.body.OutlineColor = Color.Green;
-            }
+            }  
         }
 
         public void Draw(RenderTarget target, RenderStates states)

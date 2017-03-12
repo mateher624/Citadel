@@ -12,9 +12,7 @@ namespace citadelGame
 {
     class _test_RPG : _test_Game
     {
-
         int oldCardIndex = 0;
-        
 
         _test_Tilemap map;
         Texture tileset;
@@ -38,8 +36,6 @@ namespace citadelGame
         {
             int cardIndex = 0;
             _test_Card chosenCard = new _test_Card(0, 0, 0, 0, deck, 0, 0);
-            
-            //bool eventHappened = false;
 
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
@@ -64,7 +60,6 @@ namespace citadelGame
                 cardSpriteList[i].MouseCollide(active);
             }
 
-
             // TYLKO DLA hand
             cardFound = false;
             cardIndex = -1;
@@ -82,7 +77,6 @@ namespace citadelGame
                             cardFound = true;
                             cardIndex = i;
                             hand.cardList[i].Drag((int)worldCoords.X, (int)worldCoords.Y);
-
                         }
                     }
                     else active = false;
@@ -90,15 +84,9 @@ namespace citadelGame
                     else
                     {
                         int onOrOff2 = hand.cardList[i].OnOrOff(active);
-                        if (onOrOff2 != 0)
-                        {
-                            //handFree();
-                            onOrOff = 1;
-                        }
+                        if (onOrOff2 != 0) onOrOff = 1;
                     }
                     hand.cardList[i].MouseCollide(active);
-
-                    //if (hand.cardList[i].mouseOver == true) flowEnabler = true;
                 }
                 if (onOrOff == 1)
                 {
@@ -116,8 +104,8 @@ namespace citadelGame
             else  cusrsorDockedCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
 
             
-            playground.Collide(e.X, e.Y, mousePressed);
-            hand.Collide(e.X, e.Y, mousePressed);
+            playground.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
+            hand.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
         }
         
         protected override void CheckClick(MouseButtonEventArgs e)
@@ -139,13 +127,6 @@ namespace citadelGame
                     chosenCard = card;
                     eventHappened = true;
                 }
-                //bool active = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                //if (active == true)
-                //{
-                //    cardIndex = cardSpriteList.IndexOf(card);
-                //    chosenCard = card;
-                //    eventHappened = true;
-                //}
             }
             if (eventHappened == true)
             {
@@ -175,9 +156,6 @@ namespace citadelGame
                 cusrsorDockedCard = chosenCard;
                 Console.WriteLine("Card Taken");
                 hand.activeCard.ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                //hand.cardList.RemoveAt(cardIndex);
-                //hand.cardList.Add(chosenCard);
-                //chosenCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
             }
         }
 
@@ -185,7 +163,7 @@ namespace citadelGame
         {
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             Vector2f worldCoords = window.MapPixelToCoords(mouseCoords);
-            mousePressed = false;
+            
             foreach (UIButton button in buttonList) button.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             foreach (_test_Card card in cardSpriteList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
             //foreach (_test_Card card in hand.cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
@@ -199,14 +177,20 @@ namespace citadelGame
                     card.Free();
                 }
             }
-            cusrsorDockedCard = null;
-            bool playgroundCollide = playground.Collide(e.X, e.Y, mousePressed);
-            hand.Collide(e.X, e.Y, mousePressed);
+            
+            bool playgroundCollide = playground.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
+            hand.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
 
-            if (playgroundCollide == true)
+            if (playgroundCollide == true && cusrsorDockedCard != null)
             {
 
+                playground.AddCard(cusrsorDockedCard);
+                hand.RemoveCard(cusrsorDockedCard);
+                cusrsorDockedCard.Free();
             }
+            cusrsorDockedCard = null;
+            mousePressed = false;
+
 
         }
 
@@ -240,7 +224,7 @@ namespace citadelGame
                 cardSpriteList.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deck, i, 0));
             }
             //cardSpriteList.Add(new _test_Card(20 + 15 * 2, 350, 72, 100, deck, 2, 0));
-            //hand.AddCard(1,3);
+            hand.AddCard(1,3);
             hand.AddCard(4,2);
             hand.AddCard(6,1);
             hand.AddCard(10,2);
@@ -249,10 +233,10 @@ namespace citadelGame
             hand.AddCard(5, 1);
             hand.AddCard(6, 0);
             hand.AddCard(8, 2);
-            //hand.AddCard(3, 3);
-            //hand.AddCard(3, 2);
-            //hand.AddCard(4, 1);
-            //hand.AddCard(11, 0);
+            hand.AddCard(3, 3);
+            hand.AddCard(3, 2);
+            hand.AddCard(4, 1);
+            hand.AddCard(11, 0);
             //hand.Add(new _test_Card(200, 600, 72, 100, deck, 4, 3));
             //hand.Add(new _test_Card(300, 600, 72, 100, deck, 2, 2));
             //hand.Add(new _test_Card(400, 600, 72, 100, deck, 11, 1));
@@ -277,11 +261,14 @@ namespace citadelGame
             {
                 window.Draw(card);
             }
+            foreach (_test_Card card in playground.cardList)
+            {
+                window.Draw(card);
+            }
             foreach (_test_Card card in hand.cardList)
             {
                 window.Draw(card);
             }
-
         }
     }
 }
