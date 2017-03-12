@@ -12,6 +12,7 @@ namespace citadelGame
     class _test_Hand
     {
         int handWidth;
+        int maxHandWidth;
         int handSize;
         int startX;
         int startY;
@@ -21,11 +22,12 @@ namespace citadelGame
         public _test_Card activeCard;
         public bool activeCardActive = false;
 
-        public _test_Hand(int startX, int startY, int handWidth, Texture deck)
+        public _test_Hand(int startX, int startY, int maxHandWidth, Texture deck)
         {
             this.startX = startX;
             this.startY = startY;
-            this.handWidth = handWidth;
+            this.maxHandWidth = maxHandWidth;
+            this.handWidth = 1;
             this.deck = deck;
             cardList = new List<_test_Card>();
         }
@@ -87,6 +89,7 @@ namespace citadelGame
         {
             int i = 1;
             handSize++;
+            handWidth = Math.Min((int)(72 * 1.2 * (handSize+1)), maxHandWidth);
             cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
             foreach (_test_Card card in cardList)
             {

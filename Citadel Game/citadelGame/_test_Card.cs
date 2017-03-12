@@ -37,7 +37,7 @@ namespace citadelGame
         private int exposeAnimationStep = 0;
 
         private bool magnetAnimationLock = false;
-        private int magnetAnimationDuration = 60;
+        private int magnetAnimationDuration = 80;
         private int magnetAnimationStep = 0;
         public int dockX;
         public int dockY;
@@ -94,7 +94,7 @@ namespace citadelGame
                 else
                 {
                     currentX = oldStartX - (int)((oldStartX - destinationX) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
-                    //start_y = oldStartY - (int)((oldStartY - destinationY) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
+                    currentY = oldStartY - (int)((oldStartY - destinationY) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
                     flowAnimationStep--;
                 }
             }
