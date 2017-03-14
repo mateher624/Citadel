@@ -29,17 +29,19 @@ namespace citadelGame
         private bool mouseOver = false;
 
         RectangleShape body;
-
-        Texture deck;
+        Sprite body2;
+        private Vector2f backTextureCoords = new Vector2f(2, 4);
+        
+        Texture face;
         public List<_test_Card> cardList;
 
-        public _test_Deck(int startX, int startY, int width, int height, Texture deck)
+        public _test_Deck(int startX, int startY, int width, int height, Texture face)
         {
             this.startX = startX;
             this.startY = startY;
             this.width = width;
             this.height = height;
-            this.deck = deck;
+            this.face = face;
             cardList = new List<_test_Card>();
 
             this.body = new RectangleShape();
@@ -49,6 +51,11 @@ namespace citadelGame
             this.body.OutlineThickness = 1.0f;
             this.body.Size = new Vector2f(width + 2 * offset, height + 2 * offset);
             this.body.Position = new Vector2f(this.startX - offset, this.startY - offset);
+
+            this.body2 = new Sprite();
+            this.body2.Texture = this.face;
+            this.body2.TextureRect = new IntRect((int)backTextureCoords.X * this.width, (int)backTextureCoords.Y * this.height, this.width, this.height);
+            this.body2.Position = new Vector2f(this.startX, this.startY);
         }
 
         public void RemoveCard(_test_Card removedCard)
@@ -74,8 +81,9 @@ namespace citadelGame
         {
             int i = 0;
             cardCount++;
-            cardList.Add(new _test_Card(startX, 0, 72, 100, deck, texture_x, texture_y));
+            cardList.Add(new _test_Card(startX, 0, 72, 100, face, texture_x, texture_y));
             cardList[cardList.Count - 1].orgin = Orgin.deck;
+            cardList[cardList.Count - 1].state = 0;
             foreach (_test_Card card in cardList)
             {
                 card.dockX = startX;
@@ -116,10 +124,7 @@ namespace citadelGame
 
         public void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
-            int cardIndex = -1;
             int maxCardIndex = cardList.Count - 1;
-            bool eventHappened = false;
-            _test_Card chosenCard = null;
             if (maxCardIndex >= 0)
             {
                 bool active = cardList[maxCardIndex].Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
@@ -134,7 +139,9 @@ namespace citadelGame
 
         public void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
         {
-            foreach (_test_Card card in cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
+            //foreach (_test_Card card in cardList)
+            if (cardList.Count - 1 >= 0) cardList[cardList.Count - 1].UnClicked((int)worldCoords.X, (int)worldCoords.Y);
+            //cardList[cardList.Count - 1].Flip();
         }
 
         protected void Update()
@@ -146,6 +153,7 @@ namespace citadelGame
         {
             Update();
             target.Draw(body, states);
+            target.Draw(body2, states);
         }
     }
 }

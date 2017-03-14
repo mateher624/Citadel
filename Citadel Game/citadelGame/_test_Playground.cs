@@ -64,7 +64,7 @@ namespace citadelGame
             cardList[cardList.Count - 1].orgin = Orgin.playground;
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
-            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX - cardList[0].width/2);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             height = cardList[0].height;
 
             foreach (_test_Card card in cardList)
@@ -73,7 +73,6 @@ namespace citadelGame
                 card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
                 card.dockY = startY;
                 //card.handStartX = card.dockX;
-                //card.dockY = startY;
                 card.Free();
                 //card.dockX = card.currentX;
                 //card.dockY = card.currentY;

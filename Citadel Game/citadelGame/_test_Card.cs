@@ -11,6 +11,8 @@ namespace citadelGame
 {
     class _test_Card : Drawable
     {
+        Vector2f mouseCoords;
+
         public int currentX;
         public int currentY;
         public int width;
@@ -41,9 +43,14 @@ namespace citadelGame
         public int dockX;
         public int dockY;
 
-        public bool flowAnimationLock = false;
-        public int flowAnimationDuration = 60;
-        public int flowAnimationStep = 0;
+        //public bool flowAnimationLock = false;
+        //public int flowAnimationDuration = 60;
+        //public int flowAnimationStep = 0;
+
+        private bool flipAnimationLock = false;
+        private int flipAnimationDuration = 100;
+        private int flipAnimationStep = 0;
+
         public int destinationX;
         public int destinationY;
 
@@ -85,31 +92,70 @@ namespace citadelGame
 
         protected void Update()
         {
-            if (mouseOver == false && flowAnimationLock == false) destinationX = 0;
-            if (state == 0) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
-            else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
-
-            if (flowAnimationLock == true)
+            //MouseCollide(Collide((int)mouseCoords.X, (int)mouseCoords.Y));
+            if (magnetAnimationLock == true)
             {
-                if (flowAnimationStep == -1) flowAnimationLock = false;
-                else
-                {
-                    currentX = oldStartX - (int)((oldStartX - destinationX) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
-                    currentY = oldStartY - (int)((oldStartY - destinationY) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
-                    flowAnimationStep--;
-                }
-            }
-            else if (magnetAnimationLock == true)
-            {
+                //
                 if (magnetAnimationStep == -1) magnetAnimationLock = false;
                 else
                 {
+                    //if (orgin != Orgin.hand) MouseCollide(Collide((int)mouseCoords.X, (int)mouseCoords.Y));
                     currentX = oldStartX - (int)((oldStartX - dockX) * (magnetAnimationDuration - magnetAnimationStep) / (float)magnetAnimationDuration);
                     currentY = oldStartY - (int)((oldStartY - dockY) * (magnetAnimationDuration - magnetAnimationStep) / (float)magnetAnimationDuration);
                     magnetAnimationStep--;
                 }
             }
-            this.body.Position = new Vector2f(this.currentX, this.currentY);
+            int currentXMod = currentX;
+            int currentYMod = currentY;
+            //if (mouseOver == false && flowAnimationLock == false) destinationX = 0;
+            if (state == 0) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
+            else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
+
+            if (flipAnimationLock == true && exposeAnimationLock == false)
+            {
+                float newScaleX = 1;
+                if (flipAnimationStep == -1)
+                {
+                    flipAnimationLock = false;
+                }
+                else if (flipAnimationStep < flipAnimationDuration / 2)
+                {
+                    newScaleX = Math.Abs((((flipAnimationDuration / 2.0f) - flipAnimationStep) / (flipAnimationDuration / 2.0f)));
+                    body.Scale = new Vector2f(newScaleX, 1);
+                    flipAnimationStep--;
+                }
+                else if (flipAnimationStep == flipAnimationDuration / 2)
+                {
+                    newScaleX = Math.Abs((((flipAnimationDuration / 2.0f) - flipAnimationStep) / (flipAnimationDuration / 2.0f)));
+                    body.Scale = new Vector2f(newScaleX, 1);
+                    if (state == 1) state = 0;
+                    else state = 1;
+                    flipAnimationStep--;
+                }
+                else if (flipAnimationStep <= flipAnimationDuration)
+                {
+                    newScaleX = Math.Abs((((flipAnimationDuration / 2.0f) - flipAnimationStep) / (flipAnimationDuration / 2.0f)));
+                    body.Scale = new Vector2f(newScaleX, 1);
+                    flipAnimationStep--;
+                }
+                if (newScaleX != 1)
+                {
+                    currentXMod = (int)(currentXMod + ((width * (1.0f - newScaleX)) / 2.0f));
+                }
+            }
+
+            //if (flowAnimationLock == true)
+            //{
+            //    if (flowAnimationStep == -1) flowAnimationLock = false;
+            //    else
+            //    {
+            //        currentX = oldStartX - (int)((oldStartX - destinationX) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
+            //        currentY = oldStartY - (int)((oldStartY - destinationY) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
+            //        flowAnimationStep--;
+            //    }
+            //}
+
+            //this.body.Position = new Vector2f(this.currentX, this.currentY);
             // EXPOSE PROCESS
             if (mouseOver == true && exposed == false)
             {
@@ -123,11 +169,13 @@ namespace citadelGame
                         exposeAnimationLock = false;
                         exposed = true;
                     }
-                    else//if (exposeAnimationStep > 0)
+                    else if (exposeAnimationStep >= 0)
                     {
                         float newExposeSize = 1 + (exposeSize - 1) * (exposeAnimationDuration - exposeAnimationStep) / exposeAnimationDuration;
                         this.body.Scale = new Vector2f(newExposeSize, newExposeSize);
-                        this.body.Position = new Vector2f(this.currentX - this.width * (newExposeSize - 1) / 2, this.currentY - this.height * (newExposeSize - 1) / 2);
+                        currentXMod = (int)(currentXMod - this.width * (newExposeSize - 1) / 2);
+                        currentYMod = (int)(currentYMod - this.height * (newExposeSize - 1) / 2);
+                        //this.body.Position = new Vector2f(this.currentX - this.width * (newExposeSize - 1) / 2, this.currentY - this.height * (newExposeSize - 1) / 2);
                         exposeAnimationStep--;
                     }
                 }
@@ -135,7 +183,9 @@ namespace citadelGame
             else if (mouseOver == true && exposed == true)
             {
                 this.body.Scale = new Vector2f(exposeSize, exposeSize);
-                this.body.Position = new Vector2f(this.currentX - this.width * (exposeSize - 1) / 2, this.currentY - this.height * (exposeSize - 1) / 2);
+                currentXMod = (int)(currentXMod - this.width * (exposeSize - 1) / 2);
+                currentYMod = (int)(currentYMod - this.height * (exposeSize - 1) / 2);
+                //this.body.Position = new Vector2f(this.currentX - this.width * (exposeSize - 1) / 2, this.currentY - this.height * (exposeSize - 1) / 2);
             }
             else if (mouseOver == false && exposed == false)
             {
@@ -146,23 +196,26 @@ namespace citadelGame
                     {
                         float newExposeSize = 1 + (exposeSize - 1) * (exposeAnimationDuration - exposeAnimationStep) / exposeAnimationDuration;
                         this.body.Scale = new Vector2f(newExposeSize, newExposeSize);
-                        this.body.Position = new Vector2f(this.currentX - this.width * (newExposeSize - 1) / 2, this.currentY - this.height * (newExposeSize - 1) / 2);
+                        currentXMod = (int)(currentXMod - this.width * (newExposeSize - 1) / 2);
+                        currentYMod = (int)(currentYMod - this.height * (newExposeSize - 1) / 2);
+                        //this.body.Position = new Vector2f(this.currentX - this.width * (newExposeSize - 1) / 2, this.currentY - this.height * (newExposeSize - 1) / 2);
                         exposeAnimationStep++;
                     }
                 }
             }
+            this.body.Position = new Vector2f(currentXMod, currentYMod);
         }
 
-        public void Flow(int destinationX)
-        {
-            if (this.destinationX != destinationX)
-            {
-                this.destinationX = destinationX;
-                this.oldStartX = this.currentX;
-                this.flowAnimationLock = true;
-                this.flowAnimationStep = this.flowAnimationDuration;
-            }
-        }
+        //public void Flow(int destinationX)
+        //{
+        //    if (this.destinationX != destinationX)
+        //    {
+        //        this.destinationX = destinationX;
+        //        this.oldStartX = this.currentX;
+        //        this.flowAnimationLock = true;
+        //        this.flowAnimationStep = this.flowAnimationDuration;
+        //    }
+        //}
 
         public bool IsOnTop(int x, int y)
         {
@@ -171,7 +224,7 @@ namespace citadelGame
 
         public void Expose()
         {
-            if (exposeAnimationLock == false && exposed == false)
+            if (exposeAnimationLock == false && flipAnimationLock == false && exposed == false)
             {
                 exposeAnimationLock = true;
                 exposeAnimationStep = exposeAnimationDuration;
@@ -182,7 +235,7 @@ namespace citadelGame
 
         public void DisExpose()
         {
-            if (exposeAnimationLock == false && exposed == true)
+            if (exposeAnimationLock == false && flipAnimationLock == false && exposed == true)
             {
                 exposeAnimationLock = true;
                 exposeAnimationStep = 0;
@@ -205,7 +258,6 @@ namespace citadelGame
                     this.dockX = this.currentX;
                     this.dockY = this.currentY;
                 }
-
                 this.body.Position = new Vector2f(this.currentX, this.currentY);
             }
         }
@@ -273,6 +325,7 @@ namespace citadelGame
             freezePosition = false;
             if ((dockX != currentX || dockY != currentY))
             {
+                if (orgin != Orgin.hand) MouseCollide(false);
                 magnetAnimationLock = true;
                 oldStartX = currentX;
                 oldStartY = currentY;
@@ -285,6 +338,7 @@ namespace citadelGame
             freezePosition = false;
             if ((dockX != currentX || dockY != currentY) && magnetAnimationLock == false && freezePosition == false)
             {
+                if (orgin != Orgin.hand) MouseCollide(false);
                 magnetAnimationLock = true;
                 oldStartX = currentX;
                 oldStartY = currentY;
@@ -292,23 +346,37 @@ namespace citadelGame
             }
         }
 
+        public void Flip()
+        {
+            if (flipAnimationLock == false && orgin != Orgin.hand)
+            {
+                flipAnimationLock = true;
+                flipAnimationStep = flipAnimationDuration;
+            }
+        }
+
         public void UnClicked(int x, int y)
         {
             dock = false;
-            MouseCollide(false);
+            if (orgin == Orgin.hand) MouseCollide(false);
+            
             Free();
         }
 
-        public void ResPos()
+        public void SetMouseCoords(Vector2f e)
         {
-            //currentX = dockX;
-            //currentY = dockY;
-            //destinationX = dockX;
-            //destinationY = dockY;
-            //magnetAnimationLock = false;
-            //magnetAnimationStep = 30;
-            //freezePosition = false;
+            this.mouseCoords = e;
         }
+        //public void ResPos()
+        //{
+        //    //currentX = dockX;
+        //    //currentY = dockY;
+        //    //destinationX = dockX;
+        //    //destinationY = dockY;
+        //    //magnetAnimationLock = false;
+        //    //magnetAnimationStep = 30;
+        //    //freezePosition = false;
+        //}
 
         public void Draw(RenderTarget target, RenderStates states)
         {

@@ -11,16 +11,19 @@ namespace citadelGame
 {
     class _test_Hand : Drawable
     {
+        int startX;
+        int startY;
         int width;
+        int height;
+        int offset = 50;
+
         int cardAreaWidth;
         int cardAreaStartX;
         int cardAreaStartY;
+
         int maxHandWidth;
         int cardCount;
-        int height;
-        int startX;
-        int startY;
-        int offset = 50;
+
 
         private bool mouseOver = false;
 
@@ -31,12 +34,13 @@ namespace citadelGame
         public _test_Card activeCard;
         public bool activeCardActive = false;
 
-        public _test_Hand(int startX, int startY, int maxHandWidth, Texture deck)
+        public _test_Hand(int startX, int startY, int width, int height, Texture deck)
         {
             this.startX = startX;
             this.startY = startY;
             this.maxHandWidth = maxHandWidth;
-            this.width = 1;
+            this.width = width;
+            this.height = height;
             this.deck = deck;
             cardList = new List<_test_Card>();
 
@@ -89,8 +93,8 @@ namespace citadelGame
             cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
             cardList[cardList.Count - 1].orgin = Orgin.hand;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
-            width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            //width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             height = cardList[0].height;
             foreach (_test_Card card in cardList)
@@ -113,8 +117,8 @@ namespace citadelGame
             cardList.Add(addedCard);
             cardList[cardList.Count - 1].orgin = Orgin.hand;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
-            width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            //width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             height = cardList[0].height;
             foreach (_test_Card card in cardList)
@@ -135,8 +139,8 @@ namespace citadelGame
             int i = 0;
             cardCount--;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount + 1)), maxHandWidth);
-            width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            //width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             height = cardList[0].height;
             cardList.Remove(removedCard);
