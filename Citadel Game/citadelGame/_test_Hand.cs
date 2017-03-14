@@ -87,6 +87,31 @@ namespace citadelGame
             int i = 0;
             cardCount++;
             cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
+            cardList[cardList.Count - 1].orgin = Orgin.hand;
+            //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
+            width = maxHandWidth;
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
+            height = cardList[0].height;
+            foreach (_test_Card card in cardList)
+            {
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.handStartX = card.dockX;
+                card.dockY = startY;
+                //card.dockX = card.currentX;
+                //card.dockY = card.currentY;
+                card.Free();
+                i++;
+            }
+            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+        }
+
+        public void AddCard(_test_Card addedCard)
+        {
+            int i = 0;
+            cardCount++;
+            cardList.Add(addedCard);
+            cardList[cardList.Count - 1].orgin = Orgin.hand;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), maxHandWidth);
@@ -135,6 +160,81 @@ namespace citadelGame
             else if (x >= (this.startX - 2 * offset) && x <= (this.startX + width + 2 * offset) && y >= (this.startY - offset) && y <= (this.startY + height + 1 * offset)) mouseOver = true;
             else mouseOver = false;
             return mouseOver;
+        }
+
+        public void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        {
+            bool cardFound = false;
+            int cardIndex = -1;
+            int onOrOff = 0;
+            if (cursorDockedCard == null)
+            {
+                for (int i = cardList.Count - 1; i >= 0; i--)
+                {
+                    bool active;
+                    if (cardFound == false)
+                    {
+                        active = cardList[i].Collide((int)worldCoords.X, (int)worldCoords.Y);
+                        if (active == true)
+                        {
+                            cardFound = true;
+                            cardIndex = i;
+                            cardList[i].Drag((int)worldCoords.X, (int)worldCoords.Y);
+                        }
+                    }
+                    else active = false;
+                    if (onOrOff == 0) onOrOff = cardList[i].OnOrOff(active);
+                    else
+                    {
+                        int onOrOff2 = cardList[i].OnOrOff(active);
+                        if (onOrOff2 != 0) onOrOff = 1;
+                    }
+                    cardList[i].MouseCollide(active);
+                }
+                if (onOrOff == 1)
+                {
+                    SlipCards(cardIndex);
+                }
+                if (onOrOff == -1)
+                {
+                    foreach (_test_Card card in cardList)
+                    {
+                        card.dockX = card.handStartX;
+                        card.Free();
+                    }
+                }
+            }
+            else cursorDockedCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
+        }
+
+        public void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        {
+            int cardIndex = -1;
+            bool eventHappened = false;
+            _test_Card chosenCard = null;
+            foreach (_test_Card card in cardList)
+            {
+                bool active = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (active == true)
+                {
+                    cardIndex = cardList.IndexOf(card);
+                    chosenCard = card;
+                    eventHappened = true;
+                }
+            }
+            if (eventHappened == true)
+            {
+                activeCard = chosenCard;
+                activeCardActive = true;
+                cursorDockedCard = chosenCard;
+                Console.WriteLine("Card Taken");
+                activeCard.ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            }
+        }
+
+        public void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
+        {
+            foreach (_test_Card card in cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
         }
 
         public void Update()

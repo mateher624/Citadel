@@ -11,7 +11,6 @@ namespace citadelGame
 {
     class _test_Card : Drawable
     {
-
         public int currentX;
         public int currentY;
         public int width;
@@ -37,7 +36,7 @@ namespace citadelGame
         private int exposeAnimationStep = 0;
 
         private bool magnetAnimationLock = false;
-        private int magnetAnimationDuration = 80;
+        private int magnetAnimationDuration = 100;
         private int magnetAnimationStep = 0;
         public int dockX;
         public int dockY;
@@ -58,6 +57,8 @@ namespace citadelGame
 
         public bool dock;
         public bool handHeld;
+
+        public Orgin orgin = Orgin.nowhere;
 
         public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y)
         {
