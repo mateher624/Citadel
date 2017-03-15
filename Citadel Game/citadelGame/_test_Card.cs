@@ -12,7 +12,6 @@ namespace citadelGame
     class _test_Card : Drawable
     {
         Vector2f mouseCoords;
-
         public int currentX;
         public int currentY;
         public int width;
@@ -43,10 +42,6 @@ namespace citadelGame
         public int dockX;
         public int dockY;
 
-        //public bool flowAnimationLock = false;
-        //public int flowAnimationDuration = 60;
-        //public int flowAnimationStep = 0;
-
         private bool flipAnimationLock = false;
         private int flipAnimationDuration = 100;
         private int flipAnimationStep = 0;
@@ -63,12 +58,13 @@ namespace citadelGame
         //public Color color;
 
         public bool dock;
-        public bool handHeld;
+        //public bool handHeld;
 
-        public Orgin orgin = Orgin.nowhere;
+        public _test_Container origin;
 
-        public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y)
+        public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y, _test_Container origin)
         {
+            this.origin = origin;
             state = 1;
             this.dockX = start_x;
             this.dockY = start_y;
@@ -81,7 +77,7 @@ namespace citadelGame
             this.face = face;
             this.handStartX = start_x;
 
-            this.handHeld = true;
+            //this.handHeld = true;
 
             this.body = new Sprite();
             this.body.Texture = this.face;
@@ -144,18 +140,6 @@ namespace citadelGame
                 }
             }
 
-            //if (flowAnimationLock == true)
-            //{
-            //    if (flowAnimationStep == -1) flowAnimationLock = false;
-            //    else
-            //    {
-            //        currentX = oldStartX - (int)((oldStartX - destinationX) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
-            //        currentY = oldStartY - (int)((oldStartY - destinationY) * (flowAnimationDuration - flowAnimationStep) / (float)flowAnimationDuration);
-            //        flowAnimationStep--;
-            //    }
-            //}
-
-            //this.body.Position = new Vector2f(this.currentX, this.currentY);
             // EXPOSE PROCESS
             if (mouseOver == true && exposed == false)
             {
@@ -206,17 +190,6 @@ namespace citadelGame
             this.body.Position = new Vector2f(currentXMod, currentYMod);
         }
 
-        //public void Flow(int destinationX)
-        //{
-        //    if (this.destinationX != destinationX)
-        //    {
-        //        this.destinationX = destinationX;
-        //        this.oldStartX = this.currentX;
-        //        this.flowAnimationLock = true;
-        //        this.flowAnimationStep = this.flowAnimationDuration;
-        //    }
-        //}
-
         public bool IsOnTop(int x, int y)
         {
             return false;
@@ -253,7 +226,7 @@ namespace citadelGame
                 this.currentY = y - dock_pos_y;
 
                 // WYŁĄCZENIE PRZYCIĄGANIA PRZY PRZESUNIĘCIU
-                if (handHeld == false)
+                if (origin.GetType() == typeof(_test_Aether))
                 {
                     this.dockX = this.currentX;
                     this.dockY = this.currentY;
@@ -325,7 +298,7 @@ namespace citadelGame
             freezePosition = false;
             if ((dockX != currentX || dockY != currentY))
             {
-                if (orgin != Orgin.hand) MouseCollide(false);
+                if (origin.GetType() != typeof(_test_Hand)) MouseCollide(false);
                 magnetAnimationLock = true;
                 oldStartX = currentX;
                 oldStartY = currentY;
@@ -338,7 +311,7 @@ namespace citadelGame
             freezePosition = false;
             if ((dockX != currentX || dockY != currentY) && magnetAnimationLock == false && freezePosition == false)
             {
-                if (orgin != Orgin.hand) MouseCollide(false);
+                if (origin.GetType() != typeof(_test_Hand)) MouseCollide(false);
                 magnetAnimationLock = true;
                 oldStartX = currentX;
                 oldStartY = currentY;
@@ -348,7 +321,7 @@ namespace citadelGame
 
         public void Flip()
         {
-            if (flipAnimationLock == false && orgin != Orgin.hand)
+            if (flipAnimationLock == false && origin.GetType() != typeof(_test_Hand))
             {
                 flipAnimationLock = true;
                 flipAnimationStep = flipAnimationDuration;
@@ -358,7 +331,7 @@ namespace citadelGame
         public void UnClicked(int x, int y)
         {
             dock = false;
-            if (orgin == Orgin.hand) MouseCollide(false);
+            if (origin.GetType() == typeof(_test_Hand)) MouseCollide(false);
             
             Free();
         }
@@ -367,16 +340,6 @@ namespace citadelGame
         {
             this.mouseCoords = e;
         }
-        //public void ResPos()
-        //{
-        //    //currentX = dockX;
-        //    //currentY = dockY;
-        //    //destinationX = dockX;
-        //    //destinationY = dockY;
-        //    //magnetAnimationLock = false;
-        //    //magnetAnimationStep = 30;
-        //    //freezePosition = false;
-        //}
 
         public void Draw(RenderTarget target, RenderStates states)
         {

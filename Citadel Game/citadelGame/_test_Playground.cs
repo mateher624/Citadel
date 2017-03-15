@@ -9,26 +9,8 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_Playground : Drawable
+    class _test_Playground : _test_Container
     {
-        private int startX;
-        private int startY;
-        private int width;
-        private int height;
-        int offset = 50;
-
-        int cardAreaWidth;
-        int cardAreaStartX;
-        int cardAreaStartY;
-
-        private bool mouseOver = false;
-
-        RectangleShape body;
-
-        private int cardCount;
-        Texture deck;
-        public List<_test_Card> cardList;
-
         public _test_Playground(int startX, int startY, int width, int height, Texture deck)
         {
             this.startX = startX;
@@ -55,13 +37,23 @@ namespace citadelGame
             return mouseOver;
         }
 
-        public void AddCard(_test_Card addedCard)
+        public override void RemoveCard(_test_Card removedCard)
+        {
+
+        }
+
+        public override void AddCard(int texture_x, int texture_y)
+        {
+
+        }
+
+        public override void AddCard(_test_Card addedCard)
         {
             int i = 0;
             cardCount++;
 
             cardList.Add(addedCard);
-            cardList[cardList.Count - 1].orgin = Orgin.playground;
+            cardList[cardList.Count - 1].origin = this;
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
@@ -95,7 +87,7 @@ namespace citadelGame
             }  
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
             target.Draw(body, states);

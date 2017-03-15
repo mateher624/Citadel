@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace citadelGame
 {
-    enum Orgin { nowhere, hand, deck, playground };
+    enum Origin { nowhere, hand, deck, playground };
 
     class Program
     {

@@ -20,9 +20,12 @@ namespace citadelGame
         Texture deckTexture;
         List<UIButton> buttonList;
         List<_test_Card> cardSpriteList;
+        List<_test_Container> activeElements;
 
+        _test_Aether aether;
         _test_Hand hand;
         _test_Deck deck;
+        _test_Deck deck2;
         _test_Playground playground;
         _test_Card cursorDockedCard = null;
         bool mousePressed = false;
@@ -31,12 +34,13 @@ namespace citadelGame
         {
             buttonList = new List<UIButton>();
             cardSpriteList = new List<_test_Card>();
+            activeElements = new List<_test_Container>();
         }
 
         protected override void CheckCollide(MouseMoveEventArgs e)
         {
             int cardIndex = 0;
-            _test_Card chosenCard = new _test_Card(0, 0, 0, 0, deckTexture, 0, 0);
+            _test_Card chosenCard = new _test_Card(0, 0, 0, 0, deckTexture, 0, 0, aether);
 
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = window.MapPixelToCoords(mouseCoords);
@@ -62,6 +66,7 @@ namespace citadelGame
             }
 
             deck.MouseMove(worldCoords, ref cursorDockedCard);
+            deck2.MouseMove(worldCoords, ref cursorDockedCard);
             hand.MouseMove(worldCoords, ref cursorDockedCard);
 
             playground.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
@@ -99,6 +104,7 @@ namespace citadelGame
 
             // TYLKO DLA HAND
             deck.Clicked(e, worldCoords, ref cursorDockedCard);
+            deck2.Clicked(e, worldCoords, ref cursorDockedCard);
             hand.Clicked(e, worldCoords, ref cursorDockedCard);
         }
 
@@ -120,38 +126,34 @@ namespace citadelGame
             foreach (_test_Card card in cardSpriteList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
 
             deck.UnClicked(e, worldCoords);
+            deck2.UnClicked(e, worldCoords);
             hand.UnClicked(e, worldCoords);
 
-            //                                                                                                                 TO CAŁE JEST DO PRZEPISANIA
-            bool playgroundCollide = playground.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
-            bool handCollide = hand.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
 
-            //if (cursorDockedCard.orgin == Orgin.hand) hand.RemoveCard(cursorDockedCard);
-            if (cursorDockedCard == null) Console.WriteLine("NULL w kursorze");
-            if (playgroundCollide == true && cursorDockedCard != null)
-            {
-                if (cursorDockedCard.orgin == Orgin.hand) hand.RemoveCard(cursorDockedCard);
-                else if (cursorDockedCard.orgin == Orgin.deck)
+
+            // UPUSZCZANIE KARD DO PÓL
+            if (cursorDockedCard != null)
+            { 
+                bool playgroundCollide = playground.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
+                bool handCollide = hand.Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
+
+                if (cursorDockedCard == null) Console.WriteLine("NULL w kursorze");
+                if (playgroundCollide == true && cursorDockedCard.origin.GetType() != typeof(_test_Playground))
                 {
-                    deck.RemoveCard(cursorDockedCard);
-                    cursorDockedCard.Flip();
+                    cursorDockedCard.origin.RemoveCard(cursorDockedCard);
+                    if (cursorDockedCard.origin.GetType() != typeof(_test_Hand)) cursorDockedCard.Flip();
+                    playground.AddCard(cursorDockedCard);
+                    //cursorDockedCard.Free();
                 }
-                playground.AddCard(cursorDockedCard);
-                cursorDockedCard.Free();
-            }
-            if (handCollide == true && cursorDockedCard != null)
-            {
-                if (cursorDockedCard.orgin == Orgin.hand) hand.RemoveCard(cursorDockedCard);
-                else if (cursorDockedCard.orgin == Orgin.deck)
+                if (handCollide == true && cursorDockedCard.origin.GetType() != typeof(_test_Hand))
                 {
-                    deck.RemoveCard(cursorDockedCard);
-                    cursorDockedCard.Flip();
-                }
-                hand.AddCard(cursorDockedCard);
-                cursorDockedCard.Free();
+                    cursorDockedCard.origin.RemoveCard(cursorDockedCard);
+                    if (cursorDockedCard.origin.GetType() != typeof(_test_Hand)) cursorDockedCard.Flip();
+                    hand.AddCard(cursorDockedCard);
+                    //cursorDockedCard.Free();
+                }      
+                cursorDockedCard = null;
             }
-            
-            cursorDockedCard = null;
             mousePressed = false;
         }
 
@@ -164,8 +166,10 @@ namespace citadelGame
 
         protected override void Initialize()
         {
+            aether = new _test_Aether();
             hand = new _test_Hand(400, 600, 600, 100, deckTexture);
             deck = new _test_Deck(900, 100, 72, 100, deckTexture);
+            deck2 = new _test_Deck(1200, 100, 72, 100, deckTexture);
             playground = new _test_Playground(400, 350, 600, 100, deckTexture);
 
             map = new _test_Tilemap(tileset, 4, 4, 32.0f, 64.0f);
@@ -180,10 +184,10 @@ namespace citadelGame
 
             for (int i = 0; i < 13; i++)
             {
-                cardSpriteList.Add(new _test_Card(20 + 15 * i, 20, 72, 100, deckTexture, i, 3));
-                cardSpriteList.Add(new _test_Card(20 + 15 * i, 130, 72, 100, deckTexture, i, 2));
-                cardSpriteList.Add(new _test_Card(20 + 15 * i, 240, 72, 100, deckTexture, i, 1));
-                cardSpriteList.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deckTexture, i, 0));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 20, 72, 100, deckTexture, i, 3, aether));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 130, 72, 100, deckTexture, i, 2, aether));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 240, 72, 100, deckTexture, i, 1, aether));
+                cardSpriteList.Add(new _test_Card(20 + 15 * i, 350, 72, 100, deckTexture, i, 0, aether));
             }
             //cardSpriteList.Add(new _test_Card(20 + 15 * 2, 350, 72, 100, deck, 2, 0));
             deck.AddCard(1,3);
@@ -194,14 +198,14 @@ namespace citadelGame
             deck.AddCard(12, 3);
             deck.AddCard(5, 1);
             deck.AddCard(6, 0);
-            deck.AddCard(8, 2);
-            deck.AddCard(3, 3);
-            deck.AddCard(3, 2);
-            deck.AddCard(4, 1);
-            deck.AddCard(11, 0);
-            deck.AddCard(0, 1);
-            deck.AddCard(12, 1);
-            deck.AddCard(11, 1);
+            deck2.AddCard(8, 2);
+            deck2.AddCard(3, 3);
+            deck2.AddCard(3, 2);
+            deck2.AddCard(4, 1);
+            deck2.AddCard(11, 0);
+            deck2.AddCard(0, 1);
+            deck2.AddCard(12, 1);
+            deck2.AddCard(11, 1);
         }
 
         protected override void Tick()
@@ -214,6 +218,7 @@ namespace citadelGame
             window.Draw(map);
             window.Draw(playground);
             window.Draw(deck);
+            window.Draw(deck2);
             window.Draw(hand);
 
             foreach (UIButton button in buttonList)
@@ -236,6 +241,11 @@ namespace citadelGame
                 window.Draw(card);
             }
             foreach (_test_Card card in deck.cardList)
+            {
+                //card.SetMouseCoords(worldCoords);
+                window.Draw(card);
+            }
+            foreach (_test_Card card in deck2.cardList)
             {
                 //card.SetMouseCoords(worldCoords);
                 window.Draw(card);

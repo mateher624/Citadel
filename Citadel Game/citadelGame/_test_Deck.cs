@@ -9,31 +9,13 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_Deck : Drawable
+    class _test_Deck : _test_Container
     {
-        private int width;
-        private int height;
-
-        private int startX;
         private int cardStartX;
-        private int startY;
-        private int offset = 50;
-
-
-        //int cardAreaWidth;
-        //int cardAreaStartX;
-        //int cardAreaStartY;
         private int maxStackSize;
-        int cardCount;
 
-        private bool mouseOver = false;
-
-        RectangleShape body;
-        Sprite body2;
+        Sprite bodyGround;
         private Vector2f backTextureCoords = new Vector2f(2, 4);
-        
-        Texture face;
-        public List<_test_Card> cardList;
 
         public _test_Deck(int startX, int startY, int width, int height, Texture face)
         {
@@ -52,13 +34,13 @@ namespace citadelGame
             this.body.Size = new Vector2f(width + 2 * offset, height + 2 * offset);
             this.body.Position = new Vector2f(this.startX - offset, this.startY - offset);
 
-            this.body2 = new Sprite();
-            this.body2.Texture = this.face;
-            this.body2.TextureRect = new IntRect((int)backTextureCoords.X * this.width, (int)backTextureCoords.Y * this.height, this.width, this.height);
-            this.body2.Position = new Vector2f(this.startX, this.startY);
+            this.bodyGround = new Sprite();
+            this.bodyGround.Texture = this.face;
+            this.bodyGround.TextureRect = new IntRect((int)backTextureCoords.X * this.width, (int)backTextureCoords.Y * this.height, this.width, this.height);
+            this.bodyGround.Position = new Vector2f(this.startX, this.startY);
         }
 
-        public void RemoveCard(_test_Card removedCard)
+        public override void RemoveCard(_test_Card removedCard)
         {
             int i = 0;
             cardCount--;
@@ -77,12 +59,17 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public void AddCard(int texture_x, int texture_y)
+        public override void AddCard(_test_Card addedCard)
+        {
+
+        }
+
+        public override void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
             cardCount++;
-            cardList.Add(new _test_Card(startX, 0, 72, 100, face, texture_x, texture_y));
-            cardList[cardList.Count - 1].orgin = Orgin.deck;
+            cardList.Add(new _test_Card(startX, 0, 72, 100, face, texture_x, texture_y, this));
+            cardList[cardList.Count - 1].origin = this;
             cardList[cardList.Count - 1].state = 0;
             foreach (_test_Card card in cardList)
             {
@@ -149,11 +136,11 @@ namespace citadelGame
 
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
             target.Draw(body, states);
-            target.Draw(body2, states);
+            target.Draw(bodyGround, states);
         }
     }
 }

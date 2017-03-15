@@ -78,8 +78,10 @@
     <Compile Include="UIButton.cs" />
     <Compile Include="UIGlyphButton.cs" />
     <Compile Include="UIPrimitiveButton.cs" />
+    <Compile Include="_test_Aether.cs" />
     <Compile Include="_test_button.cs" />
     <Compile Include="_test_Card.cs" />
+    <Compile Include="_test_Container.cs" />
     <Compile Include="_test_Deck.cs" />
     <Compile Include="_test_Game.cs" />
     <Compile Include="_test_Hand.cs" />

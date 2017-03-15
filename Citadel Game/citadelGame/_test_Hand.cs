@@ -9,28 +9,9 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_Hand : Drawable
+    class _test_Hand : _test_Container
     {
-        int startX;
-        int startY;
-        int width;
-        int height;
-        int offset = 50;
-
-        int cardAreaWidth;
-        int cardAreaStartX;
-        int cardAreaStartY;
-
         int maxHandWidth;
-        int cardCount;
-
-
-        private bool mouseOver = false;
-
-        RectangleShape body;
-
-        Texture deck;
-        public List<_test_Card> cardList;
         public _test_Card activeCard;
         public bool activeCardActive = false;
 
@@ -38,7 +19,7 @@ namespace citadelGame
         {
             this.startX = startX;
             this.startY = startY;
-            this.maxHandWidth = maxHandWidth;
+            //this.maxHandWidth = maxHandWidth;
             this.width = width;
             this.height = height;
             this.deck = deck;
@@ -86,12 +67,12 @@ namespace citadelGame
             }
         }
 
-        public void AddCard(int texture_x, int texture_y)
+        public override void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
             cardCount++;
-            cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y));
-            cardList[cardList.Count - 1].orgin = Orgin.hand;
+            cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y, this));
+            cardList[cardList.Count - 1].origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
@@ -110,12 +91,12 @@ namespace citadelGame
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public void AddCard(_test_Card addedCard)
+        public override void AddCard(_test_Card addedCard)
         {
             int i = 0;
             cardCount++;
             cardList.Add(addedCard);
-            cardList[cardList.Count - 1].orgin = Orgin.hand;
+            cardList[cardList.Count - 1].origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
@@ -134,7 +115,7 @@ namespace citadelGame
             this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public void RemoveCard(_test_Card removedCard)
+        public override void RemoveCard(_test_Card removedCard)
         {
             int i = 0;
             cardCount--;
@@ -255,7 +236,7 @@ namespace citadelGame
             }
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
             target.Draw(body, states);
