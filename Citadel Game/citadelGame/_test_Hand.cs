@@ -11,18 +11,20 @@ namespace citadelGame
 {
     class _test_Hand : _test_Container
     {
-        int maxHandWidth;
         public _test_Card activeCard;
         public bool activeCardActive = false;
 
-        public _test_Hand(int startX, int startY, int width, int height, Texture deck)
+        public _test_Hand(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {
             this.startX = startX;
             this.startY = startY;
-            //this.maxHandWidth = maxHandWidth;
             this.width = width;
             this.height = height;
-            this.deck = deck;
+
+            this.face = face;
+            this.cardWidth = cardWidth;
+            this.cardHeight = cardHeight;
+
             cardList = new List<_test_Card>();
 
             this.body = new RectangleShape();
@@ -41,9 +43,9 @@ namespace citadelGame
                 int distance = Math.Abs(cardIndex - i);
                 //double deltaX = Math.Abs(1 / (float)distance * card.width * 0.6f);
                 int deltaX = 0;
-                if (cardCount * (cardList[i].width * cardList[i].exposeSize + 1) > width)
+                if (cardList.Count * (cardList[i].width * cardList[i].exposeSize + 1) > width)
                 {
-                    deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(cardCount / 3.0f, distance) / (cardCount / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
+                    deltaX = (int)Math.Pow(Math.Abs(Math.Cos(Math.PI / 2 * Math.Min(cardList.Count / 3.0f, distance) / (cardList.Count / 3.0f)) * cardList[i].width * 0.6f), 1.04f);
                 }
                    
                 if (i < cardIndex && deltaX != 0)
@@ -70,17 +72,16 @@ namespace citadelGame
         public override void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
-            cardCount++;
-            cardList.Add(new _test_Card(0, startY, 72, 100, deck, texture_x, texture_y, this));
+            cardList.Add(new _test_Card(0, startY, cardWidth, cardHeight, face, texture_x, texture_y, this));
             cardList[cardList.Count - 1].origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
+            cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
-            height = cardList[0].height;
+            //height = cardHeight;
             foreach (_test_Card card in cardList)
             {
-                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
                 card.dockY = startY;
                 //card.dockX = card.currentX;
@@ -88,23 +89,22 @@ namespace citadelGame
                 card.Free();
                 i++;
             }
-            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+            //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
         public override void AddCard(_test_Card addedCard)
         {
             int i = 0;
-            cardCount++;
             cardList.Add(addedCard);
             cardList[cardList.Count - 1].origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
+            cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
-            height = cardList[0].height;
+            //height = cardHeight;
             foreach (_test_Card card in cardList)
             {
-                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
                 card.dockY = startY;
                 //card.dockX = card.currentX;
@@ -112,23 +112,22 @@ namespace citadelGame
                 card.Free();
                 i++;
             }
-            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+            //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
         public override void RemoveCard(_test_Card removedCard)
         {
             int i = 0;
-            cardCount--;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount + 1)), maxHandWidth);
             //width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
+            cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count-1)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
-            height = cardList[0].height;
+            //height = cardHeight;
             cardList.Remove(removedCard);
             
             foreach (_test_Card card in cardList)
             {
-                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
                 card.dockY = startY;
                 //card.dockX = card.currentX;
@@ -136,7 +135,7 @@ namespace citadelGame
                 card.Free();
                 i++;
             }
-            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+            //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
         public bool Collide(int x, int y, bool mousePressed)
@@ -147,7 +146,7 @@ namespace citadelGame
             return mouseOver;
         }
 
-        public void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
             bool cardFound = false;
             int cardIndex = -1;
@@ -192,7 +191,7 @@ namespace citadelGame
             else cursorDockedCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
         }
 
-        public void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
             int cardIndex = -1;
             bool eventHappened = false;
@@ -217,7 +216,7 @@ namespace citadelGame
             }
         }
 
-        public void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
+        public override void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
         {
             foreach (_test_Card card in cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
         }

@@ -11,13 +11,15 @@ namespace citadelGame
 {
     class _test_Playground : _test_Container
     {
-        public _test_Playground(int startX, int startY, int width, int height, Texture deck)
+        public _test_Playground(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {
             this.startX = startX;
             this.startY = startY;
             this.width = width;
             this.height = height;
-            this.deck = deck;
+            this.face = face;
+            this.cardWidth = cardWidth;
+            this.cardHeight = cardHeight;
             cardList = new List<_test_Card>();
 
             this.body = new RectangleShape();
@@ -37,9 +39,35 @@ namespace citadelGame
             return mouseOver;
         }
 
-        public override void RemoveCard(_test_Card removedCard)
+        public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
 
+        }
+
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        {
+
+        }
+
+        public override void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
+        {
+
+        }
+
+        public override void RemoveCard(_test_Card removedCard)
+        {
+            int i = 0;
+            cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count - 1)), width);
+            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
+            cardList.Remove(removedCard);
+
+            foreach (_test_Card card in cardList)
+            {
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
+                card.dockY = startY;
+                card.Free();
+                i++;
+            }
         }
 
         public override void AddCard(int texture_x, int texture_y)
@@ -50,19 +78,17 @@ namespace citadelGame
         public override void AddCard(_test_Card addedCard)
         {
             int i = 0;
-            cardCount++;
-
             cardList.Add(addedCard);
             cardList[cardList.Count - 1].origin = this;
             //width = maxHandWidth;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardCount)), width);
+            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardList.Count)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             height = cardList[0].height;
 
             foreach (_test_Card card in cardList)
             {
                 //card.dockX = startX + (i * (cardAreaWidth) / (cardCount+1)) - card.width/2;
-                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardCount));
+                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.dockY = startY;
                 //card.handStartX = card.dockX;
                 card.Free();

@@ -11,7 +11,7 @@ namespace citadelGame
 {
     class _test_Card : Drawable
     {
-        Vector2f mouseCoords;
+
         public int currentX;
         public int currentY;
         public int width;
@@ -25,9 +25,10 @@ namespace citadelGame
 
         public int handStartX;
 
-        Texture face;
-        Sprite body;
+        private Texture face;
+        private Sprite body;
 
+        private Vector2f mouseCoords;
         public bool mouseOver = false;
 
         public float exposeSize = 1.2f;
@@ -331,8 +332,11 @@ namespace citadelGame
         public void UnClicked(int x, int y)
         {
             dock = false;
-            if (origin.GetType() == typeof(_test_Hand)) MouseCollide(false);
-            
+            if (origin.GetType() == typeof(_test_Hand))
+            {
+                MouseCollide(false);
+                exposed = false;
+            }
             Free();
         }
 

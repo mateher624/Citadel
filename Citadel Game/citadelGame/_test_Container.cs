@@ -17,21 +17,25 @@ namespace citadelGame
         protected int height;
         protected int offset = 50;
 
+        public int cardWidth;
+        public int cardHeight;
+
         protected int cardAreaWidth;
         protected int cardAreaStartX;
         protected int cardAreaStartY;
 
         protected RectangleShape body;
         protected Texture face;
-        protected Texture deck;
 
-        protected int cardCount;
         public List<_test_Card> cardList;
 
         protected bool mouseOver = false;
 
+        public abstract void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard);
+        public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard);
+        public abstract void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords);
         public abstract void RemoveCard(_test_Card removedCard);
-        public abstract void AddCard(_test_Card removedCard);
+        public abstract void AddCard(_test_Card addedCard);
         public abstract void AddCard(int texture_x, int texture_y);
         public abstract void Draw(RenderTarget target, RenderStates states);
     }
