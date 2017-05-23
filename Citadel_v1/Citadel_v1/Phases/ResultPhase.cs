@@ -72,7 +72,7 @@ namespace Citadel_v1
         {
             ReturnFromDiscardedDeck(Deck.DiscardedCharacterDeck);
             ReturnFromDiscardedDeck(Deck.DiscardedDistrictDeck);
-            ReturnFromPlayers();
+            //ReturnFromPlayers();
         }
 
         private void ReturnFromDiscardedDeck<T>(List<T> list) where T: ICard
@@ -81,21 +81,21 @@ namespace Citadel_v1
             foreach (var card in list)
             {
                 var cardToReturn = card;
-                list.Remove(cardToReturn);
-
-                var discardedCard = cardToReturn as DistrictCard;
-                if(discardedCard != null)
+                //list.Remove(cardToReturn);
+                var discardedDistrictCard = cardToReturn as DistrictCard;
+                if(discardedDistrictCard != null)
                 {
-                    Deck.DistrictDeck.Add(discardedCard);
+                    Deck.DistrictDeck.Add(discardedDistrictCard);
                     continue;
                 }
 
-                var discardedCard2 = cardToReturn as CharacterCard;
-                if (discardedCard2 != null)
+                var discardedCharacterCard = cardToReturn as CharacterCard;
+                if (discardedCharacterCard != null)
                 {
-                    Deck.CharacterDeck.Add(discardedCard2);
+                    Deck.CharacterDeck.Add(discardedCharacterCard);
                 }
             }
+            list.RemoveRange(0, list.Count());
         } 
 
         private void ReturnFromPlayers()

@@ -17,7 +17,7 @@ namespace Citadel_v1
                 return true;
             }
 
-            return resultPhase.IsEnd;
+            return !resultPhase.IsEnd;
         }
     }
 }
