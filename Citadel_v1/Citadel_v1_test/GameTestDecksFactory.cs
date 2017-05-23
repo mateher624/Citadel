@@ -12,7 +12,7 @@ namespace Citadel_v1_test
             return new Decks(
                 new List<CharacterCard>()
                 {
-                    new CharacterCard("Thiev", 2),
+                    new CharacterCard("Thief", 2),
                     new CharacterCard("Magician", 3),
                     new CharacterCard("Merchant", 6),
                     new CharacterCard("Warlord", 8),

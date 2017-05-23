@@ -25,7 +25,7 @@ namespace Citadel_v1
         public List<DistrictCard> Table = new List<DistrictCard>();         // karty gracza na stole
         private readonly Dictionary<string, PlayerAction> _characterDictionary = new Dictionary<string, PlayerAction>();
 
-        public Player(IUserAdapter userAdapter, string name, List<Player> players, Decks deck)     // konstruktor dla Player
+        public Player(IUserAdapter userAdapter, string name, List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList)     // konstruktor dla Player
         {
             _userAdapter = userAdapter;
             Name = name;
@@ -34,7 +34,7 @@ namespace Citadel_v1
             Points = 0;
             CharacterCard = null;
             IsKing = false;
-            FullCharacterCardList = deck.CharacterDeck;
+            FullCharacterCardList = fullCharacterCardList;
             if (players.Count() <= MaxPlayersAmount)
             {
                 PlayerId = players.Count() + 1;

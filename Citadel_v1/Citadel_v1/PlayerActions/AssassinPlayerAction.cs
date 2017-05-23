@@ -30,7 +30,7 @@ namespace Citadel_v1
             //cardToEliminateId = (int)keyPressed.Key;
             ////koniec kodu testowego
 
-            List<CharacterCard> availableCards = FullCharacterCardList;
+            List<CharacterCard> availableCards = FullCharacterCardList.ToList();
             availableCards.RemoveAll(x => x.Id == 1);   // usunięcie z listy karty Assassin
             var cardToEliminate = UserAdapter.ChooseCharacterCard(availableCards);  
             for(int i = 0; i < players.Count; i++)

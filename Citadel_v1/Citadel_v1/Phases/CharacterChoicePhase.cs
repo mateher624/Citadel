@@ -10,12 +10,12 @@ namespace Citadel_v1
     {
         const int FirstPlayerId = 1;
 
-        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck) : this(players, phase.Round, deck)
+        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList) : this(players, phase.Round, deck, fullCharacterCardList)
         {
 
         }
 
-        public CharacterChoicePhase(List<Player> players, Round round, Decks deck) : base(players, deck)
+        public CharacterChoicePhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList) : base(players, deck, fullCharacterCardList)
         {
             Round = round;
         }
@@ -41,7 +41,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck);
+            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck, FullCharacterCardList);
         }
 
         private void SetAllCharacterCardsActive()       // ustawienie wszystkich kart postaci, jako aktywnych

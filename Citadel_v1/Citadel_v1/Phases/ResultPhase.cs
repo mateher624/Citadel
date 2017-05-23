@@ -14,12 +14,12 @@ namespace Citadel_v1
         public bool IsEnd { get; protected set; }             // określa, czy rozgrywka powinna się już zakończyć
         private readonly Player[] _winningPlayers = new Player[2];
 
-        public ResultPhase(List<Player> players, Phase phase, Decks deck) : this(players, phase.Round, deck)
+        public ResultPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList) : this(players, phase.Round, deck, fullCharacterCardList)
         {
 
         }
 
-        public ResultPhase(List<Player> players, Round round, Decks deck) : base(players, deck)
+        public ResultPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList) : base(players, deck, fullCharacterCardList)
         {
             Round = round;
             IsEnd = false;
@@ -57,7 +57,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck);
+            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList);
         }
 
         private void CountPlayersPoints()    // podliczenie pkt na koniec rundy

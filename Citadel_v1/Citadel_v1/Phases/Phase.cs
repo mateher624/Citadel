@@ -17,11 +17,11 @@ namespace Citadel_v1
 
         protected readonly List<Player> Players;
 
-        protected Phase(List<Player> players, Decks deck)
+        protected Phase(List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList)
         {
             Players = players;
             Deck = deck;
-            FullCharacterCardList = Deck.CharacterDeck;
+            FullCharacterCardList = fullCharacterCardList;
         }
 
         public abstract void DoPhase();

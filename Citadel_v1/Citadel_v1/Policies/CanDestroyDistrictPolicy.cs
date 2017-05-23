@@ -10,7 +10,7 @@ namespace Citadel_v1.Policies
     {
         public static bool IsSatisfied(WarlordPlayerAction.DistrictCardToDestroy districtToDestroy, Player currentPlayer)
         {
-            if (currentPlayer.Gold >= districtToDestroy.DistrictCard.Cost - 1)
+            if (districtToDestroy.DistrictCard != null && currentPlayer.Gold >= districtToDestroy.DistrictCard.Cost - 1)
             {
                 return true;
             }

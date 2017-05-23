@@ -10,12 +10,12 @@ namespace Citadel_v1
     {
         private const int BasicCharacterCardAmount = 8;
 
-        public PlayerActionPhase(List<Player> players, Phase phase, Decks deck) :this(players, phase.Round, deck)
+        public PlayerActionPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList) :this(players, phase.Round, deck, fullCharacterCardList)
         {
 
         }
 
-        public PlayerActionPhase(List<Player> players, Round round, Decks deck) : base(players, deck)
+        public PlayerActionPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList) : base(players, deck, fullCharacterCardList)
         {
             Round = round;
         }
@@ -28,7 +28,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new ResultPhase(Players, this, Deck);
+            Round.CurrentPhase = new ResultPhase(Players, this, Deck, FullCharacterCardList);
         }
 
         private void MakeTheRightPlayerDoAction()   // odnalezienie gracza z odpowiednią kartą postaci i wymuszenie na nim wykonania akcji

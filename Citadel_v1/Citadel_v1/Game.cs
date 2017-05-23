@@ -19,7 +19,7 @@ namespace Citadel_v1
             //pętla odpowiedzialna za dodanie graczy o nazwach kolejno 1, 2, 3, ...
             for (int i=0;i<playersAmount;i++)
             {
-                Players.Add(new Player(userAdapter, i.ToString(), Players, Deck));
+                Players.Add(new Player(userAdapter, i.ToString(), Players, Deck, Deck.CharacterDeck.ToList()));
             }
             //dorobić ładowanie kart z bazy danych
         }
