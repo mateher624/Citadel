@@ -100,10 +100,10 @@ namespace Citadel_v1
 
         private void ReturnFromPlayers()
         {
-            foreach (var player in Players)
-            {
-                player.ReturnCards();
-            }
+            //foreach (var player in Players)
+            //{
+            //    player.ReturnCards();
+            //}
         }
 
         private int FindFirstPlayerInThisRound()    // odnalezienie gracza, który rozpoczynał aktualną rundę

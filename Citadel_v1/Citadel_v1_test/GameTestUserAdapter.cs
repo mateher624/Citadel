@@ -14,23 +14,30 @@ namespace Citadel_v1_test
 
         public CharacterCard ChooseCharacterCard(List<CharacterCard> available)
         {
-            return available.FirstOrDefault();
+            var rnd=new Random();
+            var index = rnd.Next(0, available.Count());
+            return available[index];
         }
 
         public PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions)
         {
-            //var a = default(PlayerAction.OneAction);
+            var rnd = new Random();
+            var index = rnd.Next(0, 2);
             return availableActions.FirstOrDefault();
         }
 
         public MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(params MagicianPlayerAction.MagicianActionChoice[] availableActions)
         {
-            return availableActions.FirstOrDefault();
+            var rnd = new Random();
+            var index = rnd.Next(0, 2);
+            return availableActions[index];
         }
 
         public Player ChoosePlayerToExchangeCardsWith(List<Player> players)
         {
-            return players.FirstOrDefault();
+            var rnd = new Random();
+            var index = rnd.Next(0, players.Count());
+            return players[index];
         }
 
         public List<DistrictCard> ChooseCardsToDiscard(List<DistrictCard> availableCards)
@@ -41,7 +48,9 @@ namespace Citadel_v1_test
 
         public DistrictCard ChooseDistrictToBuild(List<DistrictCard> currentPlayerHand)
         {
-            return currentPlayerHand.FirstOrDefault();
+            var rnd=new Random();
+            var index = rnd.Next(0, currentPlayerHand.Count());
+            return currentPlayerHand[index];
         }
 
         public bool DecideToBuildDistrict()
