@@ -8,10 +8,14 @@ namespace Citadel_v1
 {
     public class Decks
     {
-        public List<CharacterCard> CharacterDeck = new List<CharacterCard>();       // talia kart postaci
-        public List<DistrictCard> DistrictDeck = new List<DistrictCard>();         // talia kart dzielnic 
+        public List<CharacterCard> CharacterDeck;       // talia kart postaci
+        public List<DistrictCard> DistrictDeck;         // talia kart dzielnic 
         public List<DistrictCard> DiscardedDistrictDeck = new List<DistrictCard>();       // talia kart odrzuconych dzielnic
         public List<CharacterCard> DiscardedCharacterDeck = new List<CharacterCard>();  // talia kart odrzuconych postaci
+
+        public Decks() : this(new List<CharacterCard>(), new List<DistrictCard>())
+        {
+        }
 
         public Decks(List<CharacterCard> characterDeck, List<DistrictCard> districtDeck)
         {
@@ -79,12 +83,7 @@ namespace Citadel_v1
 
         public bool Found(List<CharacterCard> list, int id)
         {
-            foreach (var item in list)
-            {
-                if (item.Id == id)
-                    return true;
-            }
-            return false;
+            return list.Any(item => item.Id == id);
         }
     }
 }
