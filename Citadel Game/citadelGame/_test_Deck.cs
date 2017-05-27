@@ -140,5 +140,10 @@ namespace citadelGame
             target.Draw(body, states);
             target.Draw(bodyGround, states);
         }
+
+        protected override void SetObjectTransform()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

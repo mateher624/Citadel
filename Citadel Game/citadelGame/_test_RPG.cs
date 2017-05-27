@@ -19,7 +19,7 @@ namespace citadelGame
         Texture buttonFace;
         Texture deckTexture;
         List<UIButton> buttonList;
-        List<_test_Card> cardSpriteList;
+        //List<_test_Card> cardSpriteList;
         List<_test_Container> elementsContainers;
 
         _test_Aether aether;
@@ -129,7 +129,7 @@ namespace citadelGame
         protected override void Initialize()
         {
             aether = new _test_Aether();
-            hand = new _test_Hand(400, 600, 600, 100, deckTexture, 72, 100);
+            hand = new _test_Hand(400, 600, 600, 100, deckTexture, 72, 100, 0);
             deck = new _test_Deck(900, 100, 72, 100, deckTexture, 72, 100);
             deck2 = new _test_Deck(1200, 100, 72, 100, deckTexture, 72, 100);
             playground = new _test_Playground(400, 350, 600, 100, deckTexture, 72, 100);

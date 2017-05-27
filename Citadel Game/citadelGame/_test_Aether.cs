@@ -87,6 +87,9 @@ namespace citadelGame
 
         }
 
-
+        protected override void SetObjectTransform()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

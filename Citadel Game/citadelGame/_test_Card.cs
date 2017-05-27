@@ -28,6 +28,8 @@ namespace citadelGame
         private Texture face;
         private Sprite body;
 
+        public int rotation;
+
         private Vector2f mouseCoords;
         public bool mouseOver = false;
 

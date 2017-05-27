@@ -118,5 +118,10 @@ namespace citadelGame
             Update();
             target.Draw(body, states);
         }
+
+        protected override void SetObjectTransform()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,16 +14,19 @@ namespace citadelGame
         public _test_Card activeCard;
         public bool activeCardActive = false;
 
-        public _test_Hand(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
+        public _test_Hand(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, int rotation)
         {
             this.startX = startX;
             this.startY = startY;
             this.width = width;
             this.height = height;
 
+            this.rotation = rotation;
+
             this.face = face;
             this.cardWidth = cardWidth;
             this.cardHeight = cardHeight;
+            
 
             cardList = new List<_test_Card>();
 
@@ -32,8 +35,9 @@ namespace citadelGame
             this.body.FillColor = Color.Green;
             this.body.OutlineColor = Color.Green;
             this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
-            this.body.Position = new Vector2f(this.startX - 2*offset, this.startY - offset);
+
+            SetObjectTransform();
+
         }
 
         public void SlipCards(int cardIndex)
@@ -50,7 +54,7 @@ namespace citadelGame
                    
                 if (i < cardIndex && deltaX != 0)
                 {
-                    cardList[i].destinationX = (int)(cardList[i].handStartX - deltaX);
+                    cardList[i].destinationX = cardList[i].handStartX - deltaX;
                     cardList[i].dockX = cardList[i].destinationX;
                     cardList[i].ForceFree();
                 }
@@ -72,11 +76,12 @@ namespace citadelGame
         public override void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
-            cardList.Add(new _test_Card(0, startY, cardWidth, cardHeight, face, texture_x, texture_y, this));
+            cardList.Add(new _test_Card(0, startY+height/2, cardWidth, cardHeight, face, texture_x, texture_y, this));
             cardList[cardList.Count - 1].origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count)), width);
+            //cardAreaStartX = (int)((width - cardAreaWidth) / 2.0);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             //height = cardHeight;
             foreach (_test_Card card in cardList)
@@ -100,12 +105,14 @@ namespace citadelGame
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardWidth * cardList[0].exposeSize + 1) * (cardList.Count)), width);
+            //cardAreaStartX = (int)((width - cardAreaWidth) / 2.0);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
             //height = cardHeight;
             foreach (_test_Card card in cardList)
             {
                 card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
+                //card.dockY = (int)(startY - this.height / 2.0f - offset);
                 card.dockY = startY;
                 //card.dockX = card.currentX;
                 //card.dockY = card.currentY;
@@ -144,6 +151,15 @@ namespace citadelGame
             else if (x >= (this.startX - 2 * offset) && x <= (this.startX + width + 2 * offset) && y >= (this.startY - offset) && y <= (this.startY + height + 1 * offset)) mouseOver = true;
             else mouseOver = false;
             return mouseOver;
+        }
+
+        protected override void SetObjectTransform()
+        {
+            body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+            //body.Position = new Vector2f(this.startX - 2 * offset, this.startY - offset);
+            body.Position = new Vector2f(this.startX - 2 * offset, this.startY - offset);
+            //body.Origin = new Vector2f(this.body.Size.X / 2, this.body.Size.Y / 2);
+            this.body.Rotation = this.rotation;
         }
 
         public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)

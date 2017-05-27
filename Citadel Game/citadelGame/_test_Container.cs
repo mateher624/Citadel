@@ -17,6 +17,8 @@ namespace citadelGame
         protected int height;
         protected int offset = 50;
 
+        protected int rotation = 0;
+
         public int cardWidth;
         public int cardHeight;
 
@@ -31,6 +33,7 @@ namespace citadelGame
 
         protected bool mouseOver = false;
 
+        protected abstract void SetObjectTransform();
         public abstract void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard);
         public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard);
         public abstract void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords);
