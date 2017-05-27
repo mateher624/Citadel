@@ -11,22 +11,34 @@ namespace citadelGame
 {
     class UIPrimitiveButton : UIButton
     {
-        RectangleShape body;
+        private RectangleShape body;
+        private Text text;
+        private Color primaryColor;
+        private Color secondaryColor;
 
-        public UIPrimitiveButton(int start_x, int start_y, int width, int height)
+        public UIPrimitiveButton(int start_x, int start_y, int width, int height, Color fillColor, Color outlineColor, string caption)
         {
+            Font font = new Font("../../Resources/arial.ttf");
             state = 0;
             this.start_x = start_x;
             this.start_y = start_y;
             this.width = width;
             this.height = height;
+            primaryColor = fillColor;
+            secondaryColor = outlineColor;
             this.body = new RectangleShape();
 
-            this.body.FillColor = Color.Green;
-            this.body.OutlineColor = Color.Magenta;
+            this.body.FillColor = primaryColor;
+            this.body.OutlineColor = outlineColor;
             this.body.OutlineThickness = 1.0f;
             this.body.Size = new Vector2f(width, height);
             this.body.Position = new Vector2f(this.start_x, this.start_y);
+
+            this.text = new Text();
+            text.Font = font;
+            text.Position = new Vector2f(this.start_x + 10, this.start_y + 10);
+            text.DisplayedString = caption;
+            text.CharacterSize = 20;
         }
 
         protected override void Update()
@@ -38,13 +50,13 @@ namespace citadelGame
             }
             else if (state == 0)
             {
-                this.body.FillColor = Color.Green;
-                this.body.OutlineColor = Color.Magenta;
+                this.body.FillColor = primaryColor;
+                this.body.OutlineColor = secondaryColor;
             }
             else if (state == 1)
             {
-                this.body.FillColor = Color.Magenta;
-                this.body.OutlineColor = Color.Green;
+                this.body.FillColor = secondaryColor;
+                this.body.OutlineColor = primaryColor;
             }
             else if (state == 2)
             {
@@ -56,8 +68,9 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            target.Draw(body, states);
+            if (visible) target.Draw(body, states);
+            if (visible) target.Draw(text, states);
         }
 
-    }
+    } 
 }

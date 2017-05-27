@@ -102,6 +102,7 @@ namespace citadelGame
                 card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
                 card.dockY = startY;
+                card.visible = visible;
                 //card.dockX = card.currentX;
                 //card.dockY = card.currentY;
                 card.Free();
@@ -126,6 +127,7 @@ namespace citadelGame
             {
                 card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
                 card.handStartX = card.dockX;
+                card.visible = visible;
                 //card.dockY = (int)(startY - this.height / 2.0f - offset);
                 card.dockY = startY;
                 //card.dockX = card.currentX;
@@ -289,7 +291,7 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            target.Draw(body, states);
+            if (visible) target.Draw(body, states);
         }
     }
 }

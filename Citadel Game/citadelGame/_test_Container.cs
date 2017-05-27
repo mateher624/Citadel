@@ -15,9 +15,12 @@ namespace citadelGame
         protected int startY;
         protected int width;
         protected int height;
-        protected int offset = 50;
+        protected int offset = 10;
 
         public bool active;
+        public bool oldState;
+
+        protected bool visible = true;
 
         protected int rotation = 0;
 
@@ -43,5 +46,25 @@ namespace citadelGame
         public abstract void AddCard(_test_Card addedCard);
         public abstract void AddCard(int texture_x, int texture_y);
         public abstract void Draw(RenderTarget target, RenderStates states);
+
+        public virtual void Visible()
+        {
+            if (visible)
+            {
+                visible = false;
+                foreach (var card in cardList)
+                {
+                    card.visible = false;
+                }
+            }
+            else
+            {
+                visible = true;
+                foreach (var card in cardList)
+                {
+                    card.visible = true;
+                }
+            }
+        }
     }
 }

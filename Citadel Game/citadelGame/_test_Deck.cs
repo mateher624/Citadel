@@ -14,8 +14,6 @@ namespace citadelGame
         private int cardStartX;
         private int maxStackSize;
 
-        public bool visible;
-
         Sprite bodyGround;
         private Vector2f backTextureCoords = new Vector2f(2, 4);
 
@@ -46,7 +44,7 @@ namespace citadelGame
 
         public void FlipDeck()
         {
-            visible = visible == false;
+            //visible = visible == false;
             foreach (var card in cardList)
             {
                 card.flipped = card.flipped == false;
@@ -84,6 +82,7 @@ namespace citadelGame
             {
                 card.dockX = startX;
                 card.dockY = startY;
+                card.visible = visible;
                 //card.handStartX = card.dockX;
 
                 //card.dockX = card.currentX;
@@ -103,6 +102,7 @@ namespace citadelGame
             {
                 card.dockX = startX;
                 card.dockY = startY;
+                card.visible = visible;
                 //card.handStartX = card.dockX;
 
                 //card.dockX = card.currentX;
@@ -143,16 +143,16 @@ namespace citadelGame
             if (active == true)
             {
                 int maxCardIndex = cardList.Count - 1;
-                if (maxCardIndex >= 0)
+            if (maxCardIndex >= 0)
+            {
+                bool active = cardList[maxCardIndex].Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (active == true)
                 {
-                    bool active = cardList[maxCardIndex].Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
-                    if (active == true)
-                    {
-                        Console.WriteLine("Card Taken");
-                        cardList[maxCardIndex].ClickExecute((int) worldCoords.X, (int) worldCoords.Y, e.Button);
-                        cursorDockedCard = cardList[maxCardIndex];
-                    }
+                    Console.WriteLine("Card Taken");
+                    cardList[maxCardIndex].ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    cursorDockedCard = cardList[maxCardIndex];
                 }
+            }
             }
         }
 
@@ -171,8 +171,8 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            target.Draw(body, states);
-            target.Draw(bodyGround, states);
+            if (visible) target.Draw(body, states);
+            if (visible) target.Draw(bodyGround, states);
         }
 
         protected override void SetObjectTransform()

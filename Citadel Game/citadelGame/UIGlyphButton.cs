@@ -40,7 +40,7 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            target.Draw(body, states);
+            if (visible) target.Draw(body, states);
         }
     }
 }

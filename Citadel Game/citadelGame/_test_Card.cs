@@ -29,6 +29,7 @@ namespace citadelGame
         private Sprite body;
 
         public int rotation;
+        public bool visible = true;
 
         private Vector2f mouseCoords;
         public bool mouseOver = false;
@@ -266,11 +267,11 @@ namespace citadelGame
                 dock_pos_x = x - this.currentX;
                 dock_pos_y = y - this.currentY;
             }
-            else if (button.ToString() == "Right")
+            /*else if (button.ToString() == "Right")
             {
                 if (flipped == false) flipped = true;
                 else flipped = true;
-            }
+            }*/
         }
 
         public int MouseCollide(bool ifCollide)
@@ -354,7 +355,7 @@ namespace citadelGame
         public void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            target.Draw(body, states);
+            if (visible) target.Draw(body, states);
         }
     }
 }

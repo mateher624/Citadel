@@ -16,6 +16,8 @@ namespace citadelGame
         public int width;
         public int height;
 
+        public bool visible = true;
+         
         public int state;
 
         protected abstract void Update();
