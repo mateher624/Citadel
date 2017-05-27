@@ -79,7 +79,7 @@ namespace citadelGame
 
         public override void AddCard(int texture_x, int texture_y)
         {
-            _test_Card newCard = new _test_Card(0, 0, cardWidth, cardHeight, face, texture_x, texture_y, this);
+            _test_Card newCard = new _test_Card(0, 0, cardWidth, cardHeight, face, texture_x, texture_y, this, true);
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

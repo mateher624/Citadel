@@ -52,11 +52,13 @@ namespace citadelGame
         public int destinationX;
         public int destinationY;
 
-        public int state;
+        public bool flipped;
 
         public bool freezePosition = false;
 
         private bool exposed;
+
+        //public bool flipped;
 
         //public Color color;
 
@@ -65,10 +67,10 @@ namespace citadelGame
 
         public _test_Container origin;
 
-        public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y, _test_Container origin)
+        public _test_Card(int start_x, int start_y, int width, int height, Texture face, int texture_x, int texture_y, _test_Container origin, bool flipped)
         {
             this.origin = origin;
-            state = 1;
+            //this.flipped = 1;
             this.dockX = start_x;
             this.dockY = start_y;
             this.currentX = 0;
@@ -79,6 +81,7 @@ namespace citadelGame
             this.texture_y = texture_y;
             this.face = face;
             this.handStartX = start_x;
+            this.flipped = flipped;
 
             //this.handHeld = true;
 
@@ -107,8 +110,8 @@ namespace citadelGame
             int currentXMod = currentX;
             int currentYMod = currentY;
             //if (mouseOver == false && flowAnimationLock == false) destinationX = 0;
-            if (state == 0) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
-            else if (state == 1) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
+            if (flipped == false) this.body.TextureRect = new IntRect(4 * this.width, 4 * this.height, this.width, this.height);
+            else if (flipped == true) this.body.TextureRect = new IntRect(texture_x * this.width, texture_y * this.height, this.width, this.height);
 
             if (flipAnimationLock == true && exposeAnimationLock == false)
             {
@@ -116,6 +119,7 @@ namespace citadelGame
                 if (flipAnimationStep == -1)
                 {
                     flipAnimationLock = false;
+                    //flipped = flipped == false;
                 }
                 else if (flipAnimationStep < flipAnimationDuration / 2)
                 {
@@ -127,8 +131,8 @@ namespace citadelGame
                 {
                     newScaleX = Math.Abs((((flipAnimationDuration / 2.0f) - flipAnimationStep) / (flipAnimationDuration / 2.0f)));
                     body.Scale = new Vector2f(newScaleX, 1);
-                    if (state == 1) state = 0;
-                    else state = 1;
+                    if (flipped == true) flipped = false;
+                    else flipped = true;
                     flipAnimationStep--;
                 }
                 else if (flipAnimationStep <= flipAnimationDuration)
@@ -264,8 +268,8 @@ namespace citadelGame
             }
             else if (button.ToString() == "Right")
             {
-                if (state == 0) state = 1;
-                else state = 0;
+                if (flipped == false) flipped = true;
+                else flipped = true;
             }
         }
 
@@ -324,7 +328,7 @@ namespace citadelGame
 
         public void Flip()
         {
-            if (flipAnimationLock == false && origin.GetType() != typeof(_test_Hand))
+            if (flipAnimationLock == false)
             {
                 flipAnimationLock = true;
                 flipAnimationStep = flipAnimationDuration;

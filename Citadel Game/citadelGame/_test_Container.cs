@@ -17,6 +17,8 @@ namespace citadelGame
         protected int height;
         protected int offset = 50;
 
+        public bool active;
+
         protected int rotation = 0;
 
         public int cardWidth;

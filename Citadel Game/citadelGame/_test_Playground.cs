@@ -33,6 +33,7 @@ namespace citadelGame
 
         public bool Collide(int x, int y, bool mousePressed)
         {
+            if (active == false) return false;
             if (mousePressed == false) mouseOver = false;
             else if (x >= (this.startX - 2 * offset)  && x <= (this.startX + width + 2 * offset) && y >= (this.startY - offset) && y <= (this.startY + height + 1 * offset)) mouseOver = true;
             else mouseOver = false;
@@ -83,7 +84,8 @@ namespace citadelGame
             //width = maxHandWidth;
             cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardList.Count)), width);
             cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
-            height = cardList[0].height;
+            //height = cardList[0].height;
+            if (addedCard.flipped != true) addedCard.Flip();
 
             foreach (_test_Card card in cardList)
             {
@@ -96,7 +98,21 @@ namespace citadelGame
                 //card.dockY = card.currentY;
                 i++;
             }
-            this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+            //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
+        }
+
+        public void CardDroppedEvent(_test_Card cursorDockedCard, Vector2f worldCoords, bool mousePressed)
+        {
+            bool containerCollide = Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
+
+            if (containerCollide == true && cursorDockedCard.origin != this)
+            {
+                cursorDockedCard.origin.RemoveCard(cursorDockedCard);
+                //if (cursorDockedCard.origin.GetType() != typeof(_test_Hand)) cursorDockedCard.Flip();
+                //if (cursorDockedCard.flipped == false) cursorDockedCard.Flip();
+                AddCard(cursorDockedCard);
+                //cursorDockedCard.Free();
+            }
         }
 
         public void Update()

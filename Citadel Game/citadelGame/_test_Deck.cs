@@ -14,6 +14,8 @@ namespace citadelGame
         private int cardStartX;
         private int maxStackSize;
 
+        public bool visible;
+
         Sprite bodyGround;
         private Vector2f backTextureCoords = new Vector2f(2, 4);
 
@@ -42,6 +44,15 @@ namespace citadelGame
             this.bodyGround.Position = new Vector2f(this.startX, this.startY);
         }
 
+        public void FlipDeck()
+        {
+            visible = visible == false;
+            foreach (var card in cardList)
+            {
+                card.flipped = card.flipped == false;
+            }
+        }
+
         public override void RemoveCard(_test_Card removedCard)
         {
             int i = 0;
@@ -62,15 +73,32 @@ namespace citadelGame
 
         public override void AddCard(_test_Card addedCard)
         {
+            int i = 0;
+            cardList.Add(addedCard);
+            cardList[cardList.Count - 1].origin = this;
+            //cardList[cardList.Count - 1].flipped = false;
 
+            if (addedCard.flipped != visible) addedCard.Flip();
+
+            foreach (_test_Card card in cardList)
+            {
+                card.dockX = startX;
+                card.dockY = startY;
+                //card.handStartX = card.dockX;
+
+                //card.dockX = card.currentX;
+                //card.dockY = card.currentY;
+                card.Free();
+                i++;
+            }
         }
 
         public override void AddCard(int texture_x, int texture_y)
         {
             int i = 0;
-            cardList.Add(new _test_Card(startX, 0, cardWidth, cardHeight, face, texture_x, texture_y, this));
+            cardList.Add(new _test_Card(startX, 0, cardWidth, cardHeight, face, texture_x, texture_y, this, false));
             cardList[cardList.Count - 1].origin = this;
-            cardList[cardList.Count - 1].state = 0;
+            cardList[cardList.Count - 1].flipped = false;
             foreach (_test_Card card in cardList)
             {
                 card.dockX = startX;
@@ -87,37 +115,43 @@ namespace citadelGame
 
         public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
-            int cardIndex = -1;
-            int maxCardIndex = cardList.Count - 1;
-            if (cursorDockedCard == null)
+            if (active == true)
             {
-                if (maxCardIndex >= 0)
+                int cardIndex = -1;
+                int maxCardIndex = cardList.Count - 1;
+                if (cursorDockedCard == null)
                 {
-                    bool active;
-                    active = cardList[maxCardIndex].Collide((int)worldCoords.X, (int)worldCoords.Y);
-                    if (active == true)
+                    if (maxCardIndex >= 0)
                     {
-                        cardIndex = maxCardIndex;
-                        cardList[maxCardIndex].Drag((int)worldCoords.X, (int)worldCoords.Y);
+                        bool active;
+                        active = cardList[maxCardIndex].Collide((int) worldCoords.X, (int) worldCoords.Y);
+                        if (active == true)
+                        {
+                            cardIndex = maxCardIndex;
+                            cardList[maxCardIndex].Drag((int) worldCoords.X, (int) worldCoords.Y);
+                        }
+                        cardList[maxCardIndex].MouseCollide(active);
                     }
-                    cardList[maxCardIndex].MouseCollide(active);
-                }
 
+                }
+                else cursorDockedCard.Drag((int) worldCoords.X, (int) worldCoords.Y);
             }
-            else cursorDockedCard.Drag((int)worldCoords.X, (int)worldCoords.Y);
         }
 
         public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
         {
-            int maxCardIndex = cardList.Count - 1;
-            if (maxCardIndex >= 0)
+            if (active == true)
             {
-                bool active = cardList[maxCardIndex].Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                if (active == true)
+                int maxCardIndex = cardList.Count - 1;
+                if (maxCardIndex >= 0)
                 {
-                    Console.WriteLine("Card Taken");
-                    cardList[maxCardIndex].ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                    cursorDockedCard = cardList[maxCardIndex];
+                    bool active = cardList[maxCardIndex].Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
+                    if (active == true)
+                    {
+                        Console.WriteLine("Card Taken");
+                        cardList[maxCardIndex].ClickExecute((int) worldCoords.X, (int) worldCoords.Y, e.Button);
+                        cursorDockedCard = cardList[maxCardIndex];
+                    }
                 }
             }
         }
