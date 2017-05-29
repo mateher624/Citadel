@@ -17,6 +17,9 @@ namespace Citadel_v1
 
     public class DistrictCard : ICard
     {
+        public string TextureSourceFileName { get; }
+        public int CoordinateY { get; }
+        public int CoordinateX { get; }
         public string Name { get; private set; }
         public int Id { get; private set; }
         public int Cost { get; private set; }

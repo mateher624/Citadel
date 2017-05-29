@@ -8,6 +8,9 @@ namespace Citadel_v1
 {
     public class CharacterCard : ICard
     {
+        public string TextureSourceFileName { get; }
+        public int CoordinateY { get; }
+        public int CoordinateX { get; }
         public string Name { get; private set; }
         public int Id { get; private set; }
         public bool Active { get; set; }    // określa, czy karta jest aktywna w danej rundzie
