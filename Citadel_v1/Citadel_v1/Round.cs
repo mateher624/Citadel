@@ -12,7 +12,7 @@ namespace Citadel_v1
 
         public Round(List<Player> players, Decks deck)
         {
-          CurrentPhase = new InitialPhase(players, this, deck, deck.CharacterDeck.ToList());           
+            CurrentPhase = new InitialPhase(players, this, deck, deck.CharacterDeck.ToList());           
         }
 
 

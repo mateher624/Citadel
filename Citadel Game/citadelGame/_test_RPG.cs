@@ -1,9 +1,12 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Threading;
+//using Citadel_v1;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
+using Color = SFML.Graphics.Color;
 
 
 namespace citadelGame
@@ -30,7 +33,7 @@ namespace citadelGame
 
         private _test_Deck deck;
 
-        private UIMessage message;
+        private UIDilema message;
         private string messageTitle;
         private string messageCaption;
 
@@ -40,6 +43,9 @@ namespace citadelGame
 
         private bool deckToPlaygroundLock;
         private bool foreignDeckOrPlaygroundLock;
+
+        //private Game gameLogic;
+        private Mutex gameLogicMutex;
 
 
         public _test_RPG() : base(1600, 900, "Citadel Game Alpha", Color.Cyan)
@@ -106,6 +112,10 @@ namespace citadelGame
             {
                 message.buttonCANCEL.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                 message.buttonOK.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                foreach (var card in message.cardList)
+                {
+                    //card.Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
+                }
             }
         }
 
@@ -176,6 +186,14 @@ namespace citadelGame
                 {
                     boardStableState = true;
                 }
+                foreach (var card in message.cardList)
+                {
+                    bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    if (cardUnclicked == true)
+                    {
+                        boardStableState = true;
+                    }
+                }
             }
             mousePressed = false;
             if (deckToPlaygroundLock)
@@ -197,6 +215,11 @@ namespace citadelGame
 
         protected override void Initialize()
         {
+            //gameLogicMutex = new Mutex();
+            //gameLogic = new Game();
+            //Thread gameLogicThread = new Thread(new ThreadStart(ProcessName));
+            //gameLogicThread.Start();
+
             aether = new _test_Aether();
             deck = new _test_Deck(636, 10, 72, 100, deckTexture, 72, 100);
             deck.active = true;
@@ -309,7 +332,15 @@ namespace citadelGame
             else if (boardActive && boardStableState == false)
             {
                 // init message
-                message = new UIMessage(1600/2-300, 900/2-200, 600, 400, "Test Nazwy", "test pola tekstowego", 1600, 900);
+                List<_test_Card> dilemaCardList = new List<_test_Card>();
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 20, 72, 100, deckTexture, 1, 3, aether, true));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 130, 72, 100, deckTexture, 1, 2, aether, true));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 240, 72, 100, deckTexture, 1, 1, aether, false));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 350, 72, 100, deckTexture, 1, 0, aether, true));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 350, 72, 100, deckTexture, 2, 0, aether, true));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 350, 72, 100, deckTexture, 3, 0, aether, true));
+                dilemaCardList.Add(new _test_Card(20 + 15 * 1, 350, 72, 100, deckTexture, 3, 0, aether, true));
+                message = new UIDilema(1600/2-300, 900/2-200, 600, 400, "Test Nazwy", "test pola tekstowego", 1600, 900, dilemaCardList);
                 boardActive = false;
             }
             else if (boardActive == false && boardStableState == false)
@@ -359,6 +390,10 @@ namespace citadelGame
                 window.Draw(message); 
                 window.Draw(message.buttonCANCEL);
                 window.Draw(message.buttonOK);
+                foreach (var card in message.cardList)
+                {
+                    window.Draw(card);
+                }
             }
 
             //foreach (_test_Card card in aether.cardList)

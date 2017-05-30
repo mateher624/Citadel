@@ -10,19 +10,19 @@ namespace citadelGame
 {
     class UIMessage : Drawable
     {
-        private int startX;
-        private int startY;
-        private int width;
-        private int height;
-        private int offset = 10;
+        protected int startX;
+        protected int startY;
+        protected int width;
+        protected int height;
+        protected int offset = 10;
 
-        private bool visible = true;
+        protected bool visible = true;
 
-        private RectangleShape body;
-        private RectangleShape shroud;
+        protected RectangleShape body;
+        protected RectangleShape shroud;
 
-        private Text textTitle;
-        private Text textCaption;
+        protected Text textTitle;
+        protected Text textCaption;
 
 
         public UIPrimitiveButton buttonOK;
@@ -70,7 +70,7 @@ namespace citadelGame
             buttonCANCEL = new UIPrimitiveButton(this.startX + this.width / 2 + 20, this.startY + this.height-50, 100, 30, Color.Cyan, Color.Magenta, "Cancel");
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public virtual void Draw(RenderTarget target, RenderStates states)
         {
             if (visible) target.Draw(shroud, states);
             if (visible) target.Draw(body, states);
