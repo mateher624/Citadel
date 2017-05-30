@@ -10,9 +10,12 @@ namespace Citadel_v1
     {
         public Phase CurrentPhase { get; set; }
 
-        public Round(List<Player> players, Decks deck)
+        public SynchronizationController SynchronizationController { get; private set; }
+
+        public Round(List<Player> players, Decks deck, SynchronizationController synchronizationController)
         {
-            CurrentPhase = new InitialPhase(players, this, deck, deck.CharacterDeck.ToList());           
+            SynchronizationController = synchronizationController;
+            CurrentPhase = new InitialPhase(players, this, deck, deck.CharacterDeck.ToList(), synchronizationController);           
         }
 
 

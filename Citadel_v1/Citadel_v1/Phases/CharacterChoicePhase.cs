@@ -10,12 +10,12 @@ namespace Citadel_v1
     {
         const int FirstPlayerId = 1;
 
-        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList) : this(players, phase.Round, deck, fullCharacterCardList)
+        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController)
         {
 
         }
 
-        public CharacterChoicePhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList) : base(players, deck, fullCharacterCardList)
+        public CharacterChoicePhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : base(players, deck, fullCharacterCardList, synchronizationController)
         {
             Round = round;
         }

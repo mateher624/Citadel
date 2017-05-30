@@ -14,12 +14,12 @@ namespace Citadel_v1
         public bool IsEnd { get; protected set; }             // określa, czy rozgrywka powinna się już zakończyć
         private readonly Player[] _winningPlayers = new Player[2];
 
-        public ResultPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList) : this(players, phase.Round, deck, fullCharacterCardList)
+        public ResultPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController)
         {
 
         }
 
-        public ResultPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList) : base(players, deck, fullCharacterCardList)
+        public ResultPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : base(players, deck, fullCharacterCardList, synchronizationController)
         {
             Round = round;
             IsEnd = false;

@@ -17,11 +17,14 @@ namespace Citadel_v1
 
         protected readonly List<Player> Players;
 
-        protected Phase(List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList)
+        public SynchronizationController SynchronizationController { get; private set; }
+
+        protected Phase(List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController)
         {
             Players = players;
             Deck = deck;
             FullCharacterCardList = fullCharacterCardList;
+            SynchronizationController = synchronizationController;
         }
 
         public abstract void DoPhase();
