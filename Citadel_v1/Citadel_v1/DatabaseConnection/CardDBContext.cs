@@ -29,7 +29,7 @@ namespace Citadel_v1
 
             modelBuilder.Entity<CharacterCard>().Map(m =>
             {
-                m.Properties(p => new {p.Id, p.Name});
+                m.Properties(p => new {p.Id, p.Name, p.CoordinateX, p.CoordinateY, p.TextureSourceFileName});
                 m.ToTable("CharacterCardInfo");
             });
 
@@ -50,7 +50,7 @@ namespace Citadel_v1
 
             modelBuilder.Entity<DistrictCard>().Map(m =>
             {
-                m.Properties(p => new {p.Id, p.Name, p.Cost, p.Color});
+                m.Properties(p => new {p.Id, p.Name, p.Cost, p.Color, p.CoordinateX, p.CoordinateY, p.TextureSourceFileName});
                 m.ToTable("DistrictCardInfo");
             });
         }
