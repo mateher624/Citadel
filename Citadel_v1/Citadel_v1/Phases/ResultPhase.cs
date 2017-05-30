@@ -57,7 +57,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList);
+            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
         }
 
         private void CountPlayersPoints()    // podliczenie pkt na koniec rundy

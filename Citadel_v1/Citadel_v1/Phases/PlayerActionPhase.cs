@@ -28,7 +28,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new ResultPhase(Players, this, Deck, FullCharacterCardList, TODO);
+            Round.CurrentPhase = new ResultPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
         }
 
         private void MakeTheRightPlayerDoAction()   // odnalezienie gracza z odpowiednią kartą postaci i wymuszenie na nim wykonania akcji

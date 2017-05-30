@@ -41,7 +41,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck, FullCharacterCardList);
+            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
         }
 
         private void SetAllCharacterCardsActive()       // ustawienie wszystkich kart postaci, jako aktywnych

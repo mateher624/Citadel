@@ -31,7 +31,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList);
+            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
         }
 
         private void GiveAwayGold(List<Player> players)    // rozdanie 2 szt. złota każdemu z graczy
