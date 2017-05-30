@@ -2,6 +2,9 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Threading;
+using citadelGame.UI;
+using Citadel_v1;
+using Citadel_v1_test;
 //using Citadel_v1;
 using SFML.Graphics;
 using SFML.Window;
@@ -11,11 +14,11 @@ using Color = SFML.Graphics.Color;
 
 namespace citadelGame
 {
-    class TestRpg : TestGame
+    class _test_RPG : TestGame
     {
         Vector2f worldCoords;
-        private bool boardActive;
-        private bool boardStableState;
+
+        public BoardState state;
 
         //_test_Tilemap map;
         Texture tileset;
@@ -33,24 +36,28 @@ namespace citadelGame
 
         private TestDeck deck;
 
-        private UiDilema message;
+        public UIMessage message;
         private string messageTitle;
         private string messageCaption;
 
+        private EventDenture eventDenture;
+        public UserAdapter userAdapter;
+        private IDecksFactory deckFactory;
+
         private TestDeck graveyard;
         private TestCard cursorDockedCard;
-        bool mousePressed = false;
+        private bool mousePressed = false;
 
         private bool deckToPlaygroundLock;
         private bool foreignDeckOrPlaygroundLock;
 
-        //private Game gameLogic;
-        private AutoResetEvent resetEventController;
-        private AutoResetEvent resetEventModel;
+        private Game gameLogic;
 
+        public SynchronizationController synchronizationController;
 
+        private int playerCount;
 
-        public TestRpg() : base(1600, 900, "Citadel Game Alpha", Color.Cyan)
+        public _test_RPG() : base(1600, 900, "Citadel Game Alpha", Color.Cyan)
         {
             buttonList = new List<UiButton>();
             elementsContainers = new List<TestContainer>();
@@ -60,12 +67,17 @@ namespace citadelGame
             panels = new List<UiPlayerPanel>();
         }
 
+        // Message generation and some shit functions
+        //
+        //
+        // End
+
         protected override void CheckCollide(MouseMoveEventArgs e)
         {
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
 
-            if (boardActive == true) // normal game
+            if (state.boardActive == true) // normal game
             {
                 foreach (UiButton button in buttonList) button.Collide((int) worldCoords.X, (int) worldCoords.Y);
 
@@ -83,8 +95,15 @@ namespace citadelGame
             }
             else // message up
             {
-                message.ButtonCancel.Collide((int)worldCoords.X, (int)worldCoords.Y);
-                message.ButtonOk.Collide((int)worldCoords.X, (int)worldCoords.Y);
+                if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
+                    message.ButtonOK.Collide((int)worldCoords.X, (int)worldCoords.Y);
+                if (message.GetType() == typeof(UIChoice))
+                    message.ButtonCancel.Collide((int)worldCoords.X, (int)worldCoords.Y);
+                if (message.GetType() == typeof(UIDilema))
+                    foreach (var card in message.CardList)
+                    {
+                        card.Collide((int) worldCoords.X, (int) worldCoords.Y);
+                    }
             }
         }
         
@@ -93,7 +112,7 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
             mousePressed = true;
-            if (boardActive == true) // normal game
+            if (state.boardActive == true) // normal game
             {
                 foreach (UiButton button in buttonList)
                     button.Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
@@ -113,12 +132,10 @@ namespace citadelGame
             }
             else // message up
             {
-                message.ButtonCancel.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                message.ButtonOk.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                foreach (var card in message.CardList)
-                {
-                    //card.Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
-                }
+                if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
+                    message.ButtonCancel.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (message.GetType() == typeof(UIChoice))
+                    message.ButtonOK.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             }
         }
 
@@ -127,7 +144,7 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
 
-            if (boardActive == true) // normal game
+            if (state.boardActive == true) // normal game
             {
                 //BUTTON FUNCTIONS
 
@@ -156,7 +173,7 @@ namespace citadelGame
                 if (button2Clicked == true)
                 {
                     // message start
-                    boardStableState = false;
+                    state.boardStableState = false;
                 }
 
                 foreach (TestContainer container in elementsContainers) container.UnClicked(e, worldCoords);
@@ -177,26 +194,41 @@ namespace citadelGame
             }
             else // message up
             {
-                bool buttonOkClicked = message.ButtonCancel.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                if (buttonOkClicked == true)
+                if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
                 {
-                    boardStableState = true;
-                }
-
-                bool buttonCancelClicked = message.ButtonOk.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                if (buttonCancelClicked == true)
-                {
-                    boardStableState = true;
-                }
-                foreach (var card in message.CardList)
-                {
-                    bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                    if (cardUnclicked == true)
+                    bool buttonOkClicked = message.ButtonCancel.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    if (buttonOkClicked == true)
                     {
-                        boardStableState = true;
+                        eventDenture.ReturnChoice(true);
+                        state.boardStableState = true;
                     }
                 }
+                if (message.GetType() == typeof(UIChoice))
+                {
+                    bool buttonCancelClicked = message.ButtonOK.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    if (buttonCancelClicked == true)
+                    {
+                        eventDenture.ReturnChoice(false);
+                        state.boardStableState = true;
+                    }
+                }
+                if (message.GetType() == typeof(UIDilema))
+                {
+                    int i = 0;
+                    foreach (var card in message.CardList)
+                    {
+                        bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                        if (cardUnclicked == true)
+                        {
+                            eventDenture.ReturnChosenCardIndex(i);
+
+                            state.boardStableState = true;
+                        }
+                        i++;
+                    }
+                }  
             }
+
             mousePressed = false;
             if (deckToPlaygroundLock)
             {
@@ -214,49 +246,65 @@ namespace citadelGame
 
             tileset = new Texture("../../Resources/DungeonTileset.png");
             buttonFace = new Texture("../../Resources/btn_play.bmp");
-            deckTexture = new Texture("../../Resources/deck.gif");
+            deckTexture = new Texture("../../Resources/cdeck.gif");
+        }
+
+        protected void GameLogicInit()
+        {
+            
         }
 
         protected override void Initialize()
         {
             // init game model thread
+            playerCount = 6;
+            synchronizationController = new SynchronizationController(false);
+            state = new BoardState();
+            eventDenture = new EventDenture(state, message, synchronizationController, this);
+            userAdapter = new UserAdapter(synchronizationController, eventDenture);
+            deckFactory = new GameTestDecksFactory();
+            gameLogic = new Game(playerCount, userAdapter, deckFactory.Create(), synchronizationController);
+            
+            Thread threadModel = new Thread(new ThreadStart(gameLogic.StartNewRound));
+            threadModel.Start();
+            while (!threadModel.IsAlive) ;
 
-            resetEventController = new AutoResetEvent(false);
-            resetEventModel = new AutoResetEvent(false);
-            //Thread threadModel = new Thread(new ThreadStart(gameLogic = new Game()));
-            //threadModel.Start();
-            //while (!threadModel.IsAlive) ;
-
+            
+            state.boardActive = true;
+            state.boardStableState = true;
 
             // init UI objects
 
+            int districtCardWidth = 100;
+            int districtCardHeight = 100;
+
             aether = new TestAether();
-            deck = new TestDeck(636, 10, 72, 100, deckTexture, 72, 100);
+            deck = new TestDeck(636, 10, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
             deck.Active = true;
-            graveyard = new TestDeck(892, 10, 72, 100, deckTexture, 72, 100);
+            graveyard = new TestDeck(892, 10, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
             graveyard.Active = false;
             graveyard.FlipDeck();
 
-            panels.Add(new UiPlayerPanel(643, 150, 100, 223, deckTexture, 72, 100));
-            panels.Add(new UiPlayerPanel(643, 400, 100, 223, deckTexture, 72, 100));
-            panels.Add(new UiPlayerPanel(643, 650, 100, 223, deckTexture, 72, 100));
-            panels.Add(new UiPlayerPanel(857, 150, 100, 223, deckTexture, 72, 100));
-            panels.Add(new UiPlayerPanel(857, 400, 100, 223, deckTexture, 72, 100));
-            panels.Add(new UiPlayerPanel(857, 650, 100, 223, deckTexture, 72, 100));
+            panels.Add(new UiPlayerPanel(643, 150, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            panels.Add(new UiPlayerPanel(643, 400, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            panels.Add(new UiPlayerPanel(643, 650, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            panels.Add(new UiPlayerPanel(857, 150, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            panels.Add(new UiPlayerPanel(857, 400, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            panels.Add(new UiPlayerPanel(857, 650, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
 
-            hands.Add(new TestHand(60, 150, 550, 100, deckTexture, 72, 100, 0));
-            hands.Add(new TestHand(60, 400, 550, 100, deckTexture, 72, 100, 0));
-            hands.Add(new TestHand(60, 650, 550, 100, deckTexture, 72, 100, 0));
-            hands.Add(new TestHand(990, 150, 550, 100, deckTexture, 72, 100, 0));
-            hands.Add(new TestHand(990, 400, 550, 100, deckTexture, 72, 100, 0));
-            hands.Add(new TestHand(990, 650, 550, 100, deckTexture, 72, 100, 0));
+            hands.Add(new TestHand(60, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new TestHand(60, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new TestHand(60, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new TestHand(990, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new TestHand(990, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new TestHand(990, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
 
-            playgrounds.Add(new TestPlayground(60, 273, 550, 100, deckTexture, 72, 100));
-            playgrounds.Add(new TestPlayground(60, 523, 550, 100, deckTexture, 72, 100));
-            playgrounds.Add(new TestPlayground(60, 773, 550, 100, deckTexture, 72, 100));
-            playgrounds.Add(new TestPlayground(990, 273, 550, 100, deckTexture, 72, 100));
-            playgrounds.Add(new TestPlayground(990, 523, 550, 100, deckTexture, 72, 100));
-            playgrounds.Add(new TestPlayground(990, 773, 550, 100, deckTexture, 72, 100));
+            playgrounds.Add(new TestPlayground(60, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new TestPlayground(60, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new TestPlayground(60, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new TestPlayground(990, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new TestPlayground(990, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new TestPlayground(990, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
 
             // add references to reference container
 
@@ -275,9 +323,9 @@ namespace citadelGame
 
             // init buttons
 
-            buttonList.Add(new UiPrimitiveButton(10, 10, 180, 40, Color.Magenta, Color.Green, "Zniszcz kartę"));
-            buttonList.Add(new UiPrimitiveButton(200, 10, 180, 40, Color.Blue, Color.Cyan, "Dodaj kartę"));
-            buttonList.Add(new UiPrimitiveButton(10, 60, 180, 40, Color.Blue, Color.Cyan, "Message"));
+            buttonList.Add(new UIPrimitiveButton(10, 10, 180, 40, Color.Magenta, Color.Green, "Zniszcz kartę"));
+            buttonList.Add(new UIPrimitiveButton(200, 10, 180, 40, Color.Blue, Color.Cyan, "Dodaj kartę"));
+            buttonList.Add(new UIPrimitiveButton(10, 60, 180, 40, Color.Blue, Color.Cyan, "Message"));
             //buttonList.Add(new UIGlyphButton(320, 140, 95, 53, buttonFace));
             //buttonList.Add(new UIGlyphButton(500, 140, 95, 53, buttonFace));
 
@@ -287,10 +335,10 @@ namespace citadelGame
 
             //for (int i = 0; i < 13; i++)
             //{
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 20, 72, 100, deckTexture, i, 3, aether, true));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 130, 72, 100, deckTexture, i, 2, aether, true));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 240, 72, 100, deckTexture, i, 1, aether, false));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 350, 72, 100, deckTexture, i, 0, aether, true));
+            //    aether.AddCard(new _test_Card(20 + 15 * i, 20, districtCardWidth, 100, deckTexture, i, 3, aether, true));
+            //    aether.AddCard(new _test_Card(20 + 15 * i, 130, districtCardWidth, 100, deckTexture, i, 2, aether, true));
+            //    aether.AddCard(new _test_Card(20 + 15 * i, 240, districtCardWidth, 100, deckTexture, i, 1, aether, false));
+            //    aether.AddCard(new _test_Card(20 + 15 * i, 350, districtCardWidth, 100, deckTexture, i, 0, aether, true));
             //}
 
             // some random cards
@@ -338,13 +386,13 @@ namespace citadelGame
 
             // starting normal game state
 
-            boardActive = true;
-            boardStableState = true;
+            
         }
 
         protected override void Tick()
         {
-            if (boardActive && boardStableState)
+            synchronizationController.ResetEventController.WaitOne();
+            if (state.boardActive && state.boardStableState)
             {
                 // normal game
 
@@ -354,31 +402,22 @@ namespace citadelGame
                 }
 
             }
-            else if (boardActive && boardStableState == false)
+            else if (state.boardActive && state.boardStableState == false)
             {
                 // init message
-                List<TestCard> dilemaCardList = new List<TestCard>();
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 1, 3, aether, true));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 130, 72, 100, deckTexture, 1, 2, aether, true));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 240, 72, 100, deckTexture, 1, 1, aether, false));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 350, 72, 100, deckTexture, 1, 0, aether, true));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 350, 72, 100, deckTexture, 2, 0, aether, true));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 350, 72, 100, deckTexture, 3, 0, aether, true));
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 350, 72, 100, deckTexture, 3, 0, aether, true));
-                message = new UiDilema(1600/2-300, 900/2-200, 600, 400, "Test Nazwy", "test pola tekstowego", 1600, 900, dilemaCardList);
-                boardActive = false;
+
             }
-            else if (boardActive == false && boardStableState == false)
+            else if (state.boardActive == false && state.boardStableState == false)
             {
 
                 // message duration
 
             }
-            else if (boardActive == false && boardStableState)
+            else if (state.boardActive == false && state.boardStableState)
             {
                 // destroy message
                 message = null;
-                boardActive = true;
+                state.boardActive = true;
             }
 
 
@@ -410,15 +449,18 @@ namespace citadelGame
                 Window.Draw(cursorDockedCard);
             }
 
-            if (boardActive == false && boardStableState == false)
+            if (state.boardActive == false && state.boardStableState == false)
             {
-                Window.Draw(message); 
-                Window.Draw(message.ButtonCancel);
-                Window.Draw(message.ButtonOk);
-                foreach (var card in message.CardList)
-                {
-                    Window.Draw(card);
-                }
+                Window.Draw(message);
+                if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
+                    Window.Draw(message.ButtonOK);
+                if (message.GetType() == typeof(UIChoice))
+                    Window.Draw(message.ButtonCancel);
+                if (message.GetType() == typeof(UIDilema))
+                    foreach (var card in message.CardList)
+                    {
+                        Window.Draw(card);
+                    }
             }
         }
     }

@@ -111,7 +111,7 @@ namespace citadelGame
             int currentXMod = CurrentX;
             int currentYMod = CurrentY;
             //if (mouseOver == false && flowAnimationLock == false) destinationX = 0;
-            if (Flipped == false) this._body.TextureRect = new IntRect(4 * this.Width, 4 * this.Height, this.Width, this.Height);
+            if (Flipped == false) this._body.TextureRect = new IntRect(0 * this.Width, 10 * this.Height, this.Width, this.Height);
             else if (Flipped == true) this._body.TextureRect = new IntRect(TextureX * this.Width, TextureY * this.Height, this.Width, this.Height);
 
             if (_flipAnimationLock == true && _exposeAnimationLock == false)

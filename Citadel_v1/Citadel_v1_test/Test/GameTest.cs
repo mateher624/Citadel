@@ -20,10 +20,10 @@ namespace Citadel_v1_test
             IDecksFactory decksFactory = new GameTestDecksFactory();
 
             const int playersAmount = 6;
-            SynchronizationController synchronizationController = new SynchronizationController();
+            //SynchronizationController synchronizationController = new SynchronizationController(false);
 
-            Game game = new Game(playersAmount, userAdapter, decksFactory.Create(), synchronizationController);
-            game.StartNewRound();
+            //Game game = new Game(playersAmount, userAdapter, decksFactory.Create(), synchronizationController);
+            //game.StartNewRound();
         }
     }
 }

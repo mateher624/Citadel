@@ -9,14 +9,14 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UiPrimitiveButton : UiButton
+    class UIPrimitiveButton : UiButton
     {
         private RectangleShape _body;
         private Text _text;
         private Color _primaryColor;
         private Color _secondaryColor;
 
-        public UiPrimitiveButton(int startX, int startY, int width, int height, Color fillColor, Color outlineColor, string caption)
+        public UIPrimitiveButton(int startX, int startY, int width, int height, Color fillColor, Color outlineColor, string caption)
         {
             Font font = new Font("../../Resources/arial.ttf");
             State = 0;

@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Citadel_v1_test
 {
-    internal class GameTestDecksFactory: IDecksFactory
+    public class GameTestDecksFactory: IDecksFactory
     {
         public Decks Create()
         {

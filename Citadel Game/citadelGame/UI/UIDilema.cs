@@ -8,18 +8,14 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UiDilema : UiMessage
+    class UIDilema : UIMessage
     {
-        public List<TestCard> CardList;
+        private RectangleShape cardArea;
+        private int cardAreaStartX;
+        private int cardAreaStartY;
+        private int cardAreaWidth;
 
-        private RectangleShape _cardArea;
-
-        private int _cardAreaStartX;
-        private int _cardAreaStartY;
-
-        private int _cardAreaWidth;
-
-        public UiDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UIDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
@@ -28,9 +24,9 @@ namespace citadelGame
             this.Width = width;
             this.Height = height;
 
-            _cardAreaStartX = startX + 20+30;
-            _cardAreaStartY = startY + 100;
-            _cardAreaWidth = width - 2 * 20;
+            cardAreaStartX = startX + 20+30;
+            cardAreaStartY = startY + 100;
+            cardAreaWidth = width - 2 * 20;
 
             this.CardList = cardList;
 
@@ -48,13 +44,13 @@ namespace citadelGame
             this.Shroud.Size = new Vector2f(screenW, height + screenH);
             this.Shroud.Position = new Vector2f(0, 0);
 
-            this._cardArea = new RectangleShape();
+            this.cardArea = new RectangleShape();
 
-            this._cardArea.FillColor = Color.Red;
-            this._cardArea.OutlineColor = Color.Red;
-            this._cardArea.OutlineThickness = 1.0f;
-            this._cardArea.Size = new Vector2f(_cardAreaWidth, cardList[0].Height);
-            this._cardArea.Position = new Vector2f(_cardAreaStartX, _cardAreaStartY);
+            this.cardArea.FillColor = Color.Red;
+            this.cardArea.OutlineColor = Color.Red;
+            this.cardArea.OutlineThickness = 1.0f;
+            this.cardArea.Size = new Vector2f(cardAreaWidth, cardList[0].Height);
+            this.cardArea.Position = new Vector2f(cardAreaStartX, cardAreaStartY);
 
             TextTitle = new Text();
             TextCaption = new Text();
@@ -72,26 +68,22 @@ namespace citadelGame
             TextCaption.CharacterSize = 20;
 
             SetUpCards();
-
-            ButtonOk = new UiPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
-            ButtonCancel = new UiPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Cancel");
         }
 
         private void SetUpCards()
         {
             int i = 0;
-            _cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count)), Width - 2 * 20);
-            _cardAreaStartX = (int)((Width - _cardAreaWidth) / 2.0 + StartX);
+            cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count)), Width - 2 * 20);
+            cardAreaStartX = (int)((Width - cardAreaWidth) / 2.0 + StartX);
             foreach (TestCard card in CardList)
             {
-                card.DockX = _cardAreaStartX + (i * (_cardAreaWidth + 1) / (CardList.Count));
-                card.DockY = _cardAreaStartY;
+                card.DockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (CardList.Count));
+                card.DockY = cardAreaStartY;
                 card.CurrentX = card.DockX;
                 card.CurrentY = card.DockY;
                 card.OldStartX = card.DockX;
                 card.OldStartY = card.DockY;
-        //card.Free();
-        i++;
+                i++;
             }
         }
 

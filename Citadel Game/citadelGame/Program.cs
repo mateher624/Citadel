@@ -13,7 +13,7 @@ namespace citadelGame
     {
         static void Main(string[] args)
         {
-            TestRpg myGame = new TestRpg();
+            _test_RPG myGame = new _test_RPG();
             myGame.Run();
         }
     }
