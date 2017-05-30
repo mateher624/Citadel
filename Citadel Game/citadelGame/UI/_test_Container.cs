@@ -9,42 +9,42 @@ using SFML.System;
 
 namespace citadelGame
 {
-    abstract class _test_Container : Drawable
+    abstract class TestContainer : Drawable
     {
-        protected int startX;
-        protected int startY;
-        protected int width;
-        protected int height;
-        protected int offset = 10;
+        protected int StartX;
+        protected int StartY;
+        protected int Width;
+        protected int Height;
+        protected int Offset = 10;
 
-        public bool active;
-        public bool oldState;
+        public bool Active;
+        public bool OldState;
 
         protected bool visible = true;
 
-        protected int rotation = 0;
+        protected int Rotation = 0;
 
-        public int cardWidth;
-        public int cardHeight;
+        public int CardWidth;
+        public int CardHeight;
 
-        protected int cardAreaWidth;
-        protected int cardAreaStartX;
-        protected int cardAreaStartY;
+        protected int CardAreaWidth;
+        protected int CardAreaStartX;
+        protected int CardAreaStartY;
 
-        protected RectangleShape body;
-        protected Texture face;
+        protected RectangleShape Body;
+        protected Texture Face;
 
-        public List<_test_Card> cardList;
+        public List<TestCard> CardList;
 
-        protected bool mouseOver = false;
+        protected bool MouseOver = false;
 
         protected abstract void SetObjectTransform();
-        public abstract void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard);
-        public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard);
+        public abstract void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard);
+        public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard);
         public abstract void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords);
-        public abstract void RemoveCard(_test_Card removedCard);
-        public abstract void AddCard(_test_Card addedCard);
-        public abstract void AddCard(int texture_x, int texture_y);
+        public abstract void RemoveCard(TestCard removedCard);
+        public abstract void AddCard(TestCard addedCard);
+        public abstract void AddCard(int textureX, int textureY);
         public abstract void Draw(RenderTarget target, RenderStates states);
 
         public virtual void Visible()
@@ -52,17 +52,17 @@ namespace citadelGame
             if (visible)
             {
                 visible = false;
-                foreach (var card in cardList)
+                foreach (var card in CardList)
                 {
-                    card.visible = false;
+                    card.Visible = false;
                 }
             }
             else
             {
                 visible = true;
-                foreach (var card in cardList)
+                foreach (var card in CardList)
                 {
-                    card.visible = true;
+                    card.Visible = true;
                 }
             }
         }

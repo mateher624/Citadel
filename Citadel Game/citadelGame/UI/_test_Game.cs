@@ -9,23 +9,23 @@ using SFML.System;
 
 namespace citadelGame
 {
-    abstract class _test_Game
+    abstract class TestGame
     {
-        protected RenderWindow window;
-        protected Color clearColor;
+        protected RenderWindow Window;
+        protected Color ClearColor;
 
-        public _test_Game(uint width, uint height, string name, Color clearColor)
+        public TestGame(uint width, uint height, string name, Color clearColor)
         {
-            this.window = new RenderWindow(new VideoMode(width, height), name, Styles.Default);
-            this.clearColor = clearColor;
+            this.Window = new RenderWindow(new VideoMode(width, height), name, Styles.Default);
+            this.ClearColor = clearColor;
 
             // Set up events
-            window.Closed += OnClosed;
-            window.KeyPressed += Window_KeyPressed;
-            window.MouseButtonPressed += Window_MouseButtonPressed;
-            window.MouseButtonReleased += Window_MouseButtonReleased;
-            window.MouseMoved += Window_MouseMoved;
-            window.MouseWheelMoved += Window_MouseWheelMoved;
+            Window.Closed += OnClosed;
+            Window.KeyPressed += Window_KeyPressed;
+            Window.MouseButtonPressed += Window_MouseButtonPressed;
+            Window.MouseButtonReleased += Window_MouseButtonReleased;
+            Window.MouseMoved += Window_MouseMoved;
+            Window.MouseWheelMoved += Window_MouseWheelMoved;
         }
 
         private void Window_MouseWheelMoved(object sender, MouseWheelEventArgs e)
@@ -57,7 +57,7 @@ namespace citadelGame
 
         void OnClosed(object sender, EventArgs e)
         {
-            window.Close();
+            Window.Close();
         }
 
         public void Run()
@@ -66,14 +66,14 @@ namespace citadelGame
             Initialize();
 
             // MAIN GAME LOOP
-            while (window.IsOpen)
+            while (Window.IsOpen)
             {
-                window.DispatchEvents();
+                Window.DispatchEvents();
                 Tick();
 
-                window.Clear(clearColor);
+                Window.Clear(ClearColor);
                 Render();
-                window.Display();
+                Window.Display();
             }
         }
         protected abstract void CheckCollide(MouseMoveEventArgs e);

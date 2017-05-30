@@ -9,53 +9,53 @@ using SFML.Window;
 
 namespace citadelGame
 {
-    class _test_Aether : _test_Container
+    class TestAether : TestContainer
     {
-        public _test_Aether()
+        public TestAether()
         {
-            cardList = new List<_test_Card>();
+            CardList = new List<TestCard>();
         }
 
-        public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard)
         {
             //int cardIndex;
             bool cardFound = false;
-            for (int i = cardList.Count - 1; i >= 0; i--)
+            for (int i = CardList.Count - 1; i >= 0; i--)
             {
                 bool active;
                 if (cardFound == false)
                 {
-                    active = cardList[i].Collide((int)worldCoords.X, (int)worldCoords.Y);
+                    active = CardList[i].Collide((int)worldCoords.X, (int)worldCoords.Y);
                     if (active == true)
                     {
                         cardFound = true;
                         //cardIndex = i;
-                        cardList[i].Drag((int)worldCoords.X, (int)worldCoords.Y);
+                        CardList[i].Drag((int)worldCoords.X, (int)worldCoords.Y);
                     }
                 }
                 else active = false;
-                cardList[i].MouseCollide(active);
+                CardList[i].MouseCollide(active);
             }
         }
 
-        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard)
         {
             int cardIndex = 0;
-            _test_Card chosenCard = null;
+            TestCard chosenCard = null;
             bool eventHappened = false;
-            foreach (_test_Card card in cardList)
+            foreach (TestCard card in CardList)
             {
-                if (card.mouseOver == true)
+                if (card.MouseOver == true)
                 {
-                    cardIndex = cardList.IndexOf(card);
+                    cardIndex = CardList.IndexOf(card);
                     chosenCard = card;
                     eventHappened = true;
                 }
             }
             if (eventHappened == true)
             {
-                cardList.RemoveAt(cardIndex);
-                cardList.Add(chosenCard);
+                CardList.RemoveAt(cardIndex);
+                CardList.Add(chosenCard);
                 //cusrsorDockedCard = chosenCard;
                 Console.WriteLine("Card Taken");
                 chosenCard.ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
@@ -64,22 +64,22 @@ namespace citadelGame
 
         public override void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
         {
-            foreach (_test_Card card in cardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
+            foreach (TestCard card in CardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
         }
 
-        public override void RemoveCard(_test_Card removedCard)
+        public override void RemoveCard(TestCard removedCard)
         {
 
         }
 
-        public override void AddCard(_test_Card addedCard)
+        public override void AddCard(TestCard addedCard)
         {
-            cardList.Add(addedCard);
+            CardList.Add(addedCard);
         }
 
-        public override void AddCard(int texture_x, int texture_y)
+        public override void AddCard(int textureX, int textureY)
         {
-            _test_Card newCard = new _test_Card(0, 0, cardWidth, cardHeight, face, texture_x, texture_y, this, true);
+            TestCard newCard = new TestCard(0, 0, CardWidth, CardHeight, Face, textureX, textureY, this, true);
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

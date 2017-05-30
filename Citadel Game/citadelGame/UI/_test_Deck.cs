@@ -9,56 +9,56 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_Deck : _test_Container
+    class TestDeck : TestContainer
     {
-        private int cardStartX;
-        private int maxStackSize;
+        private int _cardStartX;
+        private int _maxStackSize;
 
-        Sprite bodyGround;
-        private Vector2f backTextureCoords = new Vector2f(2, 4);
+        Sprite _bodyGround;
+        private Vector2f _backTextureCoords = new Vector2f(2, 4);
 
-        public _test_Deck(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
+        public TestDeck(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {
-            this.startX = startX;
-            this.startY = startY;
-            this.width = width;
-            this.height = height;
-            this.face = face;
-            this.cardWidth = cardWidth;
-            this.cardHeight = cardHeight;
-            cardList = new List<_test_Card>();
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
+            this.Face = face;
+            this.CardWidth = cardWidth;
+            this.CardHeight = cardHeight;
+            CardList = new List<TestCard>();
 
-            this.body = new RectangleShape();
+            this.Body = new RectangleShape();
 
-            this.body.FillColor = Color.Green;
-            this.body.OutlineColor = Color.Green;
-            this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width + 2 * offset, height + 2 * offset);
-            this.body.Position = new Vector2f(this.startX - offset, this.startY - offset);
+            this.Body.FillColor = Color.Green;
+            this.Body.OutlineColor = Color.Green;
+            this.Body.OutlineThickness = 1.0f;
+            this.Body.Size = new Vector2f(width + 2 * Offset, height + 2 * Offset);
+            this.Body.Position = new Vector2f(this.StartX - Offset, this.StartY - Offset);
 
-            this.bodyGround = new Sprite();
-            this.bodyGround.Texture = this.face;
-            this.bodyGround.TextureRect = new IntRect((int)backTextureCoords.X * this.width, (int)backTextureCoords.Y * this.height, this.width, this.height);
-            this.bodyGround.Position = new Vector2f(this.startX, this.startY);
+            this._bodyGround = new Sprite();
+            this._bodyGround.Texture = this.Face;
+            this._bodyGround.TextureRect = new IntRect((int)_backTextureCoords.X * this.Width, (int)_backTextureCoords.Y * this.Height, this.Width, this.Height);
+            this._bodyGround.Position = new Vector2f(this.StartX, this.StartY);
         }
 
         public void FlipDeck()
         {
             //visible = visible == false;
-            foreach (var card in cardList)
+            foreach (var card in CardList)
             {
-                card.flipped = card.flipped == false;
+                card.Flipped = card.Flipped == false;
             }
         }
 
-        public override void RemoveCard(_test_Card removedCard)
+        public override void RemoveCard(TestCard removedCard)
         {
             int i = 0;
-            cardList.Remove(removedCard);
-            foreach (_test_Card card in cardList)
+            CardList.Remove(removedCard);
+            foreach (TestCard card in CardList)
             {
-                card.dockX = startX;
-                card.dockY = startY;
+                card.DockX = StartX;
+                card.DockY = StartY;
                 //card.handStartX = card.dockX;
 
                 //card.dockX = card.currentX;
@@ -69,20 +69,20 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public override void AddCard(_test_Card addedCard)
+        public override void AddCard(TestCard addedCard)
         {
             int i = 0;
-            cardList.Add(addedCard);
-            cardList[cardList.Count - 1].origin = this;
+            CardList.Add(addedCard);
+            CardList[CardList.Count - 1].Origin = this;
             //cardList[cardList.Count - 1].flipped = false;
 
-            if (addedCard.flipped != visible) addedCard.Flip();
+            if (addedCard.Flipped != visible) addedCard.Flip();
 
-            foreach (_test_Card card in cardList)
+            foreach (TestCard card in CardList)
             {
-                card.dockX = startX;
-                card.dockY = startY;
-                card.visible = visible;
+                card.DockX = StartX;
+                card.DockY = StartY;
+                card.Visible = visible;
                 //card.handStartX = card.dockX;
 
                 //card.dockX = card.currentX;
@@ -92,17 +92,17 @@ namespace citadelGame
             }
         }
 
-        public override void AddCard(int texture_x, int texture_y)
+        public override void AddCard(int textureX, int textureY)
         {
             int i = 0;
-            cardList.Add(new _test_Card(startX, 0, cardWidth, cardHeight, face, texture_x, texture_y, this, false));
-            cardList[cardList.Count - 1].origin = this;
-            cardList[cardList.Count - 1].flipped = false;
-            foreach (_test_Card card in cardList)
+            CardList.Add(new TestCard(StartX, 0, CardWidth, CardHeight, Face, textureX, textureY, this, false));
+            CardList[CardList.Count - 1].Origin = this;
+            CardList[CardList.Count - 1].Flipped = false;
+            foreach (TestCard card in CardList)
             {
-                card.dockX = startX;
-                card.dockY = startY;
-                card.visible = visible;
+                card.DockX = StartX;
+                card.DockY = StartY;
+                card.Visible = visible;
                 //card.handStartX = card.dockX;
 
                 //card.dockX = card.currentX;
@@ -113,24 +113,24 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public override void MouseMove(Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard)
         {
-            if (active == true)
+            if (Active == true)
             {
                 int cardIndex = -1;
-                int maxCardIndex = cardList.Count - 1;
+                int maxCardIndex = CardList.Count - 1;
                 if (cursorDockedCard == null)
                 {
                     if (maxCardIndex >= 0)
                     {
                         bool active;
-                        active = cardList[maxCardIndex].Collide((int) worldCoords.X, (int) worldCoords.Y);
+                        active = CardList[maxCardIndex].Collide((int) worldCoords.X, (int) worldCoords.Y);
                         if (active == true)
                         {
                             cardIndex = maxCardIndex;
-                            cardList[maxCardIndex].Drag((int) worldCoords.X, (int) worldCoords.Y);
+                            CardList[maxCardIndex].Drag((int) worldCoords.X, (int) worldCoords.Y);
                         }
-                        cardList[maxCardIndex].MouseCollide(active);
+                        CardList[maxCardIndex].MouseCollide(active);
                     }
 
                 }
@@ -138,19 +138,19 @@ namespace citadelGame
             }
         }
 
-        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref _test_Card cursorDockedCard)
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard)
         {
-            if (active == true)
+            if (Active == true)
             {
-                int maxCardIndex = cardList.Count - 1;
+                int maxCardIndex = CardList.Count - 1;
             if (maxCardIndex >= 0)
             {
-                bool active = cardList[maxCardIndex].Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                bool active = CardList[maxCardIndex].Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                 if (active == true)
                 {
                     Console.WriteLine("Card Taken");
-                    cardList[maxCardIndex].ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                    cursorDockedCard = cardList[maxCardIndex];
+                    CardList[maxCardIndex].ClickExecute((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    cursorDockedCard = CardList[maxCardIndex];
                 }
             }
             }
@@ -159,7 +159,7 @@ namespace citadelGame
         public override void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
         {
             //foreach (_test_Card card in cardList)
-            if (cardList.Count - 1 >= 0) cardList[cardList.Count - 1].UnClicked((int)worldCoords.X, (int)worldCoords.Y);
+            if (CardList.Count - 1 >= 0) CardList[CardList.Count - 1].UnClicked((int)worldCoords.X, (int)worldCoords.Y);
             //cardList[cardList.Count - 1].Flip();
         }
 
@@ -171,8 +171,8 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (visible) target.Draw(body, states);
-            if (visible) target.Draw(bodyGround, states);
+            if (visible) target.Draw(Body, states);
+            if (visible) target.Draw(_bodyGround, states);
         }
 
         protected override void SetObjectTransform()

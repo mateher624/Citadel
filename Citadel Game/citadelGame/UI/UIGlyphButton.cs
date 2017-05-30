@@ -9,38 +9,38 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIGlyphButton : UIButton
+    class UiGlyphButton : UiButton
     {
-        Texture face;
-        Sprite body;
+        Texture _face;
+        Sprite _body;
 
-        public UIGlyphButton(int start_x, int start_y, int width, int height, Texture face)
+        public UiGlyphButton(int startX, int startY, int width, int height, Texture face)
         {
-            state = 0;
-            this.start_x = start_x;
-            this.start_y = start_y;
-            this.width = width;
-            this.height = height;
-            this.face = face;
+            State = 0;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
+            this._face = face;
 
-            this.body = new Sprite();
-            this.body.Texture = this.face;
-            this.body.TextureRect = new IntRect(0, 0, this.width, this.height);
-            this.body.Position = new Vector2f(this.start_x, this.start_y);
+            this._body = new Sprite();
+            this._body.Texture = this._face;
+            this._body.TextureRect = new IntRect(0, 0, this.Width, this.Height);
+            this._body.Position = new Vector2f(this.StartX, this.StartY);
         }
 
         protected override void Update()
         {
-            if (state == -1) this.body.TextureRect = new IntRect(this.width, this.height, this.width, this.height);
-            else if (state == 0) this.body.TextureRect = new IntRect(0, 0, this.width, this.height);
-            else if (state == 1) this.body.TextureRect = new IntRect(this.width, 0, this.width, this.height);
-            else if (state == 2) this.body.TextureRect = new IntRect(0, this.height, this.width, this.height);
+            if (State == -1) this._body.TextureRect = new IntRect(this.Width, this.Height, this.Width, this.Height);
+            else if (State == 0) this._body.TextureRect = new IntRect(0, 0, this.Width, this.Height);
+            else if (State == 1) this._body.TextureRect = new IntRect(this.Width, 0, this.Width, this.Height);
+            else if (State == 2) this._body.TextureRect = new IntRect(0, this.Height, this.Width, this.Height);
         }
 
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (visible) target.Draw(body, states);
+            if (Visible) target.Draw(_body, states);
         }
     }
 }

@@ -9,136 +9,136 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_button : Drawable
+    class TestButton : Drawable
     {
-        public int start_x;
-        public int start_y;
-        public int width;
-        public int height;
+        public int StartX;
+        public int StartY;
+        public int Width;
+        public int Height;
 
-        private int texture_type;
-        Texture face;
+        private int _textureType;
+        Texture _face;
 
-        RectangleShape body;
-        Sprite body_textured;
+        RectangleShape _body;
+        Sprite _bodyTextured;
 
-        public int state;
+        public int State;
         
 
-        public _test_button(int start_x, int start_y, int width, int height)
+        public TestButton(int startX, int startY, int width, int height)
         {
-            state = 0;
-            this.start_x = start_x;
-            this.start_y = start_y;
-            this.width = width;
-            this.height = height;
-            this.texture_type = 0;
-            this.body = new RectangleShape();
+            State = 0;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
+            this._textureType = 0;
+            this._body = new RectangleShape();
 
-            this.body.FillColor = Color.Green;
-            this.body.OutlineColor = Color.Magenta;
-            this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width, height);
-            this.body.Position = new Vector2f(this.start_x, this.start_y);
+            this._body.FillColor = Color.Green;
+            this._body.OutlineColor = Color.Magenta;
+            this._body.OutlineThickness = 1.0f;
+            this._body.Size = new Vector2f(width, height);
+            this._body.Position = new Vector2f(this.StartX, this.StartY);
         }
 
-        public _test_button(int start_x, int start_y, int width, int height, Texture face)
+        public TestButton(int startX, int startY, int width, int height, Texture face)
         {
-            state = 0;
-            this.start_x = start_x;
-            this.start_y = start_y;
-            this.width = width;
-            this.height = height;
+            State = 0;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
 
-            this.texture_type = 1;
-            this.face = face;
+            this._textureType = 1;
+            this._face = face;
 
-            this.body_textured = new Sprite();
+            this._bodyTextured = new Sprite();
 
-            this.body_textured.Texture = this.face;
-            this.body_textured.TextureRect = new IntRect(0, 0, this.width, this.height);
+            this._bodyTextured.Texture = this._face;
+            this._bodyTextured.TextureRect = new IntRect(0, 0, this.Width, this.Height);
             //this.body.Size = new Vector2f(width, height);
-            this.body_textured.Position = new Vector2f(this.start_x, this.start_y);
+            this._bodyTextured.Position = new Vector2f(this.StartX, this.StartY);
         }
 
         public void Update()
         {
-            if (texture_type == 0)
+            if (_textureType == 0)
             {
-                if (state == -1)
+                if (State == -1)
                 {
-                    this.body.FillColor = Color.White;
-                    this.body.OutlineColor = Color.Black;
+                    this._body.FillColor = Color.White;
+                    this._body.OutlineColor = Color.Black;
                 }
-                else if (state == 0)
+                else if (State == 0)
                 {
-                    this.body.FillColor = Color.Green;
-                    this.body.OutlineColor = Color.Magenta;
+                    this._body.FillColor = Color.Green;
+                    this._body.OutlineColor = Color.Magenta;
                 }
-                else if (state == 1)
+                else if (State == 1)
                 {
-                    this.body.FillColor = Color.Magenta;
-                    this.body.OutlineColor = Color.Green;
+                    this._body.FillColor = Color.Magenta;
+                    this._body.OutlineColor = Color.Green;
                 }
-                else if (state == 2)
+                else if (State == 2)
                 {
-                    this.body.FillColor = Color.Blue;
-                    this.body.OutlineColor = Color.Red;
+                    this._body.FillColor = Color.Blue;
+                    this._body.OutlineColor = Color.Red;
                 }
             }
             else
             {
-                if (state == -1)
+                if (State == -1)
                 {
-                    this.body_textured.TextureRect = new IntRect(this.width, this.height, this.width, this.height);
+                    this._bodyTextured.TextureRect = new IntRect(this.Width, this.Height, this.Width, this.Height);
                 }
-                if (state == 0)
+                if (State == 0)
                 {
-                    this.body_textured.TextureRect = new IntRect(0, 0, this.width, this.height);
+                    this._bodyTextured.TextureRect = new IntRect(0, 0, this.Width, this.Height);
                 }
-                else if (state == 1)
+                else if (State == 1)
                 {
-                    this.body_textured.TextureRect = new IntRect(this.width, 0, this.width, this.height);
+                    this._bodyTextured.TextureRect = new IntRect(this.Width, 0, this.Width, this.Height);
                 }
-                else if (state == 2)
+                else if (State == 2)
                 {
-                    this.body_textured.TextureRect = new IntRect(0, this.height, this.width, this.height);
+                    this._bodyTextured.TextureRect = new IntRect(0, this.Height, this.Width, this.Height);
                 }
             }
         }
 
         public void Collide(int x, int y)
         {
-            if (state != 2 && state != -1)
+            if (State != 2 && State != -1)
             {
-                if (x >= this.start_x && x <= (this.start_x+width) && y >= this.start_y && y <= (this.start_y+height)) state = 1;
-                else state = 0;
+                if (x >= this.StartX && x <= (this.StartX+Width) && y >= this.StartY && y <= (this.StartY+Height)) State = 1;
+                else State = 0;
             }
         }
 
         public void Clicked(int x, int y, Mouse.Button button)
         {
-            if (state != 2 && state != -1)
+            if (State != 2 && State != -1)
             {
-                if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height) && button.ToString() == "Left") state = 2;
+                if (x >= this.StartX && x <= (this.StartX + Width) && y >= this.StartY && y <= (this.StartY + Height) && button.ToString() == "Left") State = 2;
                 else Collide(x, y);
             }
         }
 
         public void UnClicked(int x, int y, Mouse.Button button)
         {
-            if (state == 2)
+            if (State == 2)
             {
-                if (x >= this.start_x && x <= (this.start_x + width) && y >= this.start_y && y <= (this.start_y + height)) state = 1;
-                else state = 0;
+                if (x >= this.StartX && x <= (this.StartX + Width) && y >= this.StartY && y <= (this.StartY + Height)) State = 1;
+                else State = 0;
             }
         }
 
         public void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (texture_type == 0) target.Draw(body, states);
-            else if (texture_type == 1) target.Draw(body_textured, states);
+            if (_textureType == 0) target.Draw(_body, states);
+            else if (_textureType == 1) target.Draw(_bodyTextured, states);
 
         }
     }

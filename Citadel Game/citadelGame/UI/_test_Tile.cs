@@ -9,18 +9,18 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class _test_Tile
+    class TestTile
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
 
-        public Color color;
+        public Color Color;
 
-        public _test_Tile(int x, int y, Color color)
+        public TestTile(int x, int y, Color color)
         {
-            this.x = x;
-            this.y = y;
-            this.color = color;
+            this.X = x;
+            this.Y = y;
+            this.Color = color;
         }
     }
 }

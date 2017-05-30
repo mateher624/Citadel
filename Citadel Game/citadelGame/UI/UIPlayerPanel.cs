@@ -8,131 +8,131 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIPlayerPanel : Drawable
+    class UiPlayerPanel : Drawable
     {
-        private int startX;
-        private int startY;
-        private int width;
-        private int height;
-        private int offset = 10;
+        private int _startX;
+        private int _startY;
+        private int _width;
+        private int _height;
+        private int _offset = 10;
 
-        private bool visible = true;
+        private bool _visible = true;
 
-        private int rotation = 0;
+        private int _rotation = 0;
 
-        public int cardWidth;
-        public int cardHeight;
+        public int CardWidth;
+        public int CardHeight;
 
-        private RectangleShape body;
-        private Texture face;
+        private RectangleShape _body;
+        private Texture _face;
 
-        private Text textCaptionGold;
+        private Text _textCaptionGold;
         //private Text textAmountGold;
 
-        private Text textCaptionCards;
+        private Text _textCaptionCards;
         //private Text textAmountCards;
 
-        private Text textCaptionBuildings;
+        private Text _textCaptionBuildings;
         //private Text textAmountBuildings;
 
-        private bool mouseOver = false;
+        private bool _mouseOver = false;
 
-        private Sprite portrait;
-        private Vector2f portraitCoords = new Vector2f(3, 4);
+        private Sprite _portrait;
+        private Vector2f _portraitCoords = new Vector2f(3, 4);
 
-        private int handCount = 0;
-        private int playgroundCount = 0;
-        private int goldCount = 0;
+        private int _handCount = 0;
+        private int _playgroundCount = 0;
+        private int _goldCount = 0;
 
-        public UIPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
+        public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
-            this.startX = startX;
-            this.startY = startY;
-            this.width = width;
-            this.height = height;
-            this.face = face;
-            this.cardWidth = cardWidth;
-            this.cardHeight = cardHeight;
+            this._startX = startX;
+            this._startY = startY;
+            this._width = width;
+            this._height = height;
+            this._face = face;
+            this.CardWidth = cardWidth;
+            this.CardHeight = cardHeight;
             float ratio = (float)cardHeight / cardWidth;
             //int cardScaledHeight = (int)(cardHeight * ratio);
 
-            this.body = new RectangleShape();
+            this._body = new RectangleShape();
 
-            this.body.FillColor = Color.Green;
-            this.body.OutlineColor = Color.Green;
-            this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width + 2 * offset, height + 2 * offset);
-            this.body.Position = new Vector2f(this.startX - offset, this.startY - offset);
+            this._body.FillColor = Color.Green;
+            this._body.OutlineColor = Color.Green;
+            this._body.OutlineThickness = 1.0f;
+            this._body.Size = new Vector2f(width + 2 * _offset, height + 2 * _offset);
+            this._body.Position = new Vector2f(this._startX - _offset, this._startY - _offset);
 
-            this.portrait = new Sprite();
-            this.portrait.Texture = this.face;
-            this.portrait.TextureRect = new IntRect((int)portraitCoords.X * this.cardWidth, (int)portraitCoords.Y * this.cardHeight, this.cardWidth, this.cardHeight);
-            this.portrait.Scale = new Vector2f(ratio, ratio);
-            this.portrait.Position = new Vector2f(this.startX, this.startY);
+            this._portrait = new Sprite();
+            this._portrait.Texture = this._face;
+            this._portrait.TextureRect = new IntRect((int)_portraitCoords.X * this.CardWidth, (int)_portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
+            this._portrait.Scale = new Vector2f(ratio, ratio);
+            this._portrait.Position = new Vector2f(this._startX, this._startY);
 
-            textCaptionGold = new Text();
+            _textCaptionGold = new Text();
             //textAmountGold = new Text();
-            textCaptionCards = new Text();
+            _textCaptionCards = new Text();
             //textAmountCards = new Text();
-            textCaptionBuildings = new Text();
+            _textCaptionBuildings = new Text();
             //textAmountBuildings = new Text();
 
-            textCaptionGold.Font = font;
+            _textCaptionGold.Font = font;
             //textAmountGold.Font = font;
-            textCaptionCards.Font = font;
+            _textCaptionCards.Font = font;
             //textAmountCards.Font = font;
-            textCaptionBuildings.Font = font;
+            _textCaptionBuildings.Font = font;
             //textAmountBuildings.Font = font;
 
-            textCaptionGold.Position = new Vector2f(this.startX, this.startY+(int)(cardHeight *ratio)+10);
+            _textCaptionGold.Position = new Vector2f(this._startX, this._startY+(int)(cardHeight *ratio)+10);
             //textAmountGold.Position = new Vector2f(this.startX + 50, this.startY + (int) (cardHeight * ratio) + 10);
-            textCaptionCards.Position = new Vector2f(this.startX, this.startY + (int)(cardHeight * ratio) + 35);
+            _textCaptionCards.Position = new Vector2f(this._startX, this._startY + (int)(cardHeight * ratio) + 35);
             //textAmountCards.Position = new Vector2f(this.startX + 50, this.startY + (int)(cardHeight * ratio) + 35);
-            textCaptionBuildings.Position = new Vector2f(this.startX, this.startY + (int)(cardHeight * ratio) + 60);
+            _textCaptionBuildings.Position = new Vector2f(this._startX, this._startY + (int)(cardHeight * ratio) + 60);
             //textAmountBuildings.Position = new Vector2f(this.startX + 50, this.startY + (int)(cardHeight * ratio) + 60);
 
-            textCaptionGold.DisplayedString = "Gold: 0";
+            _textCaptionGold.DisplayedString = "Gold: 0";
             //textAmountGold.DisplayedString = "0";
-            textCaptionCards.DisplayedString = "Cards: 0";
+            _textCaptionCards.DisplayedString = "Cards: 0";
             //textAmountCards.DisplayedString = "0";
-            textCaptionBuildings.DisplayedString = "Builds: 0";
+            _textCaptionBuildings.DisplayedString = "Builds: 0";
             //textAmountBuildings.DisplayedString = "0";
 
-            textCaptionGold.CharacterSize = 20;
+            _textCaptionGold.CharacterSize = 20;
             //textAmountGold.CharacterSize = 20;
-            textCaptionCards.CharacterSize = 20;
+            _textCaptionCards.CharacterSize = 20;
             //textAmountCards.CharacterSize = 20;
-            textCaptionBuildings.CharacterSize = 20;
+            _textCaptionBuildings.CharacterSize = 20;
             //textAmountBuildings.CharacterSize = 20;
         }
 
         public void SetInfo(int handCount, int playgroundCount, int goldCount)
         {
-            this.handCount = handCount;
-            this.playgroundCount = playgroundCount;
-            this.goldCount = goldCount;
+            this._handCount = handCount;
+            this._playgroundCount = playgroundCount;
+            this._goldCount = goldCount;
         }
 
         private void Update()
         {
-            textCaptionGold.DisplayedString = "Gold: "  + goldCount.ToString();
-            textCaptionCards.DisplayedString = "Cards: " + handCount.ToString();
-            textCaptionBuildings.DisplayedString = "Builds: " + playgroundCount.ToString();
+            _textCaptionGold.DisplayedString = "Gold: "  + _goldCount.ToString();
+            _textCaptionCards.DisplayedString = "Cards: " + _handCount.ToString();
+            _textCaptionBuildings.DisplayedString = "Builds: " + _playgroundCount.ToString();
         }
 
         public void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (visible) target.Draw(body, states);
-            if (visible) target.Draw(portrait, states);
+            if (_visible) target.Draw(_body, states);
+            if (_visible) target.Draw(_portrait, states);
 
-            if (visible) target.Draw(textCaptionGold, states);
+            if (_visible) target.Draw(_textCaptionGold, states);
             //if (visible) target.Draw(textAmountGold, states);
-            if (visible) target.Draw(textCaptionCards, states);
+            if (_visible) target.Draw(_textCaptionCards, states);
             //if (visible) target.Draw(textAmountCards, states);
-            if (visible) target.Draw(textCaptionBuildings, states);
+            if (_visible) target.Draw(_textCaptionBuildings, states);
             //if (visible) target.Draw(textAmountBuildings, states);
         }
     }

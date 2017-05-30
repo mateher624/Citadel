@@ -9,67 +9,67 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIPrimitiveButton : UIButton
+    class UiPrimitiveButton : UiButton
     {
-        private RectangleShape body;
-        private Text text;
-        private Color primaryColor;
-        private Color secondaryColor;
+        private RectangleShape _body;
+        private Text _text;
+        private Color _primaryColor;
+        private Color _secondaryColor;
 
-        public UIPrimitiveButton(int start_x, int start_y, int width, int height, Color fillColor, Color outlineColor, string caption)
+        public UiPrimitiveButton(int startX, int startY, int width, int height, Color fillColor, Color outlineColor, string caption)
         {
             Font font = new Font("../../Resources/arial.ttf");
-            state = 0;
-            this.start_x = start_x;
-            this.start_y = start_y;
-            this.width = width;
-            this.height = height;
-            primaryColor = fillColor;
-            secondaryColor = outlineColor;
-            this.body = new RectangleShape();
+            State = 0;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
+            _primaryColor = fillColor;
+            _secondaryColor = outlineColor;
+            this._body = new RectangleShape();
 
-            this.body.FillColor = primaryColor;
-            this.body.OutlineColor = outlineColor;
-            this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width, height);
-            this.body.Position = new Vector2f(this.start_x, this.start_y);
+            this._body.FillColor = _primaryColor;
+            this._body.OutlineColor = outlineColor;
+            this._body.OutlineThickness = 1.0f;
+            this._body.Size = new Vector2f(width, height);
+            this._body.Position = new Vector2f(this.StartX, this.StartY);
 
-            this.text = new Text();
-            text.Font = font;
-            text.Position = new Vector2f(this.start_x + 10, this.start_y + 10);
-            text.DisplayedString = caption;
-            text.CharacterSize = 20;
+            this._text = new Text();
+            _text.Font = font;
+            _text.Position = new Vector2f(this.StartX + 10, this.StartY + 10);
+            _text.DisplayedString = caption;
+            _text.CharacterSize = 20;
         }
 
         protected override void Update()
         {
-            if (state == -1)
+            if (State == -1)
             {
-                this.body.FillColor = Color.White;
-                this.body.OutlineColor = Color.Black;
+                this._body.FillColor = Color.White;
+                this._body.OutlineColor = Color.Black;
             }
-            else if (state == 0)
+            else if (State == 0)
             {
-                this.body.FillColor = primaryColor;
-                this.body.OutlineColor = secondaryColor;
+                this._body.FillColor = _primaryColor;
+                this._body.OutlineColor = _secondaryColor;
             }
-            else if (state == 1)
+            else if (State == 1)
             {
-                this.body.FillColor = secondaryColor;
-                this.body.OutlineColor = primaryColor;
+                this._body.FillColor = _secondaryColor;
+                this._body.OutlineColor = _primaryColor;
             }
-            else if (state == 2)
+            else if (State == 2)
             {
-                this.body.FillColor = Color.Blue;
-                this.body.OutlineColor = Color.Red;
+                this._body.FillColor = Color.Blue;
+                this._body.OutlineColor = Color.Red;
             }
         }
 
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (visible) target.Draw(body, states);
-            if (visible) target.Draw(text, states);
+            if (Visible) target.Draw(_body, states);
+            if (Visible) target.Draw(_text, states);
         }
 
     } 

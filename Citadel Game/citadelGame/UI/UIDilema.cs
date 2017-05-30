@@ -8,88 +8,88 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIDilema : UIMessage
+    class UiDilema : UiMessage
     {
-        public List<_test_Card> cardList;
+        public List<TestCard> CardList;
 
-        private RectangleShape cardArea;
+        private RectangleShape _cardArea;
 
-        private int cardAreaStartX;
-        private int cardAreaStartY;
+        private int _cardAreaStartX;
+        private int _cardAreaStartY;
 
-        private int cardAreaWidth;
+        private int _cardAreaWidth;
 
-        public UIDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<_test_Card> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UiDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
-            this.startX = startX;
-            this.startY = startY;
-            this.width = width;
-            this.height = height;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Width = width;
+            this.Height = height;
 
-            cardAreaStartX = startX + 20+30;
-            cardAreaStartY = startY + 100;
-            cardAreaWidth = width - 2 * 20;
+            _cardAreaStartX = startX + 20+30;
+            _cardAreaStartY = startY + 100;
+            _cardAreaWidth = width - 2 * 20;
 
-            this.cardList = cardList;
+            this.CardList = cardList;
 
-            this.body = new RectangleShape();
+            this.Body = new RectangleShape();
 
-            this.body.FillColor = Color.Green;
-            this.body.OutlineColor = Color.Green;
-            this.body.OutlineThickness = 1.0f;
-            this.body.Size = new Vector2f(width + 2 * offset, height + 2 * offset);
-            this.body.Position = new Vector2f(this.startX - offset, this.startY - offset);
+            this.Body.FillColor = Color.Green;
+            this.Body.OutlineColor = Color.Green;
+            this.Body.OutlineThickness = 1.0f;
+            this.Body.Size = new Vector2f(width + 2 * Offset, height + 2 * Offset);
+            this.Body.Position = new Vector2f(this.StartX - Offset, this.StartY - Offset);
 
-            this.shroud = new RectangleShape();
+            this.Shroud = new RectangleShape();
 
-            this.shroud.FillColor = new Color(0, 0, 0, 128);
-            this.shroud.Size = new Vector2f(screenW, height + screenH);
-            this.shroud.Position = new Vector2f(0, 0);
+            this.Shroud.FillColor = new Color(0, 0, 0, 128);
+            this.Shroud.Size = new Vector2f(screenW, height + screenH);
+            this.Shroud.Position = new Vector2f(0, 0);
 
-            this.cardArea = new RectangleShape();
+            this._cardArea = new RectangleShape();
 
-            this.cardArea.FillColor = Color.Red;
-            this.cardArea.OutlineColor = Color.Red;
-            this.cardArea.OutlineThickness = 1.0f;
-            this.cardArea.Size = new Vector2f(cardAreaWidth, cardList[0].height);
-            this.cardArea.Position = new Vector2f(cardAreaStartX, cardAreaStartY);
+            this._cardArea.FillColor = Color.Red;
+            this._cardArea.OutlineColor = Color.Red;
+            this._cardArea.OutlineThickness = 1.0f;
+            this._cardArea.Size = new Vector2f(_cardAreaWidth, cardList[0].Height);
+            this._cardArea.Position = new Vector2f(_cardAreaStartX, _cardAreaStartY);
 
-            textTitle = new Text();
-            textCaption = new Text();
+            TextTitle = new Text();
+            TextCaption = new Text();
 
-            textTitle.Font = font;
-            textCaption.Font = font;
+            TextTitle.Font = font;
+            TextCaption.Font = font;
 
-            textTitle.Position = new Vector2f(this.startX, this.startY);
-            textCaption.Position = new Vector2f(this.startX, this.startY + 30);
+            TextTitle.Position = new Vector2f(this.StartX, this.StartY);
+            TextCaption.Position = new Vector2f(this.StartX, this.StartY + 30);
 
-            textTitle.DisplayedString = title;
-            textCaption.DisplayedString = caption;
+            TextTitle.DisplayedString = title;
+            TextCaption.DisplayedString = caption;
 
-            textTitle.CharacterSize = 40;
-            textCaption.CharacterSize = 20;
+            TextTitle.CharacterSize = 40;
+            TextCaption.CharacterSize = 20;
 
             SetUpCards();
 
-            buttonOK = new UIPrimitiveButton(this.startX + this.width / 2 - 120, this.startY + this.height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
-            buttonCANCEL = new UIPrimitiveButton(this.startX + this.width / 2 + 20, this.startY + this.height - 50, 100, 30, Color.Cyan, Color.Magenta, "Cancel");
+            ButtonOk = new UiPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
+            ButtonCancel = new UiPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Cancel");
         }
 
         private void SetUpCards()
         {
             int i = 0;
-            cardAreaWidth = Math.Min((int)((cardList[0].width * cardList[0].exposeSize + 1) * (cardList.Count)), width - 2 * 20);
-            cardAreaStartX = (int)((width - cardAreaWidth) / 2.0 + startX);
-            foreach (_test_Card card in cardList)
+            _cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count)), Width - 2 * 20);
+            _cardAreaStartX = (int)((Width - _cardAreaWidth) / 2.0 + StartX);
+            foreach (TestCard card in CardList)
             {
-                card.dockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (cardList.Count));
-                card.dockY = cardAreaStartY;
-                card.currentX = card.dockX;
-                card.currentY = card.dockY;
-                card.oldStartX = card.dockX;
-                card.oldStartY = card.dockY;
+                card.DockX = _cardAreaStartX + (i * (_cardAreaWidth + 1) / (CardList.Count));
+                card.DockY = _cardAreaStartY;
+                card.CurrentX = card.DockX;
+                card.CurrentY = card.DockY;
+                card.OldStartX = card.DockX;
+                card.OldStartY = card.DockY;
         //card.Free();
         i++;
             }
@@ -97,11 +97,11 @@ namespace citadelGame
 
         public override void Draw(RenderTarget target, RenderStates states)
         {
-            if (visible) target.Draw(shroud, states);
-            if (visible) target.Draw(body, states);
+            if (Visible) target.Draw(Shroud, states);
+            if (Visible) target.Draw(Body, states);
             //if (visible) target.Draw(cardArea, states);
-            if (visible) target.Draw(textTitle, states);
-            if (visible) target.Draw(textCaption, states);
+            if (Visible) target.Draw(TextTitle, states);
+            if (Visible) target.Draw(TextCaption, states);
         }
     }
 }
