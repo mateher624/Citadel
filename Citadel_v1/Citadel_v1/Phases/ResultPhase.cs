@@ -14,12 +14,12 @@ namespace Citadel_v1
         public bool IsEnd { get; protected set; }             // określa, czy rozgrywka powinna się już zakończyć
         private readonly Player[] _winningPlayers = new Player[2];
 
-        public ResultPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController)
+        public ResultPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
 
         }
 
-        public ResultPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : base(players, deck, fullCharacterCardList, synchronizationController)
+        public ResultPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : base(players, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
             Round = round;
             IsEnd = false;
@@ -57,7 +57,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
+            Round.CurrentPhase = new CharacterChoicePhase(Players, this, Deck, FullCharacterCardList, SynchronizationController, _userAdapter);
         }
 
         private void CountPlayersPoints()    // podliczenie pkt na koniec rundy
@@ -72,7 +72,7 @@ namespace Citadel_v1
         {
             ReturnFromDiscardedDeck(Deck.DiscardedCharacterDeck);
             ReturnFromDiscardedDeck(Deck.DiscardedDistrictDeck);
-            //ReturnFromPlayers();
+            ReturnFromPlayers();
         }
 
         private void ReturnFromDiscardedDeck<T>(List<T> list) where T: ICard
@@ -100,10 +100,10 @@ namespace Citadel_v1
 
         private void ReturnFromPlayers()
         {
-            //foreach (var player in Players)
-            //{
-            //    player.ReturnCards();
-            //}
+            foreach (var player in Players)
+            {
+                player.ReturnCards();
+            }
         }
 
         private int FindFirstPlayerInThisRound()    // odnalezienie gracza, który rozpoczynał aktualną rundę

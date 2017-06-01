@@ -21,7 +21,12 @@ namespace citadelGame
         public UserAdapter userAdapter;
         public SynchronizationController synchronizationController;
 
-        public Texture deckTexture = new Texture("../../Resources/deck.gif");
+        public Texture deckTexture = new Texture("../../Resources/pdeckhd.png");
+        private int textureWidth = 144;
+        private int textureHeight = 200;
+
+        private int messageWidth = 1200;
+        private int messafeHeight = 500;
 
         //private List<CharacterCard> availableCards;
 
@@ -32,7 +37,7 @@ namespace citadelGame
             this.state = state;
             //this.userAdapter = userAdapter;
             this.synchronizationController = synchronizationController;
-        } 
+    } 
 
         public void ChooseCharacterCard(List<CharacterCard> availableCards)
         {
@@ -45,9 +50,9 @@ namespace citadelGame
             List<TestCard> dilemaCardList = new List<TestCard>();
             foreach (var card in availableCards)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 1, 3, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, card.Id-1, 0, aether, true));
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz kartę postaci", "Kliknij kartę postaci którą w którą chcesz się wcielić w tej rundzie.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth/2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę postaci", "Kliknij kartę postaci którą w którą chcesz się wcielić w tej rundzie.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -57,11 +62,13 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
             foreach (var action in availableActions)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 3, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 2, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz akcję", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz akcję", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -71,11 +78,14 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
+            Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in oneToPick)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 2, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 100, 100, deckTexture, i, 2, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz dzielnicę", "Kliknij kartę dzielnicy którą chcesz wybrać.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz dzielnicę", "Kliknij kartę dzielnicy którą chcesz wybrać.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -85,11 +95,13 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
             foreach (var action in availableActions)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 1, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz akcję Magika", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz akcję Magika", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -99,11 +111,13 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
             foreach (var player in players)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 1, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 1, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz gracza", "Kliknij kartę gracza z którym chcesz wymienić się kartami.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz gracza", "Kliknij kartę gracza z którym chcesz wymienić się kartami.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -115,11 +129,14 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
+            Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in availableCards)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 1, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 100, 100, deckTexture, i, 3, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz kartę dzielnicy", "Kliknij kartę którą chcesz odrzucić.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę dzielnicy", "Kliknij kartę którą chcesz odrzucić.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -129,11 +146,14 @@ namespace citadelGame
 
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
+            int i = 0;
+            Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in currentPlayerHand)
             {
-                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 72, 100, deckTexture, 2, 1, aether, true));
+                dilemaCardList.Add(new TestCard(20 + 15 * 1, 20, 100, 100, deckTexture, i, 4, aether, true));
+                i++;
             }
-            mainGame.message = new UIDilema(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybierz kartę dzielnicy", "Kliknij kartę dzielnicy którą chcesz zbudować.", 1600, 900, dilemaCardList);
+            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę dzielnicy", "Kliknij kartę dzielnicy którą chcesz zbudować.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
 
@@ -168,7 +188,19 @@ namespace citadelGame
             synchronizationController.ResetEventController.Reset();
         }
 
+        public void NextPlayerChosesCard(int playerIndex)
+        {
+            state.boardStableState = false;
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900);
+            state.boardActive = false;
+        }
 
+        public void NextPlayerMakeTurn(int playerIndex, string charName)
+        {
+            state.boardStableState = false;
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Nadchodzi tura gracza numer " + playerIndex.ToString() + ". Gracz gra postacią: "+charName, 1600, 900);
+            state.boardActive = false;
+        }
 
 
     }

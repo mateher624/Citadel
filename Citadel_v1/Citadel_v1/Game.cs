@@ -18,7 +18,7 @@ namespace Citadel_v1
         {
             Deck = deck;
             SynchronizationController = synchronizationController;
-            Round = new Round(Players, Deck, synchronizationController);
+            Round = new Round(Players, Deck, synchronizationController, userAdapter);
             //pętla odpowiedzialna za dodanie graczy o nazwach kolejno 1, 2, 3, ...
             for (int i=0;i<playersAmount;i++)
             {

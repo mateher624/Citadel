@@ -10,12 +10,12 @@ namespace Citadel_v1
     {
         const int FirstPlayerId = 1;
 
-        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController)
+        public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
 
         }
 
-        public CharacterChoicePhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : base(players, deck, fullCharacterCardList, synchronizationController)
+        public CharacterChoicePhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : base(players, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
             Round = round;
         }
@@ -41,7 +41,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
+            Round.CurrentPhase = new PlayerActionPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController, _userAdapter);
         }
 
         private void SetAllCharacterCardsActive()       // ustawienie wszystkich kart postaci, jako aktywnych
@@ -62,10 +62,12 @@ namespace Citadel_v1
             int playerId = FindFirstPlayerInPreviousRound();
             for(int i = playerId; i < Players.Count(); i++)  // wybór karty postaci rozpoczynany jest od gracza ze znacznikiem króla
             {
+                _userAdapter.NextPlayerChosesCard(i+1);
                 Players[i].PickCharacterCard();
             }
             for(int i = 0; i < playerId; i++)       // wybór kart postaci przez resztę graczy
             {
+                _userAdapter.NextPlayerChosesCard(i+1);
                 Players[i].PickCharacterCard();
             }
         }

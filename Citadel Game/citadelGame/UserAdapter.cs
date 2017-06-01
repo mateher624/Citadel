@@ -136,5 +136,27 @@ namespace citadelGame
 
             throw new NotImplementedException();
         }
+
+        public void NextPlayerChosesCard(int playerIndex)
+        {
+            whatThePhase = "NextPlayerChosesCard";
+            eventDenture.NextPlayerChosesCard(playerIndex);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void NextPlayerMakeTurn(int playerIndex, string charName)
+        {
+            whatThePhase = "NextPlayerMakeTurn";
+            eventDenture.NextPlayerMakeTurn(playerIndex, charName);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void NextPlayerInfo(int playerIndex)
+        {
+            
+            //throw new NotImplementedException();
+        }
     }
 }

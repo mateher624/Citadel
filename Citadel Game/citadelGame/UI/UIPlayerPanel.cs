@@ -38,13 +38,13 @@ namespace citadelGame
         private bool _mouseOver = false;
 
         private Sprite _portrait;
-        private Vector2f _portraitCoords = new Vector2f(3, 4);
+        public Vector2f portraitCoords = new Vector2f(0, 1);
 
         private int _handCount = 0;
         private int _playgroundCount = 0;
         private int _goldCount = 0;
 
-        public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
+        public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, Vector2f portraitCoords)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
@@ -55,9 +55,9 @@ namespace citadelGame
             this._face = face;
             this.CardWidth = cardWidth;
             this.CardHeight = cardHeight;
-            float ratio = (float)cardHeight / cardWidth;
+            float ratio = 0.70f; //(float)cardHeight / cardWidth;
             //int cardScaledHeight = (int)(cardHeight * ratio);
-
+            this.portraitCoords = portraitCoords;
             this._body = new RectangleShape();
 
             this._body.FillColor = Color.Green;
@@ -68,7 +68,7 @@ namespace citadelGame
 
             this._portrait = new Sprite();
             this._portrait.Texture = this._face;
-            this._portrait.TextureRect = new IntRect((int)_portraitCoords.X * this.CardWidth, (int)_portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
+            this._portrait.TextureRect = new IntRect((int)portraitCoords.X * this.CardWidth, (int)portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
             this._portrait.Scale = new Vector2f(ratio, ratio);
             this._portrait.Position = new Vector2f(this._startX, this._startY);
 

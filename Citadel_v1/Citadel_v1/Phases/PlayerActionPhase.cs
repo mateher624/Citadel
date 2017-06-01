@@ -10,12 +10,12 @@ namespace Citadel_v1
     {
         private const int BasicCharacterCardAmount = 8;
 
-        public PlayerActionPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) :this(players, phase.Round, deck, fullCharacterCardList, synchronizationController)
+        public PlayerActionPhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) :this(players, phase.Round, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
 
         }
 
-        public PlayerActionPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController) : base(players, deck, fullCharacterCardList, synchronizationController)
+        public PlayerActionPhase(List<Player> players, Round round, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : base(players, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
             Round = round;
         }
@@ -28,7 +28,7 @@ namespace Citadel_v1
 
         public override void UpdatePhase()
         {
-            Round.CurrentPhase = new ResultPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController);
+            Round.CurrentPhase = new ResultPhase(Players, this, Deck, FullCharacterCardList, SynchronizationController, _userAdapter);
         }
 
         private void MakeTheRightPlayerDoAction()   // odnalezienie gracza z odpowiednią kartą postaci i wymuszenie na nim wykonania akcji
@@ -37,9 +37,11 @@ namespace Citadel_v1
             {
                 if (!Deck.Found(Deck.DiscardedCharacterDeck, i))   // sprawdzenie, czy karta nie została odrzucona
                 {
+                    
                     var playerToDoAction = Players.Find(player => player.CharacterCard.Id == i);  // nie została odrzucona, więc któryś z graczy ją ma na ręce
                     if (playerToDoAction.CharacterCard.Active)
                     {
+                        _userAdapter.NextPlayerMakeTurn(playerToDoAction.PlayerId+1, playerToDoAction.CharacterCard.Name);
                         playerToDoAction.DoAction(Players);  // jeżeli karta aktywna, to wykonaj ruch
                     }
                 }

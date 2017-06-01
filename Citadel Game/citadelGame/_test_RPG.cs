@@ -133,9 +133,9 @@ namespace citadelGame
             else // message up
             {
                 if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
-                    message.ButtonCancel.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                if (message.GetType() == typeof(UIChoice))
                     message.ButtonOK.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (message.GetType() == typeof(UIChoice))
+                    message.ButtonCancel.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             }
         }
 
@@ -196,19 +196,19 @@ namespace citadelGame
             {
                 if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
                 {
-                    bool buttonOkClicked = message.ButtonCancel.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    bool buttonOkClicked = message.ButtonOK.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                     if (buttonOkClicked == true)
                     {
-                        eventDenture.ReturnChoice(true);
+                        eventDenture.ReturnChoice(false);
                         state.boardStableState = true;
                     }
                 }
                 if (message.GetType() == typeof(UIChoice))
                 {
-                    bool buttonCancelClicked = message.ButtonOK.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    bool buttonCancelClicked = message.ButtonCancel.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                     if (buttonCancelClicked == true)
                     {
-                        eventDenture.ReturnChoice(false);
+                        eventDenture.ReturnChoice(true);
                         state.boardStableState = true;
                     }
                 }
@@ -285,12 +285,15 @@ namespace citadelGame
             graveyard.Active = false;
             graveyard.FlipDeck();
 
-            panels.Add(new UiPlayerPanel(643, 150, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
-            panels.Add(new UiPlayerPanel(643, 400, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
-            panels.Add(new UiPlayerPanel(643, 650, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
-            panels.Add(new UiPlayerPanel(857, 150, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
-            panels.Add(new UiPlayerPanel(857, 400, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
-            panels.Add(new UiPlayerPanel(857, 650, 100, 223, deckTexture, districtCardWidth, districtCardHeight));
+            Texture panelTexture = new Texture("../../Resources/pdeckhd.png");
+            int panelTextureWidth = 144;
+            int panelTextureHeight = 200;
+            panels.Add(new UiPlayerPanel(643, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(0,1)));
+            panels.Add(new UiPlayerPanel(643, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(1, 1)));
+            panels.Add(new UiPlayerPanel(643, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(2, 1)));
+            panels.Add(new UiPlayerPanel(857, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(3, 1)));
+            panels.Add(new UiPlayerPanel(857, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(4, 1)));
+            panels.Add(new UiPlayerPanel(857, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(5, 1)));
 
             hands.Add(new TestHand(60, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
             hands.Add(new TestHand(60, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
@@ -419,6 +422,9 @@ namespace citadelGame
                 message = null;
                 state.boardActive = true;
             }
+
+            // Update panels
+
 
 
         }

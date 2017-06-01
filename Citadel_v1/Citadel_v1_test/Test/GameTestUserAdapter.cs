@@ -77,5 +77,15 @@ namespace Citadel_v1_test
                 };
             return districtCardToDestroy;
         }
+
+        public void NextPlayerChosesCard(int playerIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NextPlayerMakeTurn(int playerIndex, string charName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

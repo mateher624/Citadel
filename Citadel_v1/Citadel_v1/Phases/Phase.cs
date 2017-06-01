@@ -9,6 +9,8 @@ namespace Citadel_v1
 {
     public abstract class Phase
     {
+        protected IUserAdapter _userAdapter;
+
         public Round Round { get; set; }
 
         protected Decks Deck { get; private set; }
@@ -19,12 +21,13 @@ namespace Citadel_v1
 
         public SynchronizationController SynchronizationController { get; private set; }
 
-        protected Phase(List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController)
+        protected Phase(List<Player> players, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter)
         {
             Players = players;
             Deck = deck;
             FullCharacterCardList = fullCharacterCardList;
             SynchronizationController = synchronizationController;
+            _userAdapter = userAdapter;
         }
 
         public abstract void DoPhase();

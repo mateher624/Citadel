@@ -50,8 +50,8 @@ namespace citadelGame.UI
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
-            ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
-            ButtonCancel = new UIPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Cancel");
+            ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Tak");
+            ButtonCancel = new UIPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Nie");
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

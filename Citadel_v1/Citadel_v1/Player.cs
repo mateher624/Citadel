@@ -62,24 +62,24 @@ namespace Citadel_v1
             _characterDictionary.Add("Warlord", warlord);
         }
 
-        //public void ReturnCards()
-        //{
-        //    foreach (var card in Hand)
-        //    {
-        //        var cardToReturn = card;
-        //        Hand.Remove(cardToReturn);
-        //        _deck.DistrictDeck.Add(cardToReturn);
-        //    }
-        //    foreach (var card in Table)
-        //    {
-        //        var cardToReturn = card;
-        //        Table.Remove(cardToReturn);
-        //        _deck.DistrictDeck.Add(cardToReturn);
-        //    }
-        //    var characterCardToReturn = CharacterCard;
-        //    CharacterCard = null;
-        //    _deck.CharacterDeck.Add(characterCardToReturn);
-        //}
+        public void ReturnCards()
+        {
+            //foreach (var card in Hand)
+            //{
+            //    var cardToReturn = card;
+            //    Hand.Remove(cardToReturn);
+            //    _deck.DistrictDeck.Add(cardToReturn);
+            //}
+            //foreach (var card in Table)
+            //{
+            //    var cardToReturn = card;
+            //    Table.Remove(cardToReturn);
+            //    _deck.DistrictDeck.Add(cardToReturn);
+            //}
+            var characterCardToReturn = CharacterCard;
+            CharacterCard = null;
+            _deck.CharacterDeck.Add(characterCardToReturn);
+        }
 
         public void PickCharacterCard()     // wybór karty postaci dla danego gracza
         {

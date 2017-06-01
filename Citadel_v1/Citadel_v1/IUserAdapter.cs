@@ -24,5 +24,9 @@ namespace Citadel_v1
         bool DecideToDestroyDistrict();
 
         WarlordPlayerAction.DistrictCardToDestroy ChooseDistrictCardToDestroy(List<Player> players);
+
+        void NextPlayerChosesCard(int playerIndex);
+
+        void NextPlayerMakeTurn(int playerIndex, string charName);
     }
 }
