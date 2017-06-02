@@ -77,9 +77,9 @@ namespace citadelGame
             CardList.Add(addedCard);
         }
 
-        public override void AddCard(int textureX, int textureY)
+        public override void AddCard(int id, int textureX, int textureY)
         {
-            TestCard newCard = new TestCard(0, 0, CardWidth, CardHeight, Face, textureX, textureY, this, true);
+            TestCard newCard = new TestCard(id, 0, 0, CardWidth, CardHeight, Face, textureX, textureY, this, true);
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

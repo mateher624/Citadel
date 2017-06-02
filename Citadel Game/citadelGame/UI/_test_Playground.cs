@@ -71,7 +71,7 @@ namespace citadelGame
             }
         }
 
-        public override void AddCard(int textureX, int textureY)
+        public override void AddCard(int id, int textureX, int textureY)
         {
 
         }

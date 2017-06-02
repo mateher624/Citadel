@@ -32,7 +32,7 @@ namespace Citadel_v1
 
             List<CharacterCard> availableCards = FullCharacterCardList.ToList();
             availableCards.RemoveAll(x => x.Id == 1);   // usunięcie z listy karty Assassin
-            var cardToEliminate = UserAdapter.ChooseCharacterCard(availableCards);  
+            var cardToEliminate = UserAdapter.ChooseCharacterCard(availableCards, 1);  
             for(int i = 0; i < players.Count; i++)
             {
                 if(players[i].CharacterCard.Id == cardToEliminate.Id)     // jeżeli któryś z graczy posiada tę kartę

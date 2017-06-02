@@ -12,7 +12,7 @@ namespace Citadel_v1_test
             return oneToPick.FirstOrDefault();
         }
 
-        public CharacterCard ChooseCharacterCard(List<CharacterCard> available)
+        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type)
         {
             var rnd=new Random();
             var index = rnd.Next(0, available.Count());
@@ -46,11 +46,11 @@ namespace Citadel_v1_test
             return cardsToDiscard;
         }
 
-        public DistrictCard ChooseDistrictToBuild(List<DistrictCard> currentPlayerHand)
+        public DistrictCard ChooseDistrictToBuild(Player currentPlayer)
         {
             var rnd=new Random();
-            var index = rnd.Next(0, currentPlayerHand.Count());
-            return currentPlayerHand[index];
+            var index = rnd.Next(0, currentPlayer.Hand.Count());
+            return currentPlayer.Hand[index];
         }
 
         public bool DecideToBuildDistrict()
@@ -83,7 +83,47 @@ namespace Citadel_v1_test
             throw new NotImplementedException();
         }
 
-        public void NextPlayerMakeTurn(int playerIndex, string charName)
+        public void NextPlayerMakeTurn(Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetPanels()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePanels(List<Player> players)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DrawCardFromDeck(DistrictCard card, Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCardToDeck(DistrictCard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandToPlayground(DistrictCard card, Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandDiscard(DistrictCard card, Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlaygroundDiscard(DistrictCard card, Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandsExchange(Player player1, Player player2)
         {
             throw new NotImplementedException();
         }

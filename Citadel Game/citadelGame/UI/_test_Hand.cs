@@ -52,6 +52,18 @@ namespace citadelGame
             }
         }
 
+        public void CoverCards()
+        {
+            if (_uncovered == true)
+            {
+                _uncovered = false;
+                foreach (var card in CardList)
+                {
+                    card.Flip();
+                }
+            }
+        }
+
         public void SlipCards(int cardIndex)
         {
             for (int i = CardList.Count - 1; i >= 0; i--)
@@ -85,10 +97,10 @@ namespace citadelGame
             }
         }
 
-        public override void AddCard(int textureX, int textureY)
+        public override void AddCard(int id, int textureX, int textureY)
         {
             int i = 0;
-            CardList.Add(new TestCard(0, StartY+Height/2, CardWidth, CardHeight, Face, textureX, textureY, this, _uncovered));
+            CardList.Add(new TestCard(id, 0, StartY+Height/2, CardWidth, CardHeight, Face, textureX, textureY, this, _uncovered));
             CardList[CardList.Count - 1].Origin = this;
             CardList[CardList.Count - 1].Flipped = _uncovered;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);

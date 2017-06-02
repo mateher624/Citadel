@@ -11,6 +11,7 @@ namespace citadelGame
 {
     class TestCard : Drawable
     {
+        public int id;
 
         public int CurrentX;
         public int CurrentY;
@@ -68,8 +69,9 @@ namespace citadelGame
 
         public TestContainer Origin;
 
-        public TestCard(int startX, int startY, int width, int height, Texture face, int textureX, int textureY, TestContainer origin, bool flipped)
+        public TestCard(int id, int startX, int startY, int width, int height, Texture face, int textureX, int textureY, TestContainer origin, bool flipped)
         {
+            this.id = id;
             this.Origin = origin;
             //this.flipped = 1;
             this.DockX = startX;

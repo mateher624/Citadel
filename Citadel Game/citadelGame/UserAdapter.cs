@@ -16,6 +16,8 @@ namespace citadelGame
 
         public bool chosenCardOrDilema { get; set; }
 
+        public WarlordPlayerAction.DistrictCardToDestroy chosenCardToDestroy;
+
         private SynchronizationController synchronizationController { get; }
         private EventDenture eventDenture { get; }
 
@@ -37,11 +39,11 @@ namespace citadelGame
             throw new NotImplementedException();
         }
 
-        public CharacterCard ChooseCharacterCard(List<CharacterCard> available)
+        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type)
         {
             whatThePhase = "ChooseCharacterCard";
             chosenCardOrDilema = false;      // error protection
-            eventDenture.ChooseCharacterCard(available);
+            eventDenture.ChooseCharacterCard(available, type);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema) return available[chosenCardOrDilemaIndex];
@@ -98,14 +100,14 @@ namespace citadelGame
             throw new NotImplementedException();
         }
 
-        public DistrictCard ChooseDistrictToBuild(List<DistrictCard> currentPlayerHand)
+        public DistrictCard ChooseDistrictToBuild(Player currentPlayer)
         {
             whatThePhase = "ChooseDistrictToBuild";
             chosenCardOrDilema = false;
-            eventDenture.ChooseDistrictToBuild(currentPlayerHand);
+            eventDenture.ChooseDistrictToBuild(currentPlayer);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
-            if (chosenCardOrDilema) return currentPlayerHand[chosenCardOrDilemaIndex];
+            if (chosenCardOrDilema) return currentPlayer.Hand[chosenCardOrDilemaIndex];
             throw new NotImplementedException();
         }
 
@@ -133,7 +135,12 @@ namespace citadelGame
 
         public WarlordPlayerAction.DistrictCardToDestroy ChooseDistrictCardToDestroy(List<Player> players)
         {
-
+            whatThePhase = "ChooseDistrictCardToDestroy";
+            chosenCardOrDilema = false;
+            eventDenture.ChooseDistrictCardToDestroy(players);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+            if (chosenCardOrDilema) return chosenCardToDestroy;
             throw new NotImplementedException();
         }
 
@@ -145,18 +152,73 @@ namespace citadelGame
             synchronizationController.ResetEventModel.WaitOne();
         }
 
-        public void NextPlayerMakeTurn(int playerIndex, string charName)
+        public void NextPlayerMakeTurn(Player currentPlayer)
         {
             whatThePhase = "NextPlayerMakeTurn";
-            eventDenture.NextPlayerMakeTurn(playerIndex, charName);
+            eventDenture.NextPlayerMakeTurn(currentPlayer);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
         }
 
         public void NextPlayerInfo(int playerIndex)
         {
-            
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public void ResetPanels()
+        {
+            eventDenture.ResetPanels();
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void UpdatePanels(List<Player> players)
+        {
+            eventDenture.UpdatePanels(players);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void DrawCardFromDeck(DistrictCard card, Player currentPlayer)
+        {
+            eventDenture.DrawCardFromDeck(card, currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void AddCardToDeck(DistrictCard card)
+        {
+            eventDenture.AddCardToDeck(card);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void HandToPlayground(DistrictCard card, Player currentPlayer)
+        {
+            eventDenture.HandToPlayground(card, currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void HandDiscard(DistrictCard card, Player currentPlayer)
+        {
+            eventDenture.HandDiscard(card, currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void PlaygroundDiscard(DistrictCard card, Player currentPlayer)
+        {
+            eventDenture.PlaygroundDiscard(card, currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void HandsExchange(Player player1, Player player2)
+        {
+            eventDenture.HandsExchange(player1, player2);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
         }
     }
 }

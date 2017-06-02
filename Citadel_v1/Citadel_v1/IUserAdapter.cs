@@ -7,7 +7,7 @@ namespace Citadel_v1
     {
         DistrictCard PickOneOfTwo(List<DistrictCard> oneToPick);   //zwraca wybraną kartę z dwóch
 
-        CharacterCard ChooseCharacterCard(List<CharacterCard> available);           //zwraca wybraną kartę ze wszystkich możliwych
+        CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type);           //zwraca wybraną kartę ze wszystkich możliwych
 
         PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions);      // dobry typ???
 
@@ -17,7 +17,7 @@ namespace Citadel_v1
 
         List<DistrictCard> ChooseCardsToDiscard(List<DistrictCard> availableCards);
 
-        DistrictCard ChooseDistrictToBuild(List<DistrictCard> currentPlayerHand);
+        DistrictCard ChooseDistrictToBuild(Player currentPlayer);
 
         bool DecideToBuildDistrict();      // zwraca true jeżeli użytkownik chce budować
 
@@ -27,6 +27,22 @@ namespace Citadel_v1
 
         void NextPlayerChosesCard(int playerIndex);
 
-        void NextPlayerMakeTurn(int playerIndex, string charName);
+        void NextPlayerMakeTurn(Player currentPlayer);
+
+        void ResetPanels();
+
+        void UpdatePanels(List<Player> players);
+
+        void DrawCardFromDeck(DistrictCard card, Player currentPlayer);
+
+        void AddCardToDeck(DistrictCard card);
+
+        void HandToPlayground(DistrictCard card, Player currentPlayer);
+
+        void HandDiscard(DistrictCard card, Player currentPlayer);
+
+        void PlaygroundDiscard(DistrictCard card, Player currentPlayer);
+
+        void HandsExchange(Player player1, Player player2);
     }
 }

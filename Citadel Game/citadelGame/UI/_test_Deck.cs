@@ -92,10 +92,10 @@ namespace citadelGame
             }
         }
 
-        public override void AddCard(int textureX, int textureY)
+        public override void AddCard(int id, int textureX, int textureY)
         {
             int i = 0;
-            CardList.Add(new TestCard(StartX, 0, CardWidth, CardHeight, Face, textureX, textureY, this, false));
+            CardList.Add(new TestCard(id, StartX, 0, CardWidth, CardHeight, Face, textureX, textureY, this, false));
             CardList[CardList.Count - 1].Origin = this;
             CardList[CardList.Count - 1].Flipped = false;
             foreach (TestCard card in CardList)

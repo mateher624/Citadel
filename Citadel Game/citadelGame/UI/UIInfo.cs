@@ -40,7 +40,7 @@ namespace citadelGame
             TextCaption.Font = font;
 
             TextTitle.Position = new Vector2f(this.StartX, this.StartY);
-            TextCaption.Position = new Vector2f(this.StartX, this.StartY + 30);
+            TextCaption.Position = new Vector2f(this.StartX, this.StartY + 50);
 
             TextTitle.DisplayedString = title;
             TextCaption.DisplayedString = caption;

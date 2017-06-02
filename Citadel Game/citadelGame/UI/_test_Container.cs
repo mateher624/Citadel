@@ -44,7 +44,7 @@ namespace citadelGame
         public abstract void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords);
         public abstract void RemoveCard(TestCard removedCard);
         public abstract void AddCard(TestCard addedCard);
-        public abstract void AddCard(int textureX, int textureY);
+        public abstract void AddCard(int id, int textureX, int textureY);
         public abstract void Draw(RenderTarget target, RenderStates states);
 
         public virtual void Visible()

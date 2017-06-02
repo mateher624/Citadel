@@ -108,6 +108,12 @@ namespace citadelGame
             //textAmountBuildings.CharacterSize = 20;
         }
 
+        public void SetImage(Vector2f coords)
+        {
+            this.portraitCoords = coords;
+            this._portrait.TextureRect = new IntRect((int)portraitCoords.X * this.CardWidth, (int)portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
+        }
+
         public void SetInfo(int handCount, int playgroundCount, int goldCount)
         {
             this._handCount = handCount;

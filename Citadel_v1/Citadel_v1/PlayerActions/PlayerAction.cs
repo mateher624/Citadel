@@ -16,7 +16,8 @@ namespace Citadel_v1
 
         protected Decks Deck { get; private set; }
 
-        protected readonly IUserAdapter UserAdapter;
+        protected IUserAdapter UserAdapter;
+
 
         protected PlayerAction(IUserAdapter userAdapter, Decks deck, List<CharacterCard> fullCharacterCardList)
         {
@@ -36,7 +37,7 @@ namespace Citadel_v1
 
         protected void BuildDistricts(Player currentPlayer)
         {
-            DistrictCard districtToBuild = UserAdapter.ChooseDistrictToBuild(currentPlayer.Hand);
+            DistrictCard districtToBuild = UserAdapter.ChooseDistrictToBuild(currentPlayer);
             if (districtToBuild.Cost > currentPlayer.Gold)
             {
                 return;
@@ -57,12 +58,15 @@ namespace Citadel_v1
 
         private void TakeTwoGold(Player currentPlayer)
         {
+            List<Player> onePlayerList = new List<Player>();
+            onePlayerList.Add(currentPlayer);
             currentPlayer.Gold += 2;
+            UserAdapter.UpdatePanels(onePlayerList);
         }
 
         private void DrawDistrictCards(Player currentPlayer)
         {
-            List<DistrictCard> oneToPick=new List<DistrictCard>();
+            List<DistrictCard> oneToPick = new List<DistrictCard>();
             Deck.Shuffle(Deck.DistrictDeck, new Random());     //potasowanie talii
             oneToPick.Add(Deck.DistrictDeck[0]);       
             oneToPick.Add(Deck.DistrictDeck[1]);       //wybranie dwóch wierzchnich kart
@@ -72,6 +76,9 @@ namespace Citadel_v1
             currentPlayer.Hand.Add(pickedCard);        //wybrana karta trafia do ręki gracza
             oneToPick.Remove(pickedCard);
             Deck.DistrictDeck.Add(oneToPick[0]);       //niewybrana karta wraca do stosu
+            // draw picked card
+            UserAdapter.DrawCardFromDeck(pickedCard, currentPlayer);
+
         }
 
         //protected abstract void DoCharacterAction<T>(List<Player> players, T args = null) where T: CharacterActionArgs;

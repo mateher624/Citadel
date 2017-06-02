@@ -73,6 +73,7 @@ namespace Citadel_v1
             ReturnFromDiscardedDeck(Deck.DiscardedCharacterDeck);
             ReturnFromDiscardedDeck(Deck.DiscardedDistrictDeck);
             ReturnFromPlayers();
+            _userAdapter.ResetPanels();
         }
 
         private void ReturnFromDiscardedDeck<T>(List<T> list) where T: ICard
@@ -153,6 +154,7 @@ namespace Citadel_v1
             {
                 if(player.Table.Count()== WinningDistrictAmount)
                 {
+                    // TUTAJ INFOO O WYGRANEJ
                     return true;
                 }
             }

@@ -28,13 +28,13 @@ namespace citadelGame
         //List<_test_Card> cardSpriteList;
         List<TestContainer> elementsContainers;
 
-        private List<TestHand> hands;
-        private List<TestPlayground> playgrounds;
-        private List<UiPlayerPanel> panels;
+        public List<TestHand> hands;
+        public List<TestPlayground> playgrounds;
+        public List<UiPlayerPanel> panels;
 
         private TestAether aether;
 
-        private TestDeck deck;
+        public TestDeck deck;
 
         public UIMessage message;
         private string messageTitle;
@@ -44,7 +44,7 @@ namespace citadelGame
         public UserAdapter userAdapter;
         private IDecksFactory deckFactory;
 
-        private TestDeck graveyard;
+        public TestDeck graveyard;
         private TestCard cursorDockedCard;
         private bool mousePressed = false;
 
@@ -164,9 +164,9 @@ namespace citadelGame
                 {
                     Random rndX = new Random();
                     Random rndY = new Random();
-                    int texX = rndX.Next(0, 13);
-                    int texY = rndY.Next(0, 4);
-                    deck.AddCard(texX, texY);
+                    int texX = rndX.Next(0, 7);
+                    int texY = rndY.Next(0, 9);
+                    deck.AddCard(0, texX, texY);
                 }
 
                 bool button2Clicked = buttonList[2].UnClicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
@@ -199,7 +199,7 @@ namespace citadelGame
                     bool buttonOkClicked = message.ButtonOK.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                     if (buttonOkClicked == true)
                     {
-                        eventDenture.ReturnChoice(false);
+                        eventDenture.ReturnChoice(true);
                         state.boardStableState = true;
                     }
                 }
@@ -208,7 +208,7 @@ namespace citadelGame
                     bool buttonCancelClicked = message.ButtonCancel.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                     if (buttonCancelClicked == true)
                     {
-                        eventDenture.ReturnChoice(true);
+                        eventDenture.ReturnChoice(false);
                         state.boardStableState = true;
                     }
                 }
@@ -220,8 +220,9 @@ namespace citadelGame
                         bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                         if (cardUnclicked == true)
                         {
-                            eventDenture.ReturnChosenCardIndex(i);
-
+                            if (eventDenture.generalPhase == 1 ) eventDenture.GeneralNextStep(i);
+                            else if (eventDenture.generalPhase == 2) eventDenture.GeneralNextStep(i);
+                            else eventDenture.ReturnChosenCardIndex(i);
                             state.boardStableState = true;
                         }
                         i++;
@@ -266,8 +267,8 @@ namespace citadelGame
             gameLogic = new Game(playerCount, userAdapter, deckFactory.Create(), synchronizationController);
             
             Thread threadModel = new Thread(new ThreadStart(gameLogic.StartNewRound));
-            threadModel.Start();
-            while (!threadModel.IsAlive) ;
+            
+            //while (!threadModel.IsAlive) ;
 
             
             state.boardActive = true;
@@ -346,33 +347,39 @@ namespace citadelGame
 
             // some random cards
 
-            deck.AddCard(1,3);
-            deck.AddCard(4,2);
-            deck.AddCard(6,1);
-            deck.AddCard(10,2);
-            deck.AddCard(0,0);
-            deck.AddCard(12,3);
-            deck.AddCard(5,1);
-            deck.AddCard(6,0);
-            deck.AddCard(8,2);
-            deck.AddCard(3,3);
-            deck.AddCard(3,2);
-            deck.AddCard(4,1);
-            deck.AddCard(11,0);
-            deck.AddCard(0,1);
-            deck.AddCard(12,1);
-            deck.AddCard(11,1);
+            //deck.AddCard(0, 2,4);
+            //deck.AddCard(0, 2, 5);
+            //deck.AddCard(0, 2, 6);
+            //deck.AddCard(0, 2, 7);
+            //deck.AddCard(0, 2, 8);
+            //deck.AddCard(0, 2, 9);
+            //deck.AddCard(0, 3, 0);
+            //deck.AddCard(0, 3, 1);
+            //deck.AddCard(0, 3, 2);
+            //deck.AddCard(0, 3, 3);
+            //deck.AddCard(0, 3, 4);
+            //deck.AddCard(0, 3, 5);
+            //deck.AddCard(0, 3, 6);
+            //deck.AddCard(0, 3, 7);
+            //deck.AddCard(0, 3, 8);
+            //deck.AddCard(0, 3, 9);
 
-            hands[0].AddCard(1, 3);
-            hands[2].AddCard(1, 3);
-            hands[4].AddCard(1, 3);
+            //hands[0].AddCard(0, 1, 1);
+            //hands[1].AddCard(0, 1, 2);
+            //hands[2].AddCard(0, 1, 3);
+            //hands[3].AddCard(0, 1, 4);
+            //hands[4].AddCard(0, 1, 5);
+            //hands[5].AddCard(0, 1, 6);
+            //hands[0].AddCard(0, 1, 7);
+            //hands[1].AddCard(0, 1, 8);
+            //hands[2].AddCard(0, 1, 9);
+            //hands[3].AddCard(0, 2, 1);
+            //hands[4].AddCard(0, 2, 2);
+            //hands[5].AddCard(0, 2, 3);
 
             // some init attributes
 
-            hands[1].FlipHand();
-            hands[3].FlipHand();
-            hands[5].FlipHand();
-                      
+
             hands[0].Active = true;
             hands[1].Active = true;
             hands[2].Active = true;
@@ -388,8 +395,8 @@ namespace citadelGame
             playgrounds[5].Active = true;
 
             // starting normal game state
+            threadModel.Start();
 
-            
         }
 
         protected override void Tick()
@@ -399,10 +406,7 @@ namespace citadelGame
             {
                 // normal game
 
-                for (int i = 0; i < panels.Count; i++)
-                {
-                    panels[i].SetInfo(hands[i].CardList.Count, playgrounds[i].CardList.Count, 1);
-                }
+                
 
             }
             else if (state.boardActive && state.boardStableState == false)

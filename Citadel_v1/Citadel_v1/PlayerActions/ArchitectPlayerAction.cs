@@ -25,6 +25,8 @@ namespace Citadel_v1
                 DistrictCard cardToDraw = Deck.DistrictDeck.First();
                 Deck.DistrictDeck.Remove(cardToDraw);
                 currentPlayer.Hand.Add(cardToDraw);
+                // draw card from deck
+                UserAdapter.DrawCardFromDeck(cardToDraw, currentPlayer);
             }
         }
 

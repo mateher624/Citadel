@@ -21,7 +21,10 @@ namespace Citadel_v1
 
         private void AddGoldForBlueDistricts(int blueDistrictAmount, Player currentPlayer)
         {
+            List<Player> players = new List<Player>();
+            players.Add(currentPlayer);
             currentPlayer.Gold += blueDistrictAmount;
+            UserAdapter.UpdatePanels(players);
         }
 
         private int BlueDistrictCount(Player currentPlayer)

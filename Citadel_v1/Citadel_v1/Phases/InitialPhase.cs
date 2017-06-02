@@ -22,10 +22,15 @@ namespace Citadel_v1
 
         public override void DoPhase()
         {
+            foreach (var card in Deck.DistrictDeck)
+            {
+                _userAdapter.AddCardToDeck(card);
+            }
             Deck.Shuffle<DistrictCard>(Deck.DistrictDeck, new Random());   // potasowanie talii kart dzielnic
             HandOutDistrictCards(Players);     // rozdanie 4 kart każdemu graczowi
             GiveAwayGold(Players);              // rozdanie złota graczom
             Players.First().IsKing = true;     // nadanie pierwszemu graczowi znacznika króla
+            _userAdapter.UpdatePanels(Players);
             UpdatePhase();
         }
 
@@ -48,6 +53,7 @@ namespace Citadel_v1
             {
                 player.AddCardsToHand(CardsAmount);
             }
+
         }
     }
 }

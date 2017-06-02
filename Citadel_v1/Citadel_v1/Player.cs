@@ -83,7 +83,7 @@ namespace Citadel_v1
 
         public void PickCharacterCard()     // wybór karty postaci dla danego gracza
         {
-            var chosenCard = _userAdapter.ChooseCharacterCard(_deck.CharacterDeck);  //Decks.ChooseCardFromDeck(Decks.CharacterDeck);
+            var chosenCard = _userAdapter.ChooseCharacterCard(_deck.CharacterDeck, 0);  //Decks.ChooseCardFromDeck(Decks.CharacterDeck);
             _deck.CharacterDeck.Remove(chosenCard);
             CharacterCard = chosenCard;
         }
@@ -108,6 +108,8 @@ namespace Citadel_v1
                 var cardToAdd = _deck.DistrictDeck.First();
                 _deck.DistrictDeck.Remove(cardToAdd);
                 Hand.Add(cardToAdd);
+
+                _userAdapter.DrawCardFromDeck(cardToAdd, this);
             }
         }
 
@@ -118,8 +120,11 @@ namespace Citadel_v1
 
         public int TakeAwayGold()
         {
+            List<Player> thisPlayerList = new List<Player>();
+            thisPlayerList.Add(this);
             int goldToSteal = Gold;
             Gold = 0;
+            _userAdapter.UpdatePanels(thisPlayerList);
             return goldToSteal;
         }
 
@@ -128,6 +133,8 @@ namespace Citadel_v1
             List<DistrictCard> tmpHand = Hand;
             Hand = currentPlayer.Hand;
             currentPlayer.Hand = tmpHand;
+
+            // TUTAJ
         }
 
         public void DiscardAndDrawCards()
@@ -144,6 +151,8 @@ namespace Citadel_v1
                 var districtCard = _deck.DistrictDeck.First();
                 _deck.DistrictDeck.Remove(districtCard);
                 Hand.Add(districtCard);
+
+                _userAdapter.DrawCardFromDeck(districtCard, this);
             }
         }
 
@@ -155,6 +164,8 @@ namespace Citadel_v1
             //}
 
             Hand.RemoveAll(cardsToDiscard.Contains);
+
+            // TUTAJ
         }
 
         public void BuildDistrict(DistrictCard districtToBuild)
@@ -163,12 +174,16 @@ namespace Citadel_v1
             Hand.Remove(districtToBuild);
             CanBuild--;
             Gold -= districtToBuild.Cost;
+
+            // TUTAJ
         }
 
         public void LooseDistrict(DistrictCard districtCard)
         {
             Table.Remove(districtCard);
             _deck.DiscardedDistrictDeck.Add(districtCard);
+
+            //TUTAJ
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Citadel_v1
         public override void DoPhase()
         {
             MakeTheRightPlayerDoAction();
+            _userAdapter.UpdatePanels(Players);
             UpdatePhase();
         }
 
@@ -41,7 +42,7 @@ namespace Citadel_v1
                     var playerToDoAction = Players.Find(player => player.CharacterCard.Id == i);  // nie została odrzucona, więc któryś z graczy ją ma na ręce
                     if (playerToDoAction.CharacterCard.Active)
                     {
-                        _userAdapter.NextPlayerMakeTurn(playerToDoAction.PlayerId+1, playerToDoAction.CharacterCard.Name);
+                        _userAdapter.NextPlayerMakeTurn(playerToDoAction);
                         playerToDoAction.DoAction(Players);  // jeżeli karta aktywna, to wykonaj ruch
                     }
                 }

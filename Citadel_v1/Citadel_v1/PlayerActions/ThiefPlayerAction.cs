@@ -11,7 +11,7 @@ namespace Citadel_v1
         protected override void DoCharacterAction(List<Player> players, Player currentPlayer)
         {
             List<CharacterCard> available = ListWithNoAssassinAndThiefCharacter(FullCharacterCardList.ToList());
-            var cardToSteelFrom = UserAdapter.ChooseCharacterCard(available);   //mogą być wszystkie oprócz karty Assassin iThief
+            var cardToSteelFrom = UserAdapter.ChooseCharacterCard(available, 2);   //mogą być wszystkie oprócz karty Assassin iThief
             if (Deck.DiscardedCharacterDeck.Any(card => cardToSteelFrom.Id == card.Id))
             {
                 return;     //jeżeli wybrana karta jest odrzucona to nie ma żadnego efektu
