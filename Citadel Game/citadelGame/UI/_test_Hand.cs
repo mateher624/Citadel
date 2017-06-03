@@ -115,15 +115,12 @@ namespace citadelGame
             CardList.Add(new TestCard(id, 0, StartY+Height/2, CardWidth, CardHeight, Face, textureX, textureY, this, _uncovered));
             CardList[CardList.Count - 1].Origin = this;
             CardList[CardList.Count - 1].Flipped = _uncovered;
-            //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
-            //width = maxHandWidth;
-            CardAreaWidth = Math.Min((int)((CardWidth * CardList[0].ExposeSize + 1) * (CardList.Count)), Width);
-            //cardAreaStartX = (int)((width - cardAreaWidth) / 2.0);
-            CardAreaStartX = (int)((Width - CardAreaWidth) / 2.0 + StartX);
-            //height = cardHeight;
+
+            CardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize) * (CardList.Count + 1)), Width);
+            CardAreaStartX = (int)(((Width - CardAreaWidth) / 2.0) + StartX);
             foreach (TestCard card in CardList)
             {
-                card.DockX = CardAreaStartX + (i * (CardAreaWidth + 1) / (CardList.Count));
+                card.DockX = CardAreaStartX + ((i + 1) * (CardAreaWidth) / (CardList.Count + 1)) - CardList[0].Width / 2;
                 card.HandStartX = card.DockX;
                 card.DockY = StartY;
                 card.Visible = visible;
@@ -142,14 +139,13 @@ namespace citadelGame
             CardList[CardList.Count - 1].Origin = this;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount+1)), maxHandWidth);
             //width = maxHandWidth;
-            CardAreaWidth = Math.Min((int)((CardWidth * CardList[0].ExposeSize + 1) * (CardList.Count)), Width);
-            //cardAreaStartX = (int)((width - cardAreaWidth) / 2.0);
-            CardAreaStartX = (int)((Width - CardAreaWidth) / 2.0 + StartX);
+            CardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize) * (CardList.Count + 1)), Width);
+            CardAreaStartX = (int)(((Width - CardAreaWidth) / 2.0) + StartX);
             if (addedCard.Flipped != _uncovered) addedCard.Flip();
             //height = cardHeight;
             foreach (TestCard card in CardList)
             {
-                card.DockX = CardAreaStartX + (i * (CardAreaWidth + 1) / (CardList.Count));
+                card.DockX = CardAreaStartX + ((i + 1) * (CardAreaWidth) / (CardList.Count + 1)) - CardList[0].Width / 2;
                 card.HandStartX = card.DockX;
                 card.Visible = visible;
                 //card.dockY = (int)(startY - this.height / 2.0f - offset);
@@ -167,14 +163,14 @@ namespace citadelGame
             int i = 0;
             //width = Math.Min((int)(cardList[0].width * cardList[0].exposeSize * (cardCount + 1)), maxHandWidth);
             //width = maxHandWidth;
-            CardAreaWidth = Math.Min((int)((CardWidth * CardList[0].ExposeSize + 1) * (CardList.Count-1)), Width);
-            CardAreaStartX = (int)((Width - CardAreaWidth) / 2.0 + StartX);
+            CardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize) * (CardList.Count)), Width);
+            CardAreaStartX = (int)(((Width - CardAreaWidth) / 2.0) + StartX);
             //height = cardHeight;
             CardList.Remove(removedCard);
             
             foreach (TestCard card in CardList)
             {
-                card.DockX = CardAreaStartX + (i * (CardAreaWidth + 1) / (CardList.Count));
+                card.DockX = CardAreaStartX + ((i + 1) * (CardAreaWidth) / (CardList.Count + 1)) - CardList[0].Width / 2;
                 card.HandStartX = card.DockX;
                 card.DockY = StartY;
                 //card.dockX = card.currentX;

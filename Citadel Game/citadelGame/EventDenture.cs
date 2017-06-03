@@ -193,7 +193,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 4, 2, aether, true));
-            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zbudować dzielnicę?.", 1600, 900, cardMemo);
+            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Wybór", "Czy chcesz zbudować dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
@@ -203,7 +203,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 5, 2, aether, true));
-            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zniszczyć dzielnicę?.", 1600, 900, cardMemo);
+            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Wybór", "Czy chcesz zniszczyć dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
@@ -238,7 +238,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, playerIndex-1, 1, aether, true));
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900, cardMemo);
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
@@ -256,7 +256,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, currentPlayer.CharacterCard.Id-1, 0, aether, true));
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". Gracz gra postacią: "+currentPlayer.CharacterCard.Name, 1600, 900, cardMemo);
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". ("+currentPlayer.CharacterCard.Name+")", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id-1, 0));
             state.boardActive = false;
         }
@@ -273,7 +273,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 6, 2, aether, true));
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz (" + currentPlayer.PlayerId.ToString() + ") grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity.", 1600, 900, cardMemo);
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Gracz (" + currentPlayer.PlayerId.ToString() + ") grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity.", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
         }
@@ -498,7 +498,7 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 7, 2, aether, true));
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Zwycięstwo", "Gracz " + currentPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Zwycięstwo", "Gracz " + currentPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
         }

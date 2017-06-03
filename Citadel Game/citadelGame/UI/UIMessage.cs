@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace citadelGame
         public bool Visible = true;
 
         protected RectangleShape Body;
+        protected Sprite Background;
         protected RectangleShape Shroud;
         protected Text TextTitle;
         protected Text TextCaption;
@@ -42,11 +44,13 @@ namespace citadelGame
         protected virtual void SetUpCards()
         {
             int i = 0;
-            cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count)), Width - 2 * 20);
-            cardAreaStartX = (int)((Width - cardAreaWidth) / 2.0 + StartX);
+            cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count + 1)), Width + 2 * 20);
+            cardAreaStartX = (int)(((Width - cardAreaWidth) / 2.0) + StartX);
+            //this.cardArea.Size = new Vector2f(cardAreaWidth, CardList[0].Height);
+            //this.cardArea.Position = new Vector2f(cardAreaStartX, cardAreaStartY);
             foreach (TestCard card in CardList)
             {
-                card.DockX = cardAreaStartX + (i * (cardAreaWidth + 1) / (CardList.Count));
+                card.DockX = cardAreaStartX + ((i + 1) * (cardAreaWidth) / (CardList.Count + 1)) - CardList[0].Width / 2;
                 card.DockY = cardAreaStartY;
                 card.CurrentX = card.DockX;
                 card.CurrentY = card.DockY;
