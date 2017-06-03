@@ -8,7 +8,7 @@ namespace Citadel_v1
 {
     class CharacterChoicePhase : Phase
     {
-        const int FirstPlayerId = 1;
+        const int FirstPlayerId = 0;
 
         public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {
@@ -82,7 +82,7 @@ namespace Citadel_v1
                     playerId = player.PlayerId;
                 }
             }
-            return playerId;
+            return playerId-1;
         }
 
         private void DiscardCharacterCards(int amount)      // odrzuca zadaną ilość kart postaci na stos kart odrzuconych postaci

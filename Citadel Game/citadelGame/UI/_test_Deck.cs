@@ -15,7 +15,7 @@ namespace citadelGame
         private int _maxStackSize;
 
         Sprite _bodyGround;
-        private Vector2f _backTextureCoords = new Vector2f(2, 4);
+        private Vector2f _backTextureCoords = new Vector2f(1, 10);
 
         public TestDeck(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {

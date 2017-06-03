@@ -38,11 +38,14 @@ namespace citadelGame
         private bool _mouseOver = false;
 
         private Sprite _portrait;
+        private Sprite crown;
         public Vector2f portraitCoords = new Vector2f(0, 1);
 
         private int _handCount = 0;
         private int _playgroundCount = 0;
         private int _goldCount = 0;
+
+        public bool isKing;
 
         public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, Vector2f portraitCoords)
         {
@@ -71,6 +74,11 @@ namespace citadelGame
             this._portrait.TextureRect = new IntRect((int)portraitCoords.X * this.CardWidth, (int)portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
             this._portrait.Scale = new Vector2f(ratio, ratio);
             this._portrait.Position = new Vector2f(this._startX, this._startY);
+
+            this.crown = new Sprite();
+            this.crown.Texture = new Texture("../../Resources/crown.png");
+            this.crown.Scale = new Vector2f(ratio, ratio);
+            this.crown.Position = new Vector2f(this._startX+10, this._startY+24);
 
             _textCaptionGold = new Text();
             //textAmountGold = new Text();
@@ -114,11 +122,12 @@ namespace citadelGame
             this._portrait.TextureRect = new IntRect((int)portraitCoords.X * this.CardWidth, (int)portraitCoords.Y * this.CardHeight, this.CardWidth, this.CardHeight);
         }
 
-        public void SetInfo(int handCount, int playgroundCount, int goldCount)
+        public void SetInfo(int handCount, int playgroundCount, int goldCount, bool isKing)
         {
             this._handCount = handCount;
             this._playgroundCount = playgroundCount;
             this._goldCount = goldCount;
+            this.isKing = isKing;
         }
 
         private void Update()
@@ -140,6 +149,7 @@ namespace citadelGame
             //if (visible) target.Draw(textAmountCards, states);
             if (_visible) target.Draw(_textCaptionBuildings, states);
             //if (visible) target.Draw(textAmountBuildings, states);
+            if (_visible && isKing) target.Draw(crown, states);
         }
     }
 }

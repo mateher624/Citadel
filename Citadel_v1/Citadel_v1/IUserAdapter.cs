@@ -7,7 +7,7 @@ namespace Citadel_v1
     {
         DistrictCard PickOneOfTwo(List<DistrictCard> oneToPick);   //zwraca wybraną kartę z dwóch
 
-        CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type);           //zwraca wybraną kartę ze wszystkich możliwych
+        CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type, Player currentPlayer);           //zwraca wybraną kartę ze wszystkich możliwych
 
         PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions);      // dobry typ???
 

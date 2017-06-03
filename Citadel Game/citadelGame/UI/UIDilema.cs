@@ -67,10 +67,12 @@ namespace citadelGame
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
+            ButtonToggle = new UIPrimitiveButton(screenW-190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
             SetUpCards();
         }
 
-        private void SetUpCards()
+        protected override void SetUpCards()
         {
             int i = 0;
             cardAreaWidth = Math.Min((int)((CardList[0].Width * CardList[0].ExposeSize + 1) * (CardList.Count)), Width - 2 * 20);
@@ -94,6 +96,7 @@ namespace citadelGame
             //if (visible) target.Draw(cardArea, states);
             if (Visible) target.Draw(TextTitle, states);
             if (Visible) target.Draw(TextCaption, states);
+            target.Draw(ButtonToggle, states);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace citadelGame
 {
     class UIInfo : UIMessage
     {
-        public UIInfo(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UIInfo(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
@@ -20,6 +20,11 @@ namespace citadelGame
             this.Height = height;
 
             this.Body = new RectangleShape();
+
+            cardAreaStartX = startX + 20 + 30;
+            cardAreaStartY = startY + 100;
+            cardAreaWidth = width - 2 * 20;
+            this.CardList = cardList;
 
             this.Body.FillColor = Color.Green;
             this.Body.OutlineColor = Color.Green;
@@ -48,7 +53,10 @@ namespace citadelGame
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
-            ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
+            ButtonOK = new UIPrimitiveButton(this.StartX + (this.Width-100)/2, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "OK");
+            ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
+            SetUpCards();
         }
 
         public override void Draw(RenderTarget target, RenderStates states)
@@ -57,6 +65,7 @@ namespace citadelGame
             if (Visible) target.Draw(Body, states);
             if (Visible) target.Draw(TextTitle, states);
             if (Visible) target.Draw(TextCaption, states);
+            target.Draw(ButtonToggle, states);
         }
     }
 }

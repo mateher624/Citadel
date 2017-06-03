@@ -39,11 +39,11 @@ namespace citadelGame
             throw new NotImplementedException();
         }
 
-        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type)
+        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type, Player currentPlayer)
         {
             whatThePhase = "ChooseCharacterCard";
             chosenCardOrDilema = false;      // error protection
-            eventDenture.ChooseCharacterCard(available, type);
+            eventDenture.ChooseCharacterCard(available, type, currentPlayer);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema) return available[chosenCardOrDilemaIndex];

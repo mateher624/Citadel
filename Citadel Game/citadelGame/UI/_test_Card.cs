@@ -48,7 +48,7 @@ namespace citadelGame
         public int DockY;
 
         private bool _flipAnimationLock = false;
-        private int _flipAnimationDuration = 100;
+        private int _flipAnimationDuration = 50;
         private int _flipAnimationStep = 0;
 
         public int DestinationX;
@@ -333,6 +333,14 @@ namespace citadelGame
         {
             if (_flipAnimationLock == false)
             {
+                _flipAnimationLock = true;
+                _flipAnimationStep = _flipAnimationDuration;
+            }
+            else
+            {
+                if (Flipped == true) Flipped = false;
+                else Flipped = true;
+                
                 _flipAnimationLock = true;
                 _flipAnimationStep = _flipAnimationDuration;
             }

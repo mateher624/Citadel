@@ -18,6 +18,8 @@ namespace citadelGame
     {
         Vector2f worldCoords;
 
+        
+
         public BoardState state;
 
         //_test_Tilemap map;
@@ -36,6 +38,7 @@ namespace citadelGame
 
         public TestDeck deck;
 
+        private UIImage backgroundImage;
         public UIMessage message;
         private string messageTitle;
         private string messageCaption;
@@ -99,11 +102,14 @@ namespace citadelGame
                     message.ButtonOK.Collide((int)worldCoords.X, (int)worldCoords.Y);
                 if (message.GetType() == typeof(UIChoice))
                     message.ButtonCancel.Collide((int)worldCoords.X, (int)worldCoords.Y);
-                if (message.GetType() == typeof(UIDilema))
+                if (message.GetType() == typeof(UIDilema) || message.GetType() == typeof(UIChoice))
+                {
                     foreach (var card in message.CardList)
                     {
-                        card.Collide((int) worldCoords.X, (int) worldCoords.Y);
+                        card.Collide((int)worldCoords.X, (int)worldCoords.Y);
                     }
+                    message.ButtonToggle.Collide((int)worldCoords.X, (int)worldCoords.Y);
+                }
             }
         }
         
@@ -136,6 +142,8 @@ namespace citadelGame
                     message.ButtonOK.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                 if (message.GetType() == typeof(UIChoice))
                     message.ButtonCancel.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                if (message.GetType() == typeof(UIDilema) || message.GetType() == typeof(UIChoice))
+                    message.ButtonToggle.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
             }
         }
 
@@ -237,20 +245,29 @@ namespace citadelGame
                         state.boardStableState = true;
                     }
                 }
-                if (message.GetType() == typeof(UIDilema))
+                if (message.GetType() == typeof(UIDilema) || message.GetType() == typeof(UIChoice))
                 {
                     int i = 0;
-                    foreach (var card in message.CardList)
+                    if (message.Visible)
                     {
-                        bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
-                        if (cardUnclicked == true)
+                        foreach (var card in message.CardList)
                         {
-                            if (eventDenture.generalPhase == 1 ) eventDenture.GeneralChooseCardToDestroy(i);
-                            else if (eventDenture.generalPhase == 2) throw new NotImplementedException();
-                            else eventDenture.ReturnChosenCardIndex(i);
-                            state.boardStableState = true;
+                            bool cardUnclicked = card.Clicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
+                            if (cardUnclicked == true)
+                            {
+                                if (eventDenture.generalPhase == 1) eventDenture.GeneralChooseCardToDestroy(i);
+                                else if (eventDenture.generalPhase == 2) throw new NotImplementedException();
+                                else eventDenture.ReturnChosenCardIndex(i);
+                                state.boardStableState = true;
+                            }
+                            i++;
                         }
-                        i++;
+                    }
+                    bool buttonToggleClicked = message.ButtonToggle.UnClicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+                    if (buttonToggleClicked == true)
+                    {
+                        if (message.Visible) message.Visible = false;
+                        else message.Visible = true;
                     }
                 }  
             }
@@ -273,6 +290,8 @@ namespace citadelGame
             tileset = new Texture("../../Resources/DungeonTileset.png");
             buttonFace = new Texture("../../Resources/btn_play.bmp");
             deckTexture = new Texture("../../Resources/cdeck.gif");
+
+            backgroundImage = new UIImage(0,0, 1600, 900, new Texture("../../Resources/background.png"));
         }
 
         protected void GameLogicInit()
@@ -463,6 +482,8 @@ namespace citadelGame
 
         protected override void Render()
         {
+            Window.Draw(backgroundImage);
+
             foreach (TestContainer container in elementsContainers) Window.Draw(container);    
 
             foreach (UiButton button in buttonList)
@@ -477,7 +498,11 @@ namespace citadelGame
 
             foreach (TestContainer container in elementsContainers)
             {
-                foreach (TestCard card in container.CardList)
+                if (container.GetType() == typeof(TestDeck))
+                {
+                    if (container.CardList.Count != 0) Window.Draw(container.CardList[0]);
+                }
+                else foreach (TestCard card in container.CardList)
                 {
                     if (card != cursorDockedCard) Window.Draw(card);
                 }
@@ -494,7 +519,7 @@ namespace citadelGame
                     Window.Draw(message.ButtonOK);
                 if (message.GetType() == typeof(UIChoice))
                     Window.Draw(message.ButtonCancel);
-                if (message.GetType() == typeof(UIDilema))
+                if ((message.GetType() == typeof(UIDilema) && message.Visible) || message.GetType() == typeof(UIChoice) || message.GetType() == typeof(UIInfo))
                     foreach (var card in message.CardList)
                     {
                         Window.Draw(card);

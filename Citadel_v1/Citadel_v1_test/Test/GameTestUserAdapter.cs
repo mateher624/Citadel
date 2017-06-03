@@ -12,7 +12,7 @@ namespace Citadel_v1_test
             return oneToPick.FirstOrDefault();
         }
 
-        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type)
+        public CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type, Player currentPlayer)
         {
             var rnd=new Random();
             var index = rnd.Next(0, available.Count());

@@ -12,7 +12,7 @@ namespace citadelGame.UI
     {
         
 
-        public UIChoice(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UIChoice(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/arial.ttf");
 
@@ -20,6 +20,11 @@ namespace citadelGame.UI
             this.StartY = startY;
             this.Width = width;
             this.Height = height;
+
+            cardAreaStartX = startX + 20 + 30;
+            cardAreaStartY = startY + 100;
+            cardAreaWidth = width - 2 * 20;
+            this.CardList = cardList;
 
             this.Body = new RectangleShape();
 
@@ -52,6 +57,9 @@ namespace citadelGame.UI
 
             ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Tak");
             ButtonCancel = new UIPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 50, 100, 30, Color.Cyan, Color.Magenta, "Nie");
+            ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
+            SetUpCards();
         }
 
         public override void Draw(RenderTarget target, RenderStates states)
@@ -60,6 +68,7 @@ namespace citadelGame.UI
             if (Visible) target.Draw(Body, states);
             if (Visible) target.Draw(TextTitle, states);
             if (Visible) target.Draw(TextCaption, states);
+            target.Draw(ButtonToggle, states);
         }
     }
 }

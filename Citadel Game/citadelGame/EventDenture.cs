@@ -46,10 +46,10 @@ namespace citadelGame
             this.synchronizationController = synchronizationController;
     } 
 
-        public void ChooseCharacterCard(List<CharacterCard> availableCards, int type)
+        public void ChooseCharacterCard(List<CharacterCard> availableCards, int type, Player currentPlayer)
         {
             // set up a message with Choose Carater Card Action
-
+            mainGame.hands[currentPlayer.PlayerId - 1].UnCoverCards();
             //this.availableCards = availableCards;
             TestAether aether = new TestAether();
             
@@ -60,7 +60,7 @@ namespace citadelGame
                 dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, card.Id-1, 0, aether, true));
             }
             string msg;
-            if (type == 0) msg = "Kliknij kartę postaci w którą chcesz się wcielić w tej rundzie.";
+            if (type == 0) msg = "Wybiera gracz numer "+currentPlayer.PlayerId.ToString()+". Kliknij kartę postaci w którą chcesz się wcielić w tej rundzie.";
             else if (type == 1) msg = "Kliknij kartę postaci którą chcesz wyeliminować w tej rundzie.";
             else msg = "Kliknij kartę postaci którą chcesz okraść w tej rundzie.";
             mainGame.message = new UIDilema(1600 / 2 - messageWidth/2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę postaci", msg, 1600, 900, dilemaCardList);
@@ -148,8 +148,8 @@ namespace citadelGame
             Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in availableCards)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, i, 3, aether, true));
-                i++;
+                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
+ 
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę dzielnicy", "Kliknij kartę którą chcesz odrzucić.", 1600, 900, dilemaCardList);
             state.boardActive = false;
@@ -173,6 +173,7 @@ namespace citadelGame
 
             // set up board for player
             state.boardStableState = true;
+            
             mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
             mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
             pickUpState = 1;
@@ -182,14 +183,20 @@ namespace citadelGame
         public void DecideToBuildDistrict()
         {
             state.boardStableState = false;
-            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zbudować dzielnicę?.", 1600, 900);
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 4, 2, aether, true));
+            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zbudować dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
         public void DecideToDestroyDistrict()
         {
             state.boardStableState = false;
-            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zniszczyć dzielnicę?.", 1600, 900);
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 5, 2, aether, true));
+            mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Wybór", "Czy chcesz zniszczyć dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
@@ -221,7 +228,10 @@ namespace citadelGame
                 mainGame.playgrounds[i].Active = false;
             }
             state.boardStableState = false;
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900);
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, playerIndex-1, 1, aether, true));
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
 
@@ -235,11 +245,13 @@ namespace citadelGame
                 mainGame.hands[i].Active = false;
                 mainGame.playgrounds[i].Active = false;
             }
-            mainGame.hands[currentPlayer.PlayerId - 1].FlipHand();
+            mainGame.hands[currentPlayer.PlayerId - 1].UnCoverCards();
             mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
             mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
-
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". Gracz gra postacią: "+currentPlayer.CharacterCard.Name, 1600, 900);
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, currentPlayer.CharacterCard.Id-1, 0, aether, true));
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". Gracz gra postacią: "+currentPlayer.CharacterCard.Name, 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id-1, 0));
             state.boardActive = false;
         }
@@ -253,7 +265,10 @@ namespace citadelGame
                 mainGame.hands[i].Active = false;
                 mainGame.playgrounds[i].Active = false;
             }
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Tura gracza numer " + currentPlayer.PlayerId.ToString() + " jest pomijana. Gracz grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity przez zabójcę.", 1600, 900);
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, currentPlayer.PlayerId - 1, 0, aether, true));
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz (" + currentPlayer.PlayerId.ToString() + ") grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity.", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
         }
@@ -344,7 +359,7 @@ namespace citadelGame
         {
             foreach (var player in players)
             {
-                mainGame.panels[player.PlayerId-1].SetInfo(player.Hand.Count(), player.Table.Count(), player.Gold);
+                mainGame.panels[player.PlayerId-1].SetInfo(player.Hand.Count(), player.Table.Count(), player.Gold, player.IsKing);
             }
             synchronizationController.ResetEventModel.Set();
             synchronizationController.ResetEventController.Reset();
@@ -352,7 +367,7 @@ namespace citadelGame
 
         public void UpdateCurrentPanel(Player player)
         {
-            mainGame.panels[player.PlayerId - 1].SetInfo(player.Hand.Count(), player.Table.Count(), player.Gold);
+            mainGame.panels[player.PlayerId - 1].SetInfo(player.Hand.Count(), player.Table.Count(), player.Gold, player.IsKing);
             synchronizationController.ResetEventModel.Set();
             synchronizationController.ResetEventController.Reset();
         }

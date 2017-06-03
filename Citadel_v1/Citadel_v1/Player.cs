@@ -83,7 +83,7 @@ namespace Citadel_v1
 
         public void PickCharacterCard()     // wybór karty postaci dla danego gracza
         {
-            var chosenCard = _userAdapter.ChooseCharacterCard(_deck.CharacterDeck, 0);  //Decks.ChooseCardFromDeck(Decks.CharacterDeck);
+            var chosenCard = _userAdapter.ChooseCharacterCard(_deck.CharacterDeck, 0, this);  //Decks.ChooseCardFromDeck(Decks.CharacterDeck);
             _deck.CharacterDeck.Remove(chosenCard);
             CharacterCard = chosenCard;
         }

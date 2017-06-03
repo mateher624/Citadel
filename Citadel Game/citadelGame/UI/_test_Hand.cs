@@ -42,13 +42,25 @@ namespace citadelGame
 
         }
 
-        public void FlipHand()
+        //public void FlipHand()
+        //{
+        //    _uncovered = _uncovered == false;
+        //    foreach (var card in CardList)
+        //    {
+        //        card.Flip();
+        //        //card.flipped = card.flipped == false;
+        //    }
+        //}
+
+        public void UnCoverCards()
         {
-            _uncovered = _uncovered == false;
-            foreach (var card in CardList)
+            if (_uncovered == false)
             {
-                card.Flip();
-                //card.flipped = card.flipped == false;
+                _uncovered = true;
+                foreach (var card in CardList)
+                {
+                    card.Flip();
+                }
             }
         }
 
