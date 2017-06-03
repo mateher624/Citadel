@@ -160,6 +160,14 @@ namespace citadelGame
             synchronizationController.ResetEventModel.WaitOne();
         }
 
+        public void NextPlayerIsDead(Player currentPlayer)
+        {
+            whatThePhase = "NextPlayerIsDead";
+            eventDenture.NextPlayerIsDead(currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
         public void NextPlayerInfo(int playerIndex)
         {
             throw new NotImplementedException();
@@ -175,6 +183,13 @@ namespace citadelGame
         public void UpdatePanels(List<Player> players)
         {
             eventDenture.UpdatePanels(players);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void UpdateCurrentPanel(Player player)
+        {
+            eventDenture.UpdateCurrentPanel(player);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
         }
@@ -196,6 +211,13 @@ namespace citadelGame
         public void HandToPlayground(DistrictCard card, Player currentPlayer)
         {
             eventDenture.HandToPlayground(card, currentPlayer);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void PlaygroundToHand(DistrictCard card, Player currentPlayer)
+        {
+            eventDenture.PlaygroundToHand(card, currentPlayer);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
         }

@@ -29,15 +29,21 @@ namespace Citadel_v1
 
         void NextPlayerMakeTurn(Player currentPlayer);
 
+        void NextPlayerIsDead(Player currentPlayer);
+
         void ResetPanels();
 
         void UpdatePanels(List<Player> players);
+
+        void UpdateCurrentPanel(Player player);
 
         void DrawCardFromDeck(DistrictCard card, Player currentPlayer);
 
         void AddCardToDeck(DistrictCard card);
 
         void HandToPlayground(DistrictCard card, Player currentPlayer);
+
+        void PlaygroundToHand(DistrictCard card, Player currentPlayer);
 
         void HandDiscard(DistrictCard card, Player currentPlayer);
 

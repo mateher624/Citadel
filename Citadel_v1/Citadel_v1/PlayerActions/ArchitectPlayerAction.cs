@@ -10,12 +10,16 @@ namespace Citadel_v1
     {
         protected override void DoCharacterAction(List<Player> players, Player currentPlayer)
         {
+            DrawTwoExtraDistrictCards(currentPlayer);
             GrantBonusBuildAmount(currentPlayer);
-            while(UserAdapter.DecideToBuildDistrict())
+            UserAdapter.UpdateCurrentPanel(currentPlayer);
+            while (UserAdapter.DecideToBuildDistrict())
             {
                 BuildDistricts(currentPlayer);
+                UserAdapter.UpdateCurrentPanel(currentPlayer);
             }
-            DrawTwoExtraDistrictCards(currentPlayer);
+            
+
         }
 
         private void DrawTwoExtraDistrictCards(Player currentPlayer)

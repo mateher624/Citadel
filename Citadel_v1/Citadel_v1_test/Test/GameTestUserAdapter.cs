@@ -88,12 +88,22 @@ namespace Citadel_v1_test
             throw new NotImplementedException();
         }
 
+        public void NextPlayerIsDead(Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ResetPanels()
         {
             throw new NotImplementedException();
         }
 
         public void UpdatePanels(List<Player> players)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCurrentPanel(Player player)
         {
             throw new NotImplementedException();
         }
@@ -109,6 +119,11 @@ namespace Citadel_v1_test
         }
 
         public void HandToPlayground(DistrictCard card, Player currentPlayer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlaygroundToHand(DistrictCard card, Player currentPlayer)
         {
             throw new NotImplementedException();
         }

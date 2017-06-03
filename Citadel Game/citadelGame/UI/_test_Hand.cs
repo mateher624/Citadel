@@ -272,18 +272,18 @@ namespace citadelGame
             foreach (TestCard card in CardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
         }
 
-        public void CardDroppedEvent(TestCard cursorDockedCard, Vector2f worldCoords, bool mousePressed)
+        public bool CardDroppedEvent(TestCard cursorDockedCard, Vector2f worldCoords, bool mousePressed)
         {
             bool containerCollide = Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
 
             if (containerCollide == true && cursorDockedCard.Origin != this)
             {
                 cursorDockedCard.Origin.RemoveCard(cursorDockedCard);
-                //if (cursorDockedCard.origin.GetType() != typeof(_test_Hand)) cursorDockedCard.Flip();
-                //if (cursorDockedCard.flipped == false) cursorDockedCard.Flip();
                 AddCard(cursorDockedCard);
+                return true;
                 //cursorDockedCard.Free();
             }
+            return false;
         }
 
         public void Update()

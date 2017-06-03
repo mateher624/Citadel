@@ -110,6 +110,7 @@ namespace Citadel_v1
                 Hand.Add(cardToAdd);
 
                 _userAdapter.DrawCardFromDeck(cardToAdd, this);
+                _userAdapter.UpdateCurrentPanel(this);
             }
         }
 
@@ -120,11 +121,9 @@ namespace Citadel_v1
 
         public int TakeAwayGold()
         {
-            List<Player> thisPlayerList = new List<Player>();
-            thisPlayerList.Add(this);
             int goldToSteal = Gold;
             Gold = 0;
-            _userAdapter.UpdatePanels(thisPlayerList);
+            _userAdapter.UpdateCurrentPanel(this);
             return goldToSteal;
         }
 
@@ -134,14 +133,18 @@ namespace Citadel_v1
             Hand = currentPlayer.Hand;
             currentPlayer.Hand = tmpHand;
 
-            // TUTAJ
+            _userAdapter.HandsExchange(this, currentPlayer);
+            _userAdapter.UpdateCurrentPanel(this);
+            _userAdapter.UpdateCurrentPanel(currentPlayer);
         }
 
         public void DiscardAndDrawCards()
         {
             List<DistrictCard> cardsToDiscard = _userAdapter.ChooseCardsToDiscard(Hand);  //przypisuje karty do odrzucenia w liście cardsToDiscard
+            int cnt = cardsToDiscard.Count();
             DiscardChosenDistrictCards(cardsToDiscard);
-            DrawDistrictCards(cardsToDiscard.Count());
+            DrawDistrictCards(cnt);
+
         }
 
         private void DrawDistrictCards(int cardsToDiscardAmount)
@@ -153,6 +156,7 @@ namespace Citadel_v1
                 Hand.Add(districtCard);
 
                 _userAdapter.DrawCardFromDeck(districtCard, this);
+                _userAdapter.UpdateCurrentPanel(this);
             }
         }
 
@@ -162,10 +166,13 @@ namespace Citadel_v1
             //{
             //    hand.Remove(card);
             //}
-
+            foreach (var districtCard in cardsToDiscard)
+            {
+                _userAdapter.HandDiscard(districtCard, this);
+            }
             Hand.RemoveAll(cardsToDiscard.Contains);
 
-            // TUTAJ
+            _userAdapter.UpdateCurrentPanel(this);
         }
 
         public void BuildDistrict(DistrictCard districtToBuild)
@@ -174,8 +181,7 @@ namespace Citadel_v1
             Hand.Remove(districtToBuild);
             CanBuild--;
             Gold -= districtToBuild.Cost;
-
-            // TUTAJ
+            //_userAdapter.HandToPlayground(districtToBuild, this);
         }
 
         public void LooseDistrict(DistrictCard districtCard)
@@ -183,7 +189,8 @@ namespace Citadel_v1
             Table.Remove(districtCard);
             _deck.DiscardedDistrictDeck.Add(districtCard);
 
-            //TUTAJ
+            _userAdapter.PlaygroundDiscard(districtCard, this);
+            _userAdapter.UpdateCurrentPanel(this);
         }
     }
 }

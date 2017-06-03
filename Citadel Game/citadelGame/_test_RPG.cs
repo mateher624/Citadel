@@ -183,11 +183,17 @@ namespace citadelGame
                 {
                     foreach (var playground in playgrounds)
                     {
-                        playground.CardDroppedEvent(cursorDockedCard, worldCoords, mousePressed);
+                        bool cardWasDropped = playground.CardDroppedEvent(cursorDockedCard, worldCoords, mousePressed);
+                        if (cardWasDropped && eventDenture.pickUpState == 1)
+                        {
+                            int index = gameLogic.Players[playgrounds.IndexOf(playground)].Hand.FindIndex(x => x.Id == cursorDockedCard.id);
+                            eventDenture.ReturnChosenCardIndex(index);
+                        }
                     }
                     foreach (var hand in hands)
                     {
-                        hand.CardDroppedEvent(cursorDockedCard, worldCoords, mousePressed);
+                        bool cardWasDropped = hand.CardDroppedEvent(cursorDockedCard, worldCoords, mousePressed);
+                        
                     }
                     cursorDockedCard = null;
                 }
@@ -397,11 +403,14 @@ namespace citadelGame
             // starting normal game state
             threadModel.Start();
 
+            synchronizationController.ResetEventController.WaitOne();
+
         }
 
         protected override void Tick()
         {
-            synchronizationController.ResetEventController.WaitOne();
+            
+
             if (state.boardActive && state.boardStableState)
             {
                 // normal game

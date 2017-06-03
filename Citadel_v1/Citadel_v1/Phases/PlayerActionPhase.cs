@@ -44,7 +44,10 @@ namespace Citadel_v1
                     {
                         _userAdapter.NextPlayerMakeTurn(playerToDoAction);
                         playerToDoAction.DoAction(Players);  // jeżeli karta aktywna, to wykonaj ruch
+                        
                     }
+                    else _userAdapter.NextPlayerIsDead(playerToDoAction);
+                    _userAdapter.UpdateCurrentPanel(playerToDoAction);
                 }
             }
         }

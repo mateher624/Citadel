@@ -40,6 +40,7 @@ namespace Citadel_v1
             DistrictCard districtToBuild = UserAdapter.ChooseDistrictToBuild(currentPlayer);
             if (districtToBuild.Cost > currentPlayer.Gold)
             {
+                UserAdapter.PlaygroundToHand(districtToBuild, currentPlayer);
                 return;
             }
             if (currentPlayer.CanBuild > 0)
@@ -78,7 +79,6 @@ namespace Citadel_v1
             Deck.DistrictDeck.Add(oneToPick[0]);       //niewybrana karta wraca do stosu
             // draw picked card
             UserAdapter.DrawCardFromDeck(pickedCard, currentPlayer);
-
         }
 
         //protected abstract void DoCharacterAction<T>(List<Player> players, T args = null) where T: CharacterActionArgs;

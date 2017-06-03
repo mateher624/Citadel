@@ -12,11 +12,14 @@ namespace Citadel_v1
         {
             int greenDistrictAmount = GreenDistrictCount(currentPlayer);
             AddGoldForGreenDistricts(greenDistrictAmount, currentPlayer);
+            UserAdapter.UpdateCurrentPanel(currentPlayer);
             if (UserAdapter.DecideToBuildDistrict())
             {
                 BuildDistricts(currentPlayer);
+                UserAdapter.UpdateCurrentPanel(currentPlayer);
             }
             AddOneExtraGold(currentPlayer);
+            UserAdapter.UpdateCurrentPanel(currentPlayer);
         }
 
         private void AddOneExtraGold(Player currentPlayer)

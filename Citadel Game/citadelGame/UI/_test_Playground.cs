@@ -102,7 +102,7 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public void CardDroppedEvent(TestCard cursorDockedCard, Vector2f worldCoords, bool mousePressed)
+        public bool CardDroppedEvent(TestCard cursorDockedCard, Vector2f worldCoords, bool mousePressed)
         {
             bool containerCollide = Collide((int)worldCoords.X, (int)worldCoords.Y, mousePressed);
 
@@ -112,8 +112,10 @@ namespace citadelGame
                 //if (cursorDockedCard.origin.GetType() != typeof(_test_Hand)) cursorDockedCard.Flip();
                 //if (cursorDockedCard.flipped == false) cursorDockedCard.Flip();
                 AddCard(cursorDockedCard);
+                return true;
                 //cursorDockedCard.Free();
             }
+            return false;
         }
 
         public void Update()

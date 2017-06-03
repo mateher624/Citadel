@@ -44,6 +44,7 @@ namespace Citadel_v1
             if (UserAdapter.DecideToBuildDistrict())
             {
                 BuildDistricts(currentPlayer);
+                UserAdapter.UpdateCurrentPanel(currentPlayer);
             }
         }
 

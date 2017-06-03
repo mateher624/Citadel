@@ -21,11 +21,13 @@ namespace Citadel_v1
                 if (player.CharacterCard.Id == cardToSteelFrom.Id)
                 {
                     currentPlayer.Gold += player.TakeAwayGold();
+                    UserAdapter.UpdateCurrentPanel(currentPlayer);
                 }
             }
             if (UserAdapter.DecideToBuildDistrict())
             {
                 BuildDistricts(currentPlayer);
+                UserAdapter.UpdateCurrentPanel(currentPlayer);
             }
         }
 

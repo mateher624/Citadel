@@ -74,6 +74,7 @@ namespace Citadel_v1
             ReturnFromDiscardedDeck(Deck.DiscardedDistrictDeck);
             ReturnFromPlayers();
             _userAdapter.ResetPanels();
+            _userAdapter.UpdatePanels(Players);
         }
 
         private void ReturnFromDiscardedDeck<T>(List<T> list) where T: ICard

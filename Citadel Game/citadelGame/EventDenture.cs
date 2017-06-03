@@ -33,6 +33,8 @@ namespace citadelGame
         private int playerIndexMemo;
         public int generalPhase = 0;
 
+        public int pickUpState = 0;
+
         //private List<CharacterCard> availableCards;
 
         public EventDenture(BoardState state, UIMessage message, SynchronizationController synchronizationController, _test_RPG game)
@@ -70,6 +72,9 @@ namespace citadelGame
             TestAether aether = new TestAether();
 
             state.boardStableState = false;
+            
+            
+
             List<TestCard> dilemaCardList = new List<TestCard>();
             int i = 0;
             foreach (var action in availableActions)
@@ -169,16 +174,8 @@ namespace citadelGame
             // set up board for player
             state.boardStableState = true;
 
-            for (int i = 0; i < 6; i++)
-            {
-                mainGame.hands[i].CoverCards();
-                mainGame.hands[i].Active = false;
-                mainGame.playgrounds[i].Active = false;
-            }
-            mainGame.hands[currentPlayer.PlayerId-1].FlipHand();
-            mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
-            mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
-
+            
+            pickUpState = 1;
             state.boardActive = true;
         }
 
@@ -215,6 +212,12 @@ namespace citadelGame
 
         public void NextPlayerChosesCard(int playerIndex)
         {
+            for (int i = 0; i < 6; i++)
+            {
+                mainGame.hands[i].CoverCards();
+                mainGame.hands[i].Active = false;
+                mainGame.playgrounds[i].Active = false;
+            }
             state.boardStableState = false;
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900);
             state.boardActive = false;
@@ -223,8 +226,33 @@ namespace citadelGame
         public void NextPlayerMakeTurn(Player currentPlayer)
         {
             state.boardStableState = false;
+
+            for (int i = 0; i < 6; i++)
+            {
+                mainGame.hands[i].CoverCards();
+                mainGame.hands[i].Active = false;
+                mainGame.playgrounds[i].Active = false;
+            }
+            mainGame.hands[currentPlayer.PlayerId - 1].FlipHand();
+            mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
+            mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
+
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". Gracz gra postacią: "+currentPlayer.CharacterCard.Name, 1600, 900);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id-1, 0));
+            state.boardActive = false;
+        }
+
+        public void NextPlayerIsDead(Player currentPlayer)
+        {
+            state.boardStableState = false;
+            for (int i = 0; i < 6; i++)
+            {
+                mainGame.hands[i].CoverCards();
+                mainGame.hands[i].Active = false;
+                mainGame.playgrounds[i].Active = false;
+            }
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Tura gracza numer " + currentPlayer.PlayerId.ToString() + " jest pomijana. Gracz grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity przez zabójcę.", 1600, 900);
+            mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
         }
 
@@ -309,6 +337,13 @@ namespace citadelGame
             synchronizationController.ResetEventController.Reset();
         }
 
+        public void UpdateCurrentPanel(Player player)
+        {
+            mainGame.panels[player.PlayerId - 1].SetInfo(player.Hand.Count(), player.Table.Count(), player.Gold);
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
+        }
+
         public void DrawCardFromDeck(DistrictCard card, Player currentPlayer)
         {
             // flow
@@ -338,22 +373,84 @@ namespace citadelGame
 
         public void HandToPlayground(DistrictCard card, Player currentPlayer)
         {
-            
+            if (mainGame.hands[currentPlayer.PlayerId-1].CardList.Count > 0)
+            {
+                TestCard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.hands[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.playgrounds[currentPlayer.PlayerId - 1].AddCard(cardDummy);
+            }
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
+        }
+
+        public void PlaygroundToHand(DistrictCard card, Player currentPlayer)
+        {
+            if (mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Count > 0)
+            {
+                TestCard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.playgrounds[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.hands[currentPlayer.PlayerId - 1].AddCard(cardDummy);
+            }
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
         }
 
         public void HandDiscard(DistrictCard card, Player currentPlayer)
         {
-
+            if (mainGame.hands[currentPlayer.PlayerId - 1].CardList.Count > 0)
+            {
+                TestCard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.hands[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.graveyard.AddCard(cardDummy);
+            }
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
         }
 
         public void PlaygroundDiscard(DistrictCard card, Player currentPlayer)
         {
-
+            if (mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Count > 0)
+            {
+                TestCard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.playgrounds[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.graveyard.AddCard(cardDummy);
+            }
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
         }
 
         public void HandsExchange(Player player1, Player player2)
         {
-
+            List<int> memoCardsId1 = new List<int>();
+            List<int> memoCardsId2 = new List<int>();
+            foreach (var card in mainGame.hands[player1.PlayerId - 1].CardList)
+            {
+                memoCardsId1.Add(card.id);
+            }
+            foreach (var card in mainGame.hands[player2.PlayerId - 1].CardList)
+            {
+                memoCardsId2.Add(card.id);
+            }
+            foreach (var i in memoCardsId1)
+            {
+                TestCard cardDummy = mainGame.hands[player1.PlayerId - 1].CardList.Find(x => x.id == i);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.hands[player1.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.hands[player2.PlayerId - 1].AddCard(cardDummy);
+            }
+            foreach (var i in memoCardsId2)
+            {
+                TestCard cardDummy = mainGame.hands[player2.PlayerId - 1].CardList.Find(x => x.id == i);
+                if (cardDummy == null) throw new NotImplementedException();
+                mainGame.hands[player2.PlayerId - 1].RemoveCard(cardDummy);
+                mainGame.hands[player1.PlayerId - 1].AddCard(cardDummy);
+            }
+            synchronizationController.ResetEventModel.Set();
+            synchronizationController.ResetEventController.Reset();
         }
     }
 }

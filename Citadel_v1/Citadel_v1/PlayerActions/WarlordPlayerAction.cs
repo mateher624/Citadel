@@ -19,14 +19,17 @@ namespace Citadel_v1
         {
             int redDistrictAmount = RedDistrictCount(currentPlayer);
             AddGoldForRedDistricts(redDistrictAmount, currentPlayer);
+            UserAdapter.UpdateCurrentPanel(currentPlayer);
             if (UserAdapter.DecideToDestroyDistrict())
             {
                 DistrictCardToDestroy districtToDestroy = UserAdapter.ChooseDistrictCardToDestroy(players);
                 DestroyDistrictIfPossible(districtToDestroy, currentPlayer);
+                UserAdapter.UpdatePanels(players);
             }
             if (UserAdapter.DecideToBuildDistrict())
             {
                 BuildDistricts(currentPlayer);
+                UserAdapter.UpdateCurrentPanel(currentPlayer);
             }
         }
 
