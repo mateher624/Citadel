@@ -31,7 +31,9 @@ namespace Citadel_v1
         public void DoPlayerAction(Player currentPlayer, List<Player> players)
         {
             ChooseFirstAction(currentPlayer);
+            UserAdapter.UpdateCurrentPanel(currentPlayer);
             DoCharacterAction(players, currentPlayer);
+            
             //DoCharacterAction<CharacterActionArgs>(players);
         }
 

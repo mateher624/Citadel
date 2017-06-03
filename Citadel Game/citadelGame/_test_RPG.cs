@@ -214,6 +214,7 @@ namespace citadelGame
                         if (cardWasDropped && eventDenture.pickUpState == 1)
                         {
                             int index = gameLogic.Players[playgrounds.IndexOf(playground)].Hand.FindIndex(x => x.Id == cursorDockedCard.id);
+                            if (index == -1) throw new NotImplementedException();
                             eventDenture.ReturnChosenCardIndex(index);
                         }
                     }

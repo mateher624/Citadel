@@ -50,5 +50,7 @@ namespace Citadel_v1
         void PlaygroundDiscard(DistrictCard card, Player currentPlayer);
 
         void HandsExchange(Player player1, Player player2);
+
+        void EndGame(Player player);
     }
 }

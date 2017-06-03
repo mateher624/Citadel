@@ -8,7 +8,7 @@ namespace Citadel_v1
 {
     class CharacterChoicePhase : Phase
     {
-        const int FirstPlayerId = 0;
+        const int FirstPlayerId = 1;
 
         public CharacterChoicePhase(List<Player> players, Phase phase, Decks deck, List<CharacterCard> fullCharacterCardList, SynchronizationController synchronizationController, IUserAdapter userAdapter) : this(players, phase.Round, deck, fullCharacterCardList, synchronizationController, userAdapter)
         {

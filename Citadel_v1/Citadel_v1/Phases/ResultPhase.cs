@@ -42,6 +42,8 @@ namespace Citadel_v1
             }
             else
             {
+
+                _userAdapter.EndGame(_winningPlayers[0]);
                 // koniec rozgrywki, podsumowanie
             }
             ReturnCardsToOriginalDecks();
@@ -155,7 +157,6 @@ namespace Citadel_v1
             {
                 if(player.Table.Count()== WinningDistrictAmount)
                 {
-                    // TUTAJ INFOO O WYGRANEJ
                     return true;
                 }
             }

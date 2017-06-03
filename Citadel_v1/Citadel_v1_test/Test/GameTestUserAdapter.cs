@@ -142,5 +142,10 @@ namespace Citadel_v1_test
         {
             throw new NotImplementedException();
         }
+
+        public void EndGame(Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

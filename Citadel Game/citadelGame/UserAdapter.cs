@@ -87,6 +87,11 @@ namespace citadelGame
 
         public List<DistrictCard> ChooseCardsToDiscard(List<DistrictCard> availableCards)
         {
+            List<DistrictCard> dummyList = new List<DistrictCard>();
+            foreach (var card in availableCards)
+            {
+                dummyList.Add(card);
+            }
             whatThePhase = "ChooseCardsToDiscard";
             chosenCardOrDilema = false;
             eventDenture.ChooseCardsToDiscard(availableCards);
@@ -94,8 +99,8 @@ namespace citadelGame
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema)
             {
-                availableCards.Remove(availableCards[chosenCardOrDilemaIndex]);
-                return availableCards;
+                dummyList.Remove(availableCards[chosenCardOrDilemaIndex]);
+                return dummyList;
             }
             throw new NotImplementedException();
         }
@@ -239,6 +244,14 @@ namespace citadelGame
         public void HandsExchange(Player player1, Player player2)
         {
             eventDenture.HandsExchange(player1, player2);
+            synchronizationController.ResetEventController.Set();
+            synchronizationController.ResetEventModel.WaitOne();
+        }
+
+        public void EndGame(Player player)
+        {
+            whatThePhase = "EndGame";
+            eventDenture.EndGame(player);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
         }

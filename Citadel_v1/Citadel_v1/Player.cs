@@ -166,11 +166,19 @@ namespace Citadel_v1
             //{
             //    hand.Remove(card);
             //}
+            int i = 0, j = 0;
             foreach (var districtCard in cardsToDiscard)
             {
                 _userAdapter.HandDiscard(districtCard, this);
+                i++;
             }
-            Hand.RemoveAll(cardsToDiscard.Contains);
+            foreach (var districtCard in cardsToDiscard)
+            {
+                Hand.Remove(districtCard);
+                j++;
+            }
+            if (i != j) throw new NotImplementedException();
+            //Hand.RemoveAll(cardsToDiscard.Contains);
 
             _userAdapter.UpdateCurrentPanel(this);
         }

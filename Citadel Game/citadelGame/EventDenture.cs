@@ -98,7 +98,7 @@ namespace citadelGame
             Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in oneToPick)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, i, 2, aether, true));
+                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
                 i++;
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz dzielnicę", "Kliknij kartę dzielnicy którą chcesz wybrać.", 1600, 900, dilemaCardList);
@@ -484,6 +484,23 @@ namespace citadelGame
             }
             synchronizationController.ResetEventModel.Set();
             synchronizationController.ResetEventController.Reset();
+        }
+
+        public void EndGame(Player currentPlayer)
+        {
+            state.boardStableState = false;
+            for (int i = 0; i < 6; i++)
+            {
+                mainGame.hands[i].UnCoverCards();
+                mainGame.hands[i].Active = false;
+                mainGame.playgrounds[i].Active = false;
+            }
+            TestAether aether = new TestAether();
+            List<TestCard> cardMemo = new List<TestCard>();
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 7, 2, aether, true));
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Zwycięstwo", "Gracz " + currentPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
+            mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
+            state.boardActive = false;
         }
     }
 }
