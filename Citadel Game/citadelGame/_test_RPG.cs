@@ -178,6 +178,25 @@ namespace citadelGame
 
                 foreach (TestContainer container in elementsContainers) container.UnClicked(e, worldCoords);
 
+                if (eventDenture.generalPhase == 2) foreach (var playground in playgrounds)
+                {
+                    if (playground.Active == true)
+                    {
+                        TestCard cardDummy = null;
+                        foreach (var card in playground.CardList)
+                        {
+                            if (card.Collide((int)worldCoords.X, (int)worldCoords.Y)) cardDummy = card;
+                        }
+                        if (cardDummy != null)
+                        {
+                            WarlordPlayerAction.DistrictCardToDestroy warlordCard = new WarlordPlayerAction.DistrictCardToDestroy();
+                            warlordCard.Player = gameLogic.Players[playgrounds.IndexOf(playground)];
+                            warlordCard.DistrictCard = gameLogic.Players[playgrounds.IndexOf(playground)].Table.Find(x => x.Id == cardDummy.id);
+                            eventDenture.GeneralReturnChoice(warlordCard);
+                        }
+                    }
+                }
+
                 // UPUSZCZANIE KARD DO PÓL
                 if (cursorDockedCard != null)
                 {
@@ -226,8 +245,8 @@ namespace citadelGame
                         bool cardUnclicked = card.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
                         if (cardUnclicked == true)
                         {
-                            if (eventDenture.generalPhase == 1 ) eventDenture.GeneralNextStep(i);
-                            else if (eventDenture.generalPhase == 2) eventDenture.GeneralNextStep(i);
+                            if (eventDenture.generalPhase == 1 ) eventDenture.GeneralChooseCardToDestroy(i);
+                            else if (eventDenture.generalPhase == 2) throw new NotImplementedException();
                             else eventDenture.ReturnChosenCardIndex(i);
                             state.boardStableState = true;
                         }
@@ -287,7 +306,7 @@ namespace citadelGame
 
             aether = new TestAether();
             deck = new TestDeck(636, 10, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
-            deck.Active = true;
+            deck.Active = false;
             graveyard = new TestDeck(892, 10, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
             graveyard.Active = false;
             graveyard.FlipDeck();

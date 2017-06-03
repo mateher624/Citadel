@@ -173,8 +173,8 @@ namespace citadelGame
 
             // set up board for player
             state.boardStableState = true;
-
-            
+            mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
+            mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
             pickUpState = 1;
             state.boardActive = true;
         }
@@ -195,6 +195,7 @@ namespace citadelGame
 
         public void ReturnChosenCardIndex(int index)
         {
+            pickUpState = 0;
             userAdapter.chosenCardOrDilema = true;
             userAdapter.chosenCardOrDilemaIndex = index;
             synchronizationController.ResetEventModel.Set();
@@ -204,6 +205,7 @@ namespace citadelGame
 
         public void ReturnChoice(bool choice)
         {
+            pickUpState = 0;
             userAdapter.chosenCardOrDilema = true;
             userAdapter.choice = choice;
             synchronizationController.ResetEventModel.Set();
@@ -266,26 +268,40 @@ namespace citadelGame
             synchronizationController.ResetEventController.Reset();
         }
 
-        public void ChooseDistrictCardToDestroy(List<Player> players)
+        public void GeneralChoosePlayerToDestroy(List<Player> players)
         {
-            TestAether aether = new TestAether();
-            playersMemo = players;
-            generalPhase = 1;
-            state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
-            int i = 0;
-            foreach (var player in players)
+            //TestAether aether = new TestAether();
+            //playersMemo = players;
+            //generalPhase = 1;
+            //state.boardStableState = false;
+            //List<TestCard> dilemaCardList = new List<TestCard>();
+            //int i = 0;
+            //foreach (var player in players)
+            //{
+            //    dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 1, aether, true));
+            //    i++;
+            //}
+            //mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight / 2, messageWidth, messafeHeight, "Wybierz gracza", "Kliknij kartę gracza któremu chcesz zniszczyć kartę dzielnicy.", 1600, 900, dilemaCardList);
+            //state.boardActive = false;
+
+            state.boardStableState = true;
+
+            foreach (var hand in mainGame.hands)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 1, aether, true));
-                i++;
+                hand.Active = false;
             }
-            mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight / 2, messageWidth, messafeHeight, "Wybierz gracza", "Kliknij kartę gracza któremu chcesz zniszczyć kartę dzielnicy.", 1600, 900, dilemaCardList);
-            state.boardActive = false;
+            foreach (var playground in mainGame.playgrounds)
+            {
+                playground.Active = true;
+            }
+
+            generalPhase = 2;
+            state.boardActive = true;
         }
 
-        public void GeneralNextStep(int index)
+        public void GeneralChooseCardToDestroy(int index)
         {
-            TestAether aether = new TestAether();
+            /*TestAether aether = new TestAether();
             generalPhase = 2;
             state.boardStableState = false;
             List<TestCard> dilemaCardList = new List<TestCard>();
@@ -303,16 +319,13 @@ namespace citadelGame
                     messafeHeight, "Wybierz kartę dzielnicy", "Kliknij kartę którą chcesz odrzucić.", 1600, 900,
                     dilemaCardList);
                 state.boardActive = false;
-            }
+            }*/
+            throw new NotImplementedException();
         }
 
-        public void ReturnGeneralChoice(int index)
-        { 
-            userAdapter.chosenCardToDestroy = new WarlordPlayerAction.DistrictCardToDestroy
-            {
-                Player = playersMemo[playerIndexMemo],
-                DistrictCard = playersMemo[playerIndexMemo].Table[index]
-            };
+        public void GeneralReturnChoice(WarlordPlayerAction.DistrictCardToDestroy districtCard)
+        {
+            userAdapter.chosenCardToDestroy = districtCard;
             generalPhase = 0;
             userAdapter.chosenCardOrDilema = true;
             synchronizationController.ResetEventModel.Set();

@@ -25,7 +25,7 @@ namespace Citadel_v1
 
             var districtCardList = new List<DistrictCard>()
             {
-                new DistrictCard("Armory", Color.Yellow, 3, 1),
+                /*new DistrictCard("Armory", Color.Yellow, 3, 1),
                 new DistrictCard("Factory", Color.Red, 6, 2),
                 new DistrictCard("Tavern ", Color.Green, 1, 3),
                 new DistrictCard("Throne Room ", Color.Violet, 6, 4),
@@ -56,7 +56,7 @@ namespace Citadel_v1
                 new DistrictCard("Armory", Color.Yellow, 3, 29),
                 new DistrictCard("Factory", Color.Red, 6, 30),
                 new DistrictCard("Tavern ", Color.Green, 1, 31),
-                new DistrictCard("Throne Room ", Color.Violet, 6, 32),
+                new DistrictCard("Throne Room ", Color.Violet, 6, 32),*/
             };
 
             context.CharacterCards.AddRange(characterCardList);

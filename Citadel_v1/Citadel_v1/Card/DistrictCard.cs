@@ -25,12 +25,14 @@ namespace Citadel_v1
         public int Cost { get; private set; }
         public Color Color { get; private set; }
 
-        public DistrictCard(string name, Color color, int cost, int id)  // konstruktor dla CharacterCard
+        public DistrictCard(int id, string name, Color color, int cost,  int coordinateX, int coordinateY)  // konstruktor dla CharacterCard
         {
             Name = name;
             Id = id;
             Cost = cost;
             Color = color;
+            CoordinateX = coordinateX;
+            CoordinateY = coordinateY;
         }
     }
 }

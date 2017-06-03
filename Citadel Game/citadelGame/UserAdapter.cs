@@ -135,9 +135,9 @@ namespace citadelGame
 
         public WarlordPlayerAction.DistrictCardToDestroy ChooseDistrictCardToDestroy(List<Player> players)
         {
-            whatThePhase = "ChooseDistrictCardToDestroy";
+            whatThePhase = "GeneralChoosePlayerToDestroy";
             chosenCardOrDilema = false;
-            eventDenture.ChooseDistrictCardToDestroy(players);
+            eventDenture.GeneralChoosePlayerToDestroy(players);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema) return chosenCardToDestroy;
