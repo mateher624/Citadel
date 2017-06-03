@@ -498,11 +498,11 @@ namespace citadelGame
 
             foreach (TestContainer container in elementsContainers)
             {
-                if (container.GetType() == typeof(TestDeck))
+                /*if (container.GetType() == typeof(TestDeck))
                 {
                     if (container.CardList.Count != 0) Window.Draw(container.CardList[0]);
                 }
-                else foreach (TestCard card in container.CardList)
+                else */foreach (TestCard card in container.CardList)
                 {
                     if (card != cursorDockedCard) Window.Draw(card);
                 }
@@ -515,11 +515,11 @@ namespace citadelGame
             if (state.boardActive == false && state.boardStableState == false)
             {
                 Window.Draw(message);
-                if (message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice))
+                if ((message.GetType() == typeof(UIInfo) || message.GetType() == typeof(UIChoice)) && message.Visible)
                     Window.Draw(message.ButtonOK);
-                if (message.GetType() == typeof(UIChoice))
+                if ((message.GetType() == typeof(UIChoice)) && message.Visible)
                     Window.Draw(message.ButtonCancel);
-                if ((message.GetType() == typeof(UIDilema) && message.Visible) || message.GetType() == typeof(UIChoice) || message.GetType() == typeof(UIInfo))
+                if ((message.GetType() == typeof(UIDilema)  || message.GetType() == typeof(UIChoice) || message.GetType() == typeof(UIInfo)) && message.Visible)
                     foreach (var card in message.CardList)
                     {
                         Window.Draw(card);

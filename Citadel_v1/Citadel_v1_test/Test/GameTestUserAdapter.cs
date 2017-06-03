@@ -19,14 +19,14 @@ namespace Citadel_v1_test
             return available[index];
         }
 
-        public PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions)
+        public PlayerAction.OneAction ChooseOneFromTwoPlayerActions(Player currentPlayer, params PlayerAction.OneAction[] availableActions)
         {
             var rnd = new Random();
             var index = rnd.Next(0, 2);
             return availableActions.FirstOrDefault();
         }
 
-        public MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(params MagicianPlayerAction.MagicianActionChoice[] availableActions)
+        public MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(Player currentPlayer, params MagicianPlayerAction.MagicianActionChoice[] availableActions)
         {
             var rnd = new Random();
             var index = rnd.Next(0, 2);

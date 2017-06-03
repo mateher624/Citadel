@@ -12,16 +12,15 @@ namespace Citadel_v1
         {
             List<CharacterCard> available = ListWithNoAssassinAndThiefCharacter(FullCharacterCardList.ToList());
             var cardToSteelFrom = UserAdapter.ChooseCharacterCard(available, 2, currentPlayer);   //mogą być wszystkie oprócz karty Assassin iThief
-            if (Deck.DiscardedCharacterDeck.Any(card => cardToSteelFrom.Id == card.Id))
+            if (Deck.DiscardedCharacterDeck.Any(card => cardToSteelFrom.Id == card.Id) == false)
             {
-                return;     //jeżeli wybrana karta jest odrzucona to nie ma żadnego efektu
-            }
-            foreach (var player in players)
-            {
-                if (player.CharacterCard.Id == cardToSteelFrom.Id)
+                foreach (var player in players)
                 {
-                    currentPlayer.Gold += player.TakeAwayGold();
-                    UserAdapter.UpdateCurrentPanel(currentPlayer);
+                    if (player.CharacterCard.Id == cardToSteelFrom.Id)
+                    {
+                        currentPlayer.Gold += player.TakeAwayGold();
+                        UserAdapter.UpdateCurrentPanel(currentPlayer);
+                    }
                 }
             }
             if (UserAdapter.DecideToBuildDistrict())

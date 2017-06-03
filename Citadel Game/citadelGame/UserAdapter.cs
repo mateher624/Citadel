@@ -50,22 +50,22 @@ namespace citadelGame
             throw new NotImplementedException();
         }
 
-        public PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions)
+        public PlayerAction.OneAction ChooseOneFromTwoPlayerActions(Player currentPlayer, params PlayerAction.OneAction[] availableActions)
         {
             whatThePhase = "ChooseOneFromTwoPlayerActions";
             chosenCardOrDilema = false;
-            eventDenture.ChooseActionCard(availableActions);
+            eventDenture.ChooseActionCard(currentPlayer, availableActions);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema) return availableActions[chosenCardOrDilemaIndex];
             throw new NotImplementedException();
         }
 
-        public MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(params MagicianPlayerAction.MagicianActionChoice[] availableActions)
+        public MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(Player currentPlayer, params MagicianPlayerAction.MagicianActionChoice[] availableActions)
         {
             whatThePhase = "MagicianActionChoice";
             chosenCardOrDilema = false;
-            eventDenture.MagicianActionChoice(availableActions);
+            eventDenture.MagicianActionChoice(currentPlayer, availableActions);
             synchronizationController.ResetEventController.Set();
             synchronizationController.ResetEventModel.WaitOne();
             if (chosenCardOrDilema) return availableActions[chosenCardOrDilemaIndex];

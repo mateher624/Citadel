@@ -53,7 +53,7 @@ namespace Citadel_v1
 
         private void ChooseFirstAction(Player currentPlayer)
         {
-            var action = UserAdapter.ChooseOneFromTwoPlayerActions(TakeTwoGold, DrawDistrictCards);
+            var action = UserAdapter.ChooseOneFromTwoPlayerActions(currentPlayer, TakeTwoGold, DrawDistrictCards);
             action(currentPlayer);
         }
 

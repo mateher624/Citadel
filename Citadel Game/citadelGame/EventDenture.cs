@@ -67,13 +67,15 @@ namespace citadelGame
             state.boardActive = false;
         }
 
-        public void ChooseActionCard(params PlayerAction.OneAction[] availableActions)
+        public void ChooseActionCard(Player currentPlayer, params PlayerAction.OneAction[] availableActions)
         {
             TestAether aether = new TestAether();
 
             state.boardStableState = false;
-            
-            
+
+            mainGame.hands[currentPlayer.PlayerId - 1].UnCoverCards();
+            mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
+            mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
 
             List<TestCard> dilemaCardList = new List<TestCard>();
             int i = 0;
@@ -103,7 +105,7 @@ namespace citadelGame
             state.boardActive = false;
         }
 
-        public void MagicianActionChoice(params MagicianPlayerAction.MagicianActionChoice[] availableActions)
+        public void MagicianActionChoice(Player currentPlayer, params MagicianPlayerAction.MagicianActionChoice[] availableActions)
         {
             TestAether aether = new TestAether();
 
@@ -112,9 +114,14 @@ namespace citadelGame
             int i = 0;
             foreach (var action in availableActions)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                if (i != 1) dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                else
+                {
+                    if (mainGame.hands[currentPlayer.PlayerId - 1].CardList.Count != 0) dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                }
                 i++;
             }
+            
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz akcję Magika", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
             state.boardActive = false;
         }
@@ -245,9 +252,7 @@ namespace citadelGame
                 mainGame.hands[i].Active = false;
                 mainGame.playgrounds[i].Active = false;
             }
-            mainGame.hands[currentPlayer.PlayerId - 1].UnCoverCards();
-            mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
-            mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
+            
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, currentPlayer.CharacterCard.Id-1, 0, aether, true));
@@ -267,7 +272,7 @@ namespace citadelGame
             }
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, currentPlayer.PlayerId - 1, 0, aether, true));
+            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 6, 2, aether, true));
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - 200, 600, 400, "Informacja", "Gracz (" + currentPlayer.PlayerId.ToString() + ") grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity.", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;

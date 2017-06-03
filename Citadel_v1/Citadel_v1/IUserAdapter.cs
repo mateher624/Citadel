@@ -9,9 +9,9 @@ namespace Citadel_v1
 
         CharacterCard ChooseCharacterCard(List<CharacterCard> available, int type, Player currentPlayer);           //zwraca wybraną kartę ze wszystkich możliwych
 
-        PlayerAction.OneAction ChooseOneFromTwoPlayerActions(params PlayerAction.OneAction[] availableActions);      // dobry typ???
+        PlayerAction.OneAction ChooseOneFromTwoPlayerActions(Player currentPlayer, params PlayerAction.OneAction[] availableActions);      // dobry typ???
 
-        MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(params MagicianPlayerAction.MagicianActionChoice[] availableActions);
+        MagicianPlayerAction.MagicianActionChoice MagicianActionChoice(Player currentPlayer, params MagicianPlayerAction.MagicianActionChoice[] availableActions);
 
         Player ChoosePlayerToExchangeCardsWith(List<Player> players);
 

@@ -12,7 +12,7 @@ namespace Citadel_v1
 
         protected override void DoCharacterAction(List<Player> players, Player currentPlayer)
         {
-            MagicianActionChoice decision = UserAdapter.MagicianActionChoice(ExchangeCardsWithOtherPlayer, DiscardAndDrawCards);
+            MagicianActionChoice decision = UserAdapter.MagicianActionChoice(currentPlayer, ExchangeCardsWithOtherPlayer, DiscardAndDrawCards);
             decision.Invoke(players, currentPlayer);
 
             if (UserAdapter.DecideToBuildDistrict())
