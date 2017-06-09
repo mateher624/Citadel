@@ -9,13 +9,14 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UiGlyphButton : UiButton
+    class UIGlyphButton : UiButton
     {
         Texture _face;
         Sprite _body;
 
-        public UiGlyphButton(int startX, int startY, int width, int height, Texture face)
+        public UIGlyphButton(int startX, int startY, int width, int height, Texture face, string caption, int text_x)
         {
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
             State = 0;
             this.StartX = startX;
             this.StartY = startY;
@@ -27,6 +28,12 @@ namespace citadelGame
             this._body.Texture = this._face;
             this._body.TextureRect = new IntRect(0, 0, this.Width, this.Height);
             this._body.Position = new Vector2f(this.StartX, this.StartY);
+
+            this._text = new Text();
+            _text.Font = font;
+            _text.Position = new Vector2f(this.StartX + (int)width / 2 - text_x, this.StartY + 8 );
+            _text.DisplayedString = caption;
+            _text.CharacterSize = 20;
         }
 
         protected override void Update()
@@ -41,6 +48,7 @@ namespace citadelGame
         {
             Update();
             if (Visible) target.Draw(_body, states);
+            if (Visible) target.Draw(_text, states);
         }
     }
 }

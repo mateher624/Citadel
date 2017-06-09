@@ -14,7 +14,8 @@ namespace citadelGame.UI
 
         public UIChoice(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
-            Font font = new Font("../../Resources/arial.ttf");
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
+            Texture btnTexture = new Texture("../../Resources/sbutton.png");
 
             this.StartX = startX;
             this.StartY = startY;
@@ -60,9 +61,13 @@ namespace citadelGame.UI
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
-            ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "Tak");
-            ButtonCancel = new UIPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "Nie");
-            ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+            //ButtonOK = new UIPrimitiveButton(this.StartX + this.Width / 2 - 120, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "Tak");
+            //ButtonCancel = new UIPrimitiveButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "Nie");
+            //ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
+            ButtonOK = new UIGlyphButton(this.StartX + this.Width / 2 - 215, this.StartY + this.Height - 90, 195, 45, btnTexture, "Tak", 15);
+            ButtonCancel = new UIGlyphButton(this.StartX + this.Width / 2 + 20, this.StartY + this.Height - 90, 195, 45, btnTexture, "Nie", 15);
+            ButtonToggle = new UIGlyphButton(screenW - 205, 10, 195, 45, btnTexture, "Toggle Message", 65);
 
             SetUpCards();
         }

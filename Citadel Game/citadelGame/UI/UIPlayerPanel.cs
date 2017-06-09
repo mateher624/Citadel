@@ -49,7 +49,7 @@ namespace citadelGame
 
         public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, Vector2f portraitCoords)
         {
-            Font font = new Font("../../Resources/arial.ttf");
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
 
             this._startX = startX;
             this._startY = startY;
@@ -140,7 +140,7 @@ namespace citadelGame
         public void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (_visible) target.Draw(_body, states);
+            //if (_visible) target.Draw(_body, states);
             if (_visible) target.Draw(_portrait, states);
 
             if (_visible) target.Draw(_textCaptionGold, states);

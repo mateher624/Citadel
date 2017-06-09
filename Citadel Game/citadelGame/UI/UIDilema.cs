@@ -17,7 +17,8 @@ namespace citadelGame
 
         public UIDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
-            Font font = new Font("../../Resources/arial.ttf");
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
+            Texture btnTexture = new Texture("../../Resources/sbutton.png");
 
             this.StartX = startX;
             this.StartY = startY;
@@ -72,7 +73,9 @@ namespace citadelGame
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
-            ButtonToggle = new UIPrimitiveButton(screenW-190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+            //ButtonToggle = new UIPrimitiveButton(screenW-190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
+            ButtonToggle = new UIGlyphButton(screenW - 205, 10, 195, 45, btnTexture, "Toggle Message", 65);
 
             SetUpCards();
         }

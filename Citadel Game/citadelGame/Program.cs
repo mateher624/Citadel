@@ -13,8 +13,21 @@ namespace citadelGame
     {
         static void Main(string[] args)
         {
-            _test_RPG myGame = new _test_RPG();
-            myGame.Run();
+            
+            bool returnMenu = true;
+            while (returnMenu == true)
+            {
+                returnMenu = false;
+                SceneMenu myMenu = new SceneMenu();
+                bool proceed = myMenu.Run();
+                if (proceed)
+                {
+                    SceneRPG myGame = new SceneRPG();
+                    returnMenu = myGame.Run();
+                    myGame.Abort();
+                }
+            }
+            
         }
     }
 }

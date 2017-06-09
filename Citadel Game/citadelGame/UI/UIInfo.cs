@@ -12,7 +12,8 @@ namespace citadelGame
     {
         public UIInfo(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
-            Font font = new Font("../../Resources/arial.ttf");
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
+            Texture btnTexture = new Texture("../../Resources/sbutton.png");
 
             this.StartX = startX;
             this.StartY = startY;
@@ -58,8 +59,11 @@ namespace citadelGame
             TextTitle.CharacterSize = 40;
             TextCaption.CharacterSize = 20;
 
-            ButtonOK = new UIPrimitiveButton(this.StartX + (this.Width-100)/2, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "OK");
-            ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+            //ButtonOK = new UIPrimitiveButton(this.StartX + (this.Width-100)/2, this.StartY + this.Height - 90, 100, 30, Color.Cyan, Color.Magenta, "OK");
+            //ButtonToggle = new UIPrimitiveButton(screenW - 190, 10, 180, 40, Color.Red, Color.Magenta, "Toggle Message");
+
+            ButtonOK = new UIGlyphButton(this.StartX + (this.Width - 195) / 2, this.StartY + this.Height - 90, 195, 45, btnTexture, "OK", 13);
+            ButtonToggle = new UIGlyphButton(screenW - 205, 10, 195, 45, btnTexture, "Toggle Message", 65);
 
             SetUpCards();
         }
@@ -71,7 +75,7 @@ namespace citadelGame
             if (Visible) target.Draw(Background, states);
             if (Visible) target.Draw(TextTitle, states);
             if (Visible) target.Draw(TextCaption, states);
-            target.Draw(ButtonToggle, states);
+            //target.Draw(ButtonToggle, states);
         }
     }
 }

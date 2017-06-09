@@ -15,7 +15,7 @@ namespace citadelGame
 {
     class EventDenture
     {
-        _test_RPG mainGame;
+        SceneRPG mainGame;
         public BoardState state;
 
         public UIMessage message;
@@ -37,7 +37,7 @@ namespace citadelGame
 
         //private List<CharacterCard> availableCards;
 
-        public EventDenture(BoardState state, UIMessage message, SynchronizationController synchronizationController, _test_RPG game)
+        public EventDenture(BoardState state, UIMessage message, SynchronizationController synchronizationController, SceneRPG game)
         {
             mainGame = game;
             this.message = message;
@@ -486,7 +486,7 @@ namespace citadelGame
             synchronizationController.ResetEventController.Reset();
         }
 
-        public void EndGame(Player currentPlayer)
+        public void EndGame(Player winningPlayer)
         {
             state.boardStableState = false;
             for (int i = 0; i < 6; i++)
@@ -498,8 +498,8 @@ namespace citadelGame
             TestAether aether = new TestAether();
             List<TestCard> cardMemo = new List<TestCard>();
             cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 7, 2, aether, true));
-            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Zwycięstwo", "Gracz " + currentPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
-            mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
+            mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Zwycięstwo", "Gracz " + winningPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
+            //mainGame.panels[winningPlayer.PlayerId - 1].SetImage(new Vector2f(winningPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
         }
     }

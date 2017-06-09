@@ -32,9 +32,9 @@ namespace citadelGame
         protected int cardAreaWidth;
 
 
-        public UIPrimitiveButton ButtonOK;
-        public UIPrimitiveButton ButtonCancel;
-        public UIPrimitiveButton ButtonToggle;
+        public UIGlyphButton ButtonOK;
+        public UIGlyphButton ButtonCancel;
+        public UIGlyphButton ButtonToggle;
 
         public UIMessage(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH)
         {

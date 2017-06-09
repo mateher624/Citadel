@@ -16,6 +16,8 @@ namespace citadelGame
         public int Width;
         public int Height;
 
+        protected Text _text;
+
         public bool Visible = true;
          
         public int State;

@@ -171,7 +171,7 @@ namespace citadelGame
         public override void Draw(RenderTarget target, RenderStates states)
         {
             Update();
-            if (visible) target.Draw(Body, states);
+            //if (visible) target.Draw(Body, states);
             if (visible) target.Draw(_bodyGround, states);
         }
 

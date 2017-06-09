@@ -8,7 +8,7 @@ namespace Citadel_v1
 {
     class ResultPhase : Phase
     {
-        private const int WinningDistrictAmount = 8;
+        private const int WinningDistrictAmount = 1;
         private const int MaxWinningPlayerAmount = 2;
         private const int FirstPlayerId = 1;
         public bool IsEnd { get; protected set; }             // określa, czy rozgrywka powinna się już zakończyć
@@ -27,14 +27,22 @@ namespace Citadel_v1
 
         public override void DoPhase()
         {
-            if(IsWinningConditionSatisfied())
+            Player winner = null;
+            foreach (var player in Players)
+            {
+                if (player.Table.Count >= WinningDistrictAmount) IsEnd = true;
+                winner = player;
+                break;
+            }
+            /*if (IsWinningConditionSatisfied())
             {
                 int playerId = FindFirstPlayerInThisRound();
                 FindWinningPlayers(_winningPlayers, playerId);
                 // uwzględnienie dodatkowych pkt za zwycięstwo
                 CountPlayersPoints();
+                
                 IsEnd = true;
-            }
+            }*/
             if(!IsEnd)
             {
                 SetNewKingPlayer();
@@ -43,7 +51,7 @@ namespace Citadel_v1
             else
             {
 
-                _userAdapter.EndGame(_winningPlayers[0]);
+                _userAdapter.EndGame(winner);
                 // koniec rozgrywki, podsumowanie
             }
             ReturnCardsToOriginalDecks();
@@ -155,7 +163,7 @@ namespace Citadel_v1
         {
             foreach (var player in Players)
             {
-                if(player.Table.Count()== WinningDistrictAmount)
+                if(player.Table.Count() == WinningDistrictAmount)
                 {
                     return true;
                 }

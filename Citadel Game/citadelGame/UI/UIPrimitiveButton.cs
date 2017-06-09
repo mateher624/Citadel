@@ -16,9 +16,9 @@ namespace citadelGame
         private Color _primaryColor;
         private Color _secondaryColor;
 
-        public UIPrimitiveButton(int startX, int startY, int width, int height, Color fillColor, Color outlineColor, string caption)
+        public UIPrimitiveButton(int startX, int startY, int width, int height, Color fillColor, Color outlineColor, string caption, int xd)
         {
-            Font font = new Font("../../Resources/arial.ttf");
+            Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
             State = 0;
             this.StartX = startX;
             this.StartY = startY;
