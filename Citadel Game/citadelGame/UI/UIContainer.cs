@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    abstract class TestContainer : Drawable
+    abstract class UIContainer : Drawable
     {
         protected int StartX;
         protected int StartY;
@@ -34,16 +34,16 @@ namespace citadelGame
         protected RectangleShape Body;
         protected Texture Face;
 
-        public List<TestCard> CardList;
+        public List<UICard> CardList;
 
         protected bool MouseOver = false;
 
         protected abstract void SetObjectTransform();
-        public abstract void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard);
-        public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard);
+        public abstract void MouseMove(Vector2f worldCoords, ref UICard cursorDockedCard);
+        public abstract void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref UICard cursorDockedCard);
         public abstract void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords);
-        public abstract void RemoveCard(TestCard removedCard);
-        public abstract void AddCard(TestCard addedCard);
+        public abstract void RemoveCard(UICard removedCard);
+        public abstract void AddCard(UICard addedCard);
         public abstract void AddCard(int id, int textureX, int textureY);
         public abstract void Draw(RenderTarget target, RenderStates states);
 

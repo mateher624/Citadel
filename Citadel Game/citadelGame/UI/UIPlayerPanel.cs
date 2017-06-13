@@ -8,7 +8,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UiPlayerPanel : Drawable
+    class UIPlayerPanel : Drawable
     {
         private int _startX;
         private int _startY;
@@ -47,7 +47,7 @@ namespace citadelGame
 
         public bool isKing;
 
-        public UiPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, Vector2f portraitCoords)
+        public UIPlayerPanel(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight, Vector2f portraitCoords)
         {
             Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
 

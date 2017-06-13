@@ -9,14 +9,14 @@ using SFML.Window;
 
 namespace citadelGame
 {
-    class TestAether : TestContainer
+    class UIAether : UIContainer
     {
-        public TestAether()
+        public UIAether()
         {
-            CardList = new List<TestCard>();
+            CardList = new List<UICard>();
         }
 
-        public override void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard)
+        public override void MouseMove(Vector2f worldCoords, ref UICard cursorDockedCard)
         {
             //int cardIndex;
             bool cardFound = false;
@@ -38,12 +38,12 @@ namespace citadelGame
             }
         }
 
-        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard)
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref UICard cursorDockedCard)
         {
             int cardIndex = 0;
-            TestCard chosenCard = null;
+            UICard chosenCard = null;
             bool eventHappened = false;
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 if (card.MouseOver == true)
                 {
@@ -64,22 +64,22 @@ namespace citadelGame
 
         public override void UnClicked(MouseButtonEventArgs e, Vector2f worldCoords)
         {
-            foreach (TestCard card in CardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
+            foreach (UICard card in CardList) card.UnClicked((int)worldCoords.X, (int)worldCoords.Y);
         }
 
-        public override void RemoveCard(TestCard removedCard)
+        public override void RemoveCard(UICard removedCard)
         {
 
         }
 
-        public override void AddCard(TestCard addedCard)
+        public override void AddCard(UICard addedCard)
         {
             CardList.Add(addedCard);
         }
 
         public override void AddCard(int id, int textureX, int textureY)
         {
-            TestCard newCard = new TestCard(id, 0, 0, CardWidth, CardHeight, Face, textureX, textureY, this, true);
+            UICard newCard = new UICard(id, 0, 0, CardWidth, CardHeight, Face, textureX, textureY, this, true);
         }
 
         public override void Draw(RenderTarget target, RenderStates states)

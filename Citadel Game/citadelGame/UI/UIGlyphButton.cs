@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIGlyphButton : UiButton
+    class UIGlyphButton : UIButton
     {
         Texture _face;
         Sprite _body;

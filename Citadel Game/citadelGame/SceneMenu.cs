@@ -10,10 +10,10 @@ using SFML.Window;
 
 namespace citadelGame
 {
-    class SceneMenu : TestGame
+    class SceneMenu : Scene
     {
         Vector2f worldCoords;
-        List<UiButton> buttonList;
+        List<UIButton> buttonList;
 
         private UIImage backgroundImage;
         private Texture buttonTexture;
@@ -22,7 +22,7 @@ namespace citadelGame
 
         public SceneMenu() : base(1600, 900, "Citadel Game Alpha", Color.Cyan)
         {
-            buttonList = new List<UiButton>();
+            buttonList = new List<UIButton>();
         }
 
         protected override void CheckCollide(MouseMoveEventArgs e)
@@ -30,7 +30,7 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
 
-            foreach (UiButton button in buttonList) button.Collide((int)worldCoords.X, (int)worldCoords.Y);
+            foreach (UIButton button in buttonList) button.Collide((int)worldCoords.X, (int)worldCoords.Y);
         }
 
         protected override void CheckClick(MouseButtonEventArgs e)
@@ -38,7 +38,7 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
             mousePressed = true;
-            foreach (UiButton button in buttonList) button.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
+            foreach (UIButton button in buttonList) button.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
         }
 
         protected override void CheckUnClick(MouseButtonEventArgs e)
@@ -101,7 +101,7 @@ namespace citadelGame
         protected override void Render()
         {
             Window.Draw(backgroundImage);
-            foreach (UiButton button in buttonList)
+            foreach (UIButton button in buttonList)
             {
                 Window.Draw(button);
             }

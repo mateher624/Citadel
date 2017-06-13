@@ -14,7 +14,7 @@ using Color = SFML.Graphics.Color;
 
 namespace citadelGame
 {
-    class SceneRPG : TestGame
+    class SceneRPG : Scene
     {
         Vector2f worldCoords;
 
@@ -26,17 +26,17 @@ namespace citadelGame
         Texture tileset;
         Texture buttonFace;
         Texture deckTexture;
-        List<UiButton> buttonList;
+        List<UIButton> buttonList;
         //List<_test_Card> cardSpriteList;
-        List<TestContainer> elementsContainers;
+        List<UIContainer> elementsContainers;
 
-        public List<TestHand> hands;
-        public List<TestPlayground> playgrounds;
-        public List<UiPlayerPanel> panels;
+        public List<UIHand> hands;
+        public List<UIPlayground> playgrounds;
+        public List<UIPlayerPanel> panels;
 
-        private TestAether aether;
+        private UIAether aether;
 
-        public TestDeck deck;
+        public UIDeck deck;
 
         private UIImage backgroundImage;
         public UIMessage message;
@@ -47,8 +47,8 @@ namespace citadelGame
         public UserAdapter userAdapter;
         private IDecksFactory deckFactory;
 
-        public TestDeck graveyard;
-        private TestCard cursorDockedCard;
+        public UIDeck graveyard;
+        private UICard cursorDockedCard;
         private bool mousePressed = false;
 
         private bool deckToPlaygroundLock;
@@ -62,12 +62,12 @@ namespace citadelGame
 
         public SceneRPG() : base(1600, 900, "Citadel Game Alpha", Color.Cyan)
         {
-            buttonList = new List<UiButton>();
-            elementsContainers = new List<TestContainer>();
+            buttonList = new List<UIButton>();
+            elementsContainers = new List<UIContainer>();
 
-            hands = new List<TestHand>();
-            playgrounds = new List<TestPlayground>();
-            panels = new List<UiPlayerPanel>();
+            hands = new List<UIHand>();
+            playgrounds = new List<UIPlayground>();
+            panels = new List<UIPlayerPanel>();
         }
 
         // Message generation and some shit functions
@@ -80,13 +80,13 @@ namespace citadelGame
             Vector2i mouseCoords = new Vector2i(e.X, e.Y);
             worldCoords = Window.MapPixelToCoords(mouseCoords);
 
-            foreach (UiButton button in buttonList) button.Collide((int)worldCoords.X, (int)worldCoords.Y);
+            foreach (UIButton button in buttonList) button.Collide((int)worldCoords.X, (int)worldCoords.Y);
 
             if (state.boardActive == true) // normal game
             {
                 
 
-                foreach (TestContainer container in elementsContainers)
+                foreach (UIContainer container in elementsContainers)
                     container.MouseMove(worldCoords, ref cursorDockedCard);
 
                 foreach (var playground in playgrounds)
@@ -121,7 +121,7 @@ namespace citadelGame
             worldCoords = Window.MapPixelToCoords(mouseCoords);
             mousePressed = true;
 
-            foreach (UiButton button in buttonList)
+            foreach (UIButton button in buttonList)
                 button.Clicked((int)worldCoords.X, (int)worldCoords.Y, e.Button);
 
             if (state.boardActive == true) // normal game
@@ -129,10 +129,10 @@ namespace citadelGame
                 
 
                 // TROCHĘ MNIEJ UPOŚLEDZONA FUNKCJA ELEMENTU AKTYWNEGO
-                foreach (TestContainer container in elementsContainers) container.Clicked(e, worldCoords, ref cursorDockedCard);
+                foreach (UIContainer container in elementsContainers) container.Clicked(e, worldCoords, ref cursorDockedCard);
                 if (cursorDockedCard != null)
                 {
-                    if (cursorDockedCard.Origin.GetType() == typeof(TestDeck))
+                    if (cursorDockedCard.Origin.GetType() == typeof(UIDeck))
                         foreach (var playground in playgrounds)
                         {
                             playground.OldState = playground.Active;
@@ -168,32 +168,15 @@ namespace citadelGame
             {
                 //BUTTON FUNCTIONS
 
-                
-
-                /*bool button1Clicked = buttonList[1].UnClicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
-                if (button1Clicked == true)
-                {
-                    Random rndX = new Random();
-                    Random rndY = new Random();
-                    int texX = rndX.Next(0, 7);
-                    int texY = rndY.Next(0, 9);
-                    deck.AddCard(0, texX, texY);
-                }
-
-                bool button2Clicked = buttonList[2].UnClicked((int) worldCoords.X, (int) worldCoords.Y, e.Button);
-                if (button2Clicked == true)
-                {
-                    // message start
-                    state.boardStableState = false;
-                }*/
-
-                foreach (TestContainer container in elementsContainers) container.UnClicked(e, worldCoords);
+                //TUTAJ JEST FOREACH
+                elementsContainers.ForEach((element) => element.UnClicked(e, worldCoords) );
+                //foreach (UIContainer container in elementsContainers) container.UnClicked(e, worldCoords);
 
                 if (eventDenture.generalPhase == 2) foreach (var playground in playgrounds)
                 {
                     if (playground.Active == true)
                     {
-                        TestCard cardDummy = null;
+                        UICard cardDummy = null;
                         foreach (var card in playground.CardList)
                         {
                             if (card.Collide((int)worldCoords.X, (int)worldCoords.Y)) cardDummy = card;
@@ -280,10 +263,11 @@ namespace citadelGame
             if (deckToPlaygroundLock)
             {
                 deckToPlaygroundLock = false;
-                foreach (var playground in playgrounds)
+                playgrounds.ForEach((element) => element.Active = element.OldState);
+                /*foreach (var playground in playgrounds)
                 {
                     playground.Active = playground.OldState;
-                }
+                }*/
             }
         }
 
@@ -322,36 +306,36 @@ namespace citadelGame
             int districtCardWidth = 100;
             int districtCardHeight = 100;
 
-            aether = new TestAether();
-            deck = new TestDeck(644, 19, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
+            aether = new UIAether();
+            deck = new UIDeck(644, 19, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
             deck.Active = false;
-            graveyard = new TestDeck(858, 19, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
+            graveyard = new UIDeck(858, 19, districtCardWidth, 100, deckTexture, districtCardWidth, districtCardHeight);
             graveyard.Active = false;
             graveyard.FlipDeck();
 
             Texture panelTexture = new Texture("../../Resources/pdeckhd.png");
             int panelTextureWidth = 144;
             int panelTextureHeight = 200;
-            panels.Add(new UiPlayerPanel(643, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(0,1)));
-            panels.Add(new UiPlayerPanel(643, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(1, 1)));
-            panels.Add(new UiPlayerPanel(643, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(2, 1)));
-            panels.Add(new UiPlayerPanel(857, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(3, 1)));
-            panels.Add(new UiPlayerPanel(857, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(4, 1)));
-            panels.Add(new UiPlayerPanel(857, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(5, 1)));
+            panels.Add(new UIPlayerPanel(643, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(0,1)));
+            panels.Add(new UIPlayerPanel(643, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(1, 1)));
+            panels.Add(new UIPlayerPanel(643, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(2, 1)));
+            panels.Add(new UIPlayerPanel(857, 150, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(3, 1)));
+            panels.Add(new UIPlayerPanel(857, 400, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(4, 1)));
+            panels.Add(new UIPlayerPanel(857, 650, 100, 223, panelTexture, panelTextureWidth, panelTextureHeight, new Vector2f(5, 1)));
 
-            hands.Add(new TestHand(60, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
-            hands.Add(new TestHand(60, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
-            hands.Add(new TestHand(60, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
-            hands.Add(new TestHand(990, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
-            hands.Add(new TestHand(990, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
-            hands.Add(new TestHand(990, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(60, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(60, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(60, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(990, 150, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(990, 400, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
+            hands.Add(new UIHand(990, 650, 550, 100, deckTexture, districtCardWidth, districtCardHeight, 0));
 
-            playgrounds.Add(new TestPlayground(60, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
-            playgrounds.Add(new TestPlayground(60, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
-            playgrounds.Add(new TestPlayground(60, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
-            playgrounds.Add(new TestPlayground(990, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
-            playgrounds.Add(new TestPlayground(990, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
-            playgrounds.Add(new TestPlayground(990, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(60, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(60, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(60, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(990, 273, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(990, 523, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
+            playgrounds.Add(new UIPlayground(990, 773, 550, 100, deckTexture, districtCardWidth, districtCardHeight));
 
             // add references to reference container
 
@@ -371,59 +355,8 @@ namespace citadelGame
             // init buttons
 
             buttonList.Add(new UIGlyphButton(10, 10, 195, 45, buttonFace, "Menu główne", 55));
-            //buttonList.Add(new UIGlyphButton(200, 10, 195, 45, buttonFace, "Dodaj kartę", 0));
-            //buttonList.Add(new UIGlyphButton(10, 60, 195, 45, buttonFace, "Message", 0));
-
-
-            //buttonList.Add(new UIGlyphButton(320, 140, 95, 53, buttonFace));
-            //buttonList.Add(new UIGlyphButton(500, 140, 95, 53, buttonFace));
-
-            //UIGlyphButton buttonOff = new UIGlyphButton(320, 240, 95, 53, buttonFace);
-            //buttonOff.state = -1;
-            //buttonList.Add(buttonOff);
-
-            //for (int i = 0; i < 13; i++)
-            //{
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 20, districtCardWidth, 100, deckTexture, i, 3, aether, true));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 130, districtCardWidth, 100, deckTexture, i, 2, aether, true));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 240, districtCardWidth, 100, deckTexture, i, 1, aether, false));
-            //    aether.AddCard(new _test_Card(20 + 15 * i, 350, districtCardWidth, 100, deckTexture, i, 0, aether, true));
-            //}
-
-            // some random cards
-
-            //deck.AddCard(0, 2,4);
-            //deck.AddCard(0, 2, 5);
-            //deck.AddCard(0, 2, 6);
-            //deck.AddCard(0, 2, 7);
-            //deck.AddCard(0, 2, 8);
-            //deck.AddCard(0, 2, 9);
-            //deck.AddCard(0, 3, 0);
-            //deck.AddCard(0, 3, 1);
-            //deck.AddCard(0, 3, 2);
-            //deck.AddCard(0, 3, 3);
-            //deck.AddCard(0, 3, 4);
-            //deck.AddCard(0, 3, 5);
-            //deck.AddCard(0, 3, 6);
-            //deck.AddCard(0, 3, 7);
-            //deck.AddCard(0, 3, 8);
-            //deck.AddCard(0, 3, 9);
-
-            //hands[0].AddCard(0, 1, 1);
-            //hands[1].AddCard(0, 1, 2);
-            //hands[2].AddCard(0, 1, 3);
-            //hands[3].AddCard(0, 1, 4);
-            //hands[4].AddCard(0, 1, 5);
-            //hands[5].AddCard(0, 1, 6);
-            //hands[0].AddCard(0, 1, 7);
-            //hands[1].AddCard(0, 1, 8);
-            //hands[2].AddCard(0, 1, 9);
-            //hands[3].AddCard(0, 2, 1);
-            //hands[4].AddCard(0, 2, 2);
-            //hands[5].AddCard(0, 2, 3);
 
             // some init attributes
-
 
             hands[0].Active = true;
             hands[1].Active = true;
@@ -448,27 +381,7 @@ namespace citadelGame
 
         protected override void Tick()
         {
-            
-
-            if (state.boardActive && state.boardStableState)
-            {
-                // normal game
-
-                
-
-            }
-            else if (state.boardActive && state.boardStableState == false)
-            {
-                // init message
-
-            }
-            else if (state.boardActive == false && state.boardStableState == false)
-            {
-
-                // message duration
-
-            }
-            else if (state.boardActive == false && state.boardStableState)
+            if (state.boardActive == false && state.boardStableState)
             {
                 // destroy message
                 message = null;
@@ -476,9 +389,6 @@ namespace citadelGame
             }
 
             // Update panels
-
-
-
         }
 
         public void Abort()
@@ -491,7 +401,7 @@ namespace citadelGame
         {
             Window.Draw(backgroundImage);
 
-            foreach (TestContainer container in elementsContainers) Window.Draw(container);    
+            foreach (UIContainer container in elementsContainers) Window.Draw(container);    
 
             
 
@@ -500,13 +410,13 @@ namespace citadelGame
                 Window.Draw(panel);
             }
 
-            foreach (TestContainer container in elementsContainers)
+            foreach (UIContainer container in elementsContainers)
             {
                 /*if (container.GetType() == typeof(TestDeck))
                 {
                     if (container.CardList.Count != 0) Window.Draw(container.CardList[0]);
                 }
-                else */foreach (TestCard card in container.CardList)
+                else */foreach (UICard card in container.CardList)
                 {
                     if (card != cursorDockedCard) Window.Draw(card);
                 }
@@ -530,7 +440,7 @@ namespace citadelGame
                     }
             }
 
-            foreach (UiButton button in buttonList)
+            foreach (UIButton button in buttonList)
             {
                 Window.Draw(button);
             }

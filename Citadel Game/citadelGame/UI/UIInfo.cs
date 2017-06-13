@@ -10,7 +10,7 @@ namespace citadelGame
 {
     class UIInfo : UIMessage
     {
-        public UIInfo(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UIInfo(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<UICard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
             Texture btnTexture = new Texture("../../Resources/sbutton.png");

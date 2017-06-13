@@ -25,7 +25,7 @@ namespace citadelGame
         protected Text TextTitle;
         protected Text TextCaption;
 
-        public List<TestCard> CardList;
+        public List<UICard> CardList;
         protected RectangleShape cardArea;
         protected int cardAreaStartX;
         protected int cardAreaStartY;
@@ -48,7 +48,7 @@ namespace citadelGame
             cardAreaStartX = (int)(((Width - cardAreaWidth) / 2.0) + StartX);
             //this.cardArea.Size = new Vector2f(cardAreaWidth, CardList[0].Height);
             //this.cardArea.Position = new Vector2f(cardAreaStartX, cardAreaStartY);
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 card.DockX = cardAreaStartX + ((i + 1) * (cardAreaWidth) / (CardList.Count + 1)) - CardList[0].Width / 2;
                 card.DockY = cardAreaStartY;

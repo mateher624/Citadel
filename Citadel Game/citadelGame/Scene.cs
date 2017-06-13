@@ -9,14 +9,14 @@ using SFML.System;
 
 namespace citadelGame
 {
-    abstract class TestGame
+    abstract class Scene
     {
         protected RenderWindow Window;
         protected Color ClearColor;
 
         protected bool OReturn = false;
 
-        public TestGame(uint width, uint height, string name, Color clearColor)
+        public Scene(uint width, uint height, string name, Color clearColor)
         {
             this.Window = new RenderWindow(new VideoMode(width, height), name, Styles.Default);
             this.ClearColor = clearColor;

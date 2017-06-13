@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class TestCard : Drawable
+    class UICard : Drawable
     {
         public int id;
 
@@ -67,9 +67,9 @@ namespace citadelGame
         public bool Dock;
         //public bool handHeld;
 
-        public TestContainer Origin;
+        public UIContainer Origin;
 
-        public TestCard(int id, int startX, int startY, int width, int height, Texture face, int textureX, int textureY, TestContainer origin, bool flipped)
+        public UICard(int id, int startX, int startY, int width, int height, Texture face, int textureX, int textureY, UIContainer origin, bool flipped)
         {
             this.id = id;
             this.Origin = origin;
@@ -236,7 +236,7 @@ namespace citadelGame
                 this.CurrentY = y - _dockPosY;
 
                 // WYŁĄCZENIE PRZYCIĄGANIA PRZY PRZESUNIĘCIU
-                if (Origin.GetType() == typeof(TestAether))
+                if (Origin.GetType() == typeof(UIAether))
                 {
                     this.DockX = this.CurrentX;
                     this.DockY = this.CurrentY;
@@ -308,7 +308,7 @@ namespace citadelGame
             FreezePosition = false;
             if ((DockX != CurrentX || DockY != CurrentY))
             {
-                if (Origin.GetType() != typeof(TestHand)) MouseCollide(false);
+                if (Origin.GetType() != typeof(UIHand)) MouseCollide(false);
                 _magnetAnimationLock = true;
                 OldStartX = CurrentX;
                 OldStartY = CurrentY;
@@ -321,7 +321,7 @@ namespace citadelGame
             FreezePosition = false;
             if ((DockX != CurrentX || DockY != CurrentY) && _magnetAnimationLock == false && FreezePosition == false)
             {
-                if (Origin.GetType() != typeof(TestHand)) MouseCollide(false);
+                if (Origin.GetType() != typeof(UIHand)) MouseCollide(false);
                 _magnetAnimationLock = true;
                 OldStartX = CurrentX;
                 OldStartY = CurrentY;
@@ -349,7 +349,7 @@ namespace citadelGame
         public void UnClicked(int x, int y)
         {
             Dock = false;
-            if (Origin.GetType() == typeof(TestHand))
+            if (Origin.GetType() == typeof(UIHand))
             {
                 MouseCollide(false);
                 _exposed = false;

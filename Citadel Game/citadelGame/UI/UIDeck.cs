@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class TestDeck : TestContainer
+    class UIDeck : UIContainer
     {
         private int _cardStartX;
         private int _maxStackSize;
@@ -17,7 +17,7 @@ namespace citadelGame
         Sprite _bodyGround;
         private Vector2f _backTextureCoords = new Vector2f(1, 10);
 
-        public TestDeck(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
+        public UIDeck(int startX, int startY, int width, int height, Texture face, int cardWidth, int cardHeight)
         {
             this.StartX = startX;
             this.StartY = startY;
@@ -26,7 +26,7 @@ namespace citadelGame
             this.Face = face;
             this.CardWidth = cardWidth;
             this.CardHeight = cardHeight;
-            CardList = new List<TestCard>();
+            CardList = new List<UICard>();
 
             this.Body = new RectangleShape();
 
@@ -51,11 +51,11 @@ namespace citadelGame
             }
         }
 
-        public override void RemoveCard(TestCard removedCard)
+        public override void RemoveCard(UICard removedCard)
         {
             int i = 0;
             CardList.Remove(removedCard);
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 card.DockX = StartX;
                 card.DockY = StartY;
@@ -69,7 +69,7 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public override void AddCard(TestCard addedCard)
+        public override void AddCard(UICard addedCard)
         {
             int i = 0;
             CardList.Add(addedCard);
@@ -78,7 +78,7 @@ namespace citadelGame
 
             if (addedCard.Flipped != visible) addedCard.Flip();
 
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 card.DockX = StartX;
                 card.DockY = StartY;
@@ -95,10 +95,10 @@ namespace citadelGame
         public override void AddCard(int id, int textureX, int textureY)
         {
             int i = 0;
-            CardList.Add(new TestCard(id, StartX, 0, CardWidth, CardHeight, Face, textureX, textureY, this, false));
+            CardList.Add(new UICard(id, StartX, 0, CardWidth, CardHeight, Face, textureX, textureY, this, false));
             CardList[CardList.Count - 1].Origin = this;
             CardList[CardList.Count - 1].Flipped = false;
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 card.DockX = StartX;
                 card.DockY = StartY;
@@ -113,7 +113,7 @@ namespace citadelGame
             //this.body.Size = new Vector2f(width + 4 * offset, height + 2 * offset);
         }
 
-        public override void MouseMove(Vector2f worldCoords, ref TestCard cursorDockedCard)
+        public override void MouseMove(Vector2f worldCoords, ref UICard cursorDockedCard)
         {
             if (Active == true)
             {
@@ -138,7 +138,7 @@ namespace citadelGame
             }
         }
 
-        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref TestCard cursorDockedCard)
+        public override void Clicked(MouseButtonEventArgs e, Vector2f worldCoords, ref UICard cursorDockedCard)
         {
             if (Active == true)
             {

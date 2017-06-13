@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    class UIPrimitiveButton : UiButton
+    class UIPrimitiveButton : UIButton
     {
         private RectangleShape _body;
         private Text _text;

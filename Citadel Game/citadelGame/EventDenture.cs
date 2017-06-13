@@ -51,13 +51,13 @@ namespace citadelGame
             // set up a message with Choose Carater Card Action
             mainGame.hands[currentPlayer.PlayerId - 1].UnCoverCards();
             //this.availableCards = availableCards;
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
             
             state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             foreach (var card in availableCards)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, card.Id-1, 0, aether, true));
+                dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, card.Id-1, 0, aether, true));
             }
             string msg;
             if (type == 0) msg = "Wybiera gracz numer "+currentPlayer.PlayerId.ToString()+". Kliknij kartę postaci w którą chcesz się wcielić w tej rundzie.";
@@ -69,7 +69,7 @@ namespace citadelGame
 
         public void ChooseActionCard(Player currentPlayer, params PlayerAction.OneAction[] availableActions)
         {
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
 
             state.boardStableState = false;
 
@@ -77,11 +77,11 @@ namespace citadelGame
             mainGame.hands[currentPlayer.PlayerId - 1].Active = true;
             mainGame.playgrounds[currentPlayer.PlayerId - 1].Active = true;
 
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             int i = 0;
             foreach (var action in availableActions)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 2, aether, true));
+                dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 2, aether, true));
                 i++;
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz akcję", "Kliknij kartę akcji którą chcesz wykonać w tej turze.", 1600, 900, dilemaCardList);
@@ -90,15 +90,15 @@ namespace citadelGame
 
         public void PickOneOfTwo(List<DistrictCard> oneToPick)
         {
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
 
             state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             int i = 0;
             Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in oneToPick)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
+                dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
                 i++;
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz dzielnicę", "Kliknij kartę dzielnicy którą chcesz wybrać.", 1600, 900, dilemaCardList);
@@ -107,17 +107,17 @@ namespace citadelGame
 
         public void MagicianActionChoice(Player currentPlayer, params MagicianPlayerAction.MagicianActionChoice[] availableActions)
         {
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
 
             state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             int i = 0;
             foreach (var action in availableActions)
             {
-                if (i != 1) dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                if (i != 1) dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
                 else
                 {
-                    if (mainGame.hands[currentPlayer.PlayerId - 1].CardList.Count != 0) dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
+                    if (mainGame.hands[currentPlayer.PlayerId - 1].CardList.Count != 0) dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i+2, 2, aether, true));
                 }
                 i++;
             }
@@ -128,15 +128,15 @@ namespace citadelGame
 
         public void ChoosePlayerToExchangeCardsWith(List<Player> players)
         {
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
 
             
             state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             int i = 0;
             foreach (var player in players)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 1, aether, true));
+                dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, i, 1, aether, true));
                 i++;
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz gracza", "Kliknij kartę gracza z którym chcesz wymienić się kartami.", 1600, 900, dilemaCardList);
@@ -147,15 +147,15 @@ namespace citadelGame
 
         public void ChooseCardsToDiscard(List<DistrictCard> availableCards)
         {
-            TestAether aether = new TestAether();
+            UIAether aether = new UIAether();
 
             state.boardStableState = false;
-            List<TestCard> dilemaCardList = new List<TestCard>();
+            List<UICard> dilemaCardList = new List<UICard>();
             int i = 0;
             Texture deckTexture = new Texture("../../Resources/cdeck.gif");
             foreach (var card in availableCards)
             {
-                dilemaCardList.Add(new TestCard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
+                dilemaCardList.Add(new UICard(0, 20 + 15 * 1, 20, 100, 100, deckTexture, card.CoordinateX, card.CoordinateY, aether, true));
  
             }
             mainGame.message = new UIDilema(1600 / 2 - messageWidth / 2, 900 / 2 - messafeHeight/2, messageWidth, messafeHeight, "Wybierz kartę dzielnicy", "Kliknij kartę którą chcesz odrzucić.", 1600, 900, dilemaCardList);
@@ -190,9 +190,9 @@ namespace citadelGame
         public void DecideToBuildDistrict()
         {
             state.boardStableState = false;
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 4, 2, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 4, 2, aether, true));
             mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Wybór", "Czy chcesz zbudować dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
@@ -200,9 +200,9 @@ namespace citadelGame
         public void DecideToDestroyDistrict()
         {
             state.boardStableState = false;
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 5, 2, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 5, 2, aether, true));
             mainGame.message = new UIChoice(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Wybór", "Czy chcesz zniszczyć dzielnicę?.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
@@ -235,9 +235,9 @@ namespace citadelGame
                 mainGame.playgrounds[i].Active = false;
             }
             state.boardStableState = false;
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, playerIndex-1, 1, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, playerIndex-1, 1, aether, true));
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Gracz numer " + playerIndex + " wybiera kartę postaci.", 1600, 900, cardMemo);
             state.boardActive = false;
         }
@@ -253,9 +253,9 @@ namespace citadelGame
                 mainGame.playgrounds[i].Active = false;
             }
             
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, currentPlayer.CharacterCard.Id-1, 0, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, currentPlayer.CharacterCard.Id-1, 0, aether, true));
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Nadchodzi tura gracza numer " + currentPlayer.PlayerId.ToString() + ". ("+currentPlayer.CharacterCard.Name+")", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id-1, 0));
             state.boardActive = false;
@@ -270,9 +270,9 @@ namespace citadelGame
                 mainGame.hands[i].Active = false;
                 mainGame.playgrounds[i].Active = false;
             }
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 6, 2, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 6, 2, aether, true));
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Informacja", "Gracz (" + currentPlayer.PlayerId.ToString() + ") grający postacią: " + currentPlayer.CharacterCard.Name + " został zabity.", 1600, 900, cardMemo);
             mainGame.panels[currentPlayer.PlayerId - 1].SetImage(new Vector2f(currentPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;
@@ -382,7 +382,7 @@ namespace citadelGame
             // flow
             if (mainGame.deck.CardList.Count > 0)
             {
-                TestCard cardDummy = mainGame.deck.CardList.Find(x => x.id == card.Id);
+                UICard cardDummy = mainGame.deck.CardList.Find(x => x.id == card.Id);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.deck.RemoveCard(cardDummy);
                 mainGame.hands[currentPlayer.PlayerId-1].AddCard(cardDummy);
@@ -408,7 +408,7 @@ namespace citadelGame
         {
             if (mainGame.hands[currentPlayer.PlayerId-1].CardList.Count > 0)
             {
-                TestCard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                UICard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.hands[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.playgrounds[currentPlayer.PlayerId - 1].AddCard(cardDummy);
@@ -421,7 +421,7 @@ namespace citadelGame
         {
             if (mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Count > 0)
             {
-                TestCard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                UICard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.playgrounds[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.hands[currentPlayer.PlayerId - 1].AddCard(cardDummy);
@@ -434,7 +434,7 @@ namespace citadelGame
         {
             if (mainGame.hands[currentPlayer.PlayerId - 1].CardList.Count > 0)
             {
-                TestCard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                UICard cardDummy = mainGame.hands[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.hands[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.graveyard.AddCard(cardDummy);
@@ -447,7 +447,7 @@ namespace citadelGame
         {
             if (mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Count > 0)
             {
-                TestCard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
+                UICard cardDummy = mainGame.playgrounds[currentPlayer.PlayerId - 1].CardList.Find(x => x.id == card.Id);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.playgrounds[currentPlayer.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.graveyard.AddCard(cardDummy);
@@ -470,14 +470,14 @@ namespace citadelGame
             }
             foreach (var i in memoCardsId1)
             {
-                TestCard cardDummy = mainGame.hands[player1.PlayerId - 1].CardList.Find(x => x.id == i);
+                UICard cardDummy = mainGame.hands[player1.PlayerId - 1].CardList.Find(x => x.id == i);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.hands[player1.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.hands[player2.PlayerId - 1].AddCard(cardDummy);
             }
             foreach (var i in memoCardsId2)
             {
-                TestCard cardDummy = mainGame.hands[player2.PlayerId - 1].CardList.Find(x => x.id == i);
+                UICard cardDummy = mainGame.hands[player2.PlayerId - 1].CardList.Find(x => x.id == i);
                 if (cardDummy == null) throw new NotImplementedException();
                 mainGame.hands[player2.PlayerId - 1].RemoveCard(cardDummy);
                 mainGame.hands[player1.PlayerId - 1].AddCard(cardDummy);
@@ -495,9 +495,9 @@ namespace citadelGame
                 mainGame.hands[i].Active = false;
                 mainGame.playgrounds[i].Active = false;
             }
-            TestAether aether = new TestAether();
-            List<TestCard> cardMemo = new List<TestCard>();
-            cardMemo.Add(new TestCard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 7, 2, aether, true));
+            UIAether aether = new UIAether();
+            List<UICard> cardMemo = new List<UICard>();
+            cardMemo.Add(new UICard(0, 20 + 15 * 1, 20, textureWidth, textureHeight, deckTexture, 7, 2, aether, true));
             mainGame.message = new UIInfo(1600 / 2 - 300, 900 / 2 - messafeHeight/2, 600, messafeHeight, "Zwycięstwo", "Gracz " + winningPlayer.PlayerId.ToString() + " zwyciężył swoich przeciwników.", 1600, 900, cardMemo);
             //mainGame.panels[winningPlayer.PlayerId - 1].SetImage(new Vector2f(winningPlayer.CharacterCard.Id - 1, 0));
             state.boardActive = false;

@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace citadelGame
 {
-    abstract class UiButton : Drawable
+    abstract class UIButton : Drawable
     {
         public int StartX;
         public int StartY;

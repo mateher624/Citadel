@@ -15,7 +15,7 @@ namespace citadelGame
         private int cardAreaStartY;
         private int cardAreaWidth;
 
-        public UIDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<TestCard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
+        public UIDilema(int startX, int startY, int width, int height, string title, string caption, int screenW, int screenH, List<UICard> cardList) : base(startX, startY, width, height, title, caption, screenW, screenH)
         {
             Font font = new Font("../../Resources/AGaramondPro-Bold.otf");
             Texture btnTexture = new Texture("../../Resources/sbutton.png");
@@ -87,7 +87,7 @@ namespace citadelGame
             cardAreaStartX = (int)(((Width - cardAreaWidth) / 2.0) + StartX);
             this.cardArea.Size = new Vector2f(cardAreaWidth, CardList[0].Height);
             this.cardArea.Position = new Vector2f(cardAreaStartX, cardAreaStartY);
-            foreach (TestCard card in CardList)
+            foreach (UICard card in CardList)
             {
                 card.DockX = cardAreaStartX + ((i+1) * (cardAreaWidth) / (CardList.Count+1))-CardList[0].Width/2;
                 card.DockY = cardAreaStartY;
